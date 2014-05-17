@@ -6,15 +6,15 @@ import java.util.Collections;
 import java.util.UUID;
 
 /**
- * Represents a DefaultParticipant
+ * Represents a DefaultMember
  */
-public class DefaultParticipant implements Member {
+public class DefaultMember implements Member {
 
     private final UUID uuid;
 
     private final ArrayList<Group> groups = new ArrayList<Group>();
 
-    public DefaultParticipant(UUID uuid) {this.uuid = uuid;}
+    public DefaultMember(UUID uuid) {this.uuid = uuid;}
 
     @Override
     public UUID getUUID() {
