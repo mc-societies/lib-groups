@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface MemberCache {
 
     Member getMember(UUID uuid);
+
+    Member getMember(String name);
 }
