@@ -1,145 +1,45 @@
 package net.catharos.groups;
 
-import com.google.common.base.Objects;
-import com.google.inject.Provider;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
-import gnu.trove.map.hash.THashMap;
-import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.rank.Rank;
-import net.catharos.groups.setting.subject.DefaultSubject;
 import net.catharos.groups.setting.subject.Subject;
 import org.jetbrains.annotations.Nullable;
 
-import javax.inject.Inject;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
- * Represents a Group
+ *
  */
-public class Group extends DefaultSubject implements Subject {
+public interface Group extends Subject {
+    UUID getUUID();
 
-    private final UUID uuid;
-    @Nullable
-    private Group parent;
+    Relation getRelation(Group anotherGroup);
 
-    private final THashMap<Group, Relation> relations = new THashMap<Group, Relation>();
-    private final THashSet<Rank> ranks = new THashSet<Rank>();
+    void setRelation(Relation relation);
 
-    private final ArrayList<Member> members = new ArrayList<Member>();
-    private final THashSet<Group> subGroups = new THashSet<Group>();
+    void setRelation(Relation relation, boolean override);
 
+    void setRelation(Group target, Relation relation, boolean override);
 
-    @AssistedInject
-    public Group(@Assisted UUID uuid, @Assisted @Nullable Group parent) {
-        this.uuid = uuid;
-        this.parent = parent;
-    }
+    void removeRelation(Group anotherGroup);
 
-    @AssistedInject
-    public Group(@Assisted UUID uuid) {
-        this(uuid, null);
-    }
+    boolean hasRelation(Group anotherGroup);
 
-    @Inject
-    public Group(Provider<UUID> uuidProvider) {
-        this(uuidProvider.get());
-    }
-
-    public UUID getUUID() {
-        return uuid;
-    }
-
-    public Relation getRelation(Group anotherGroup) {
-        Relation relation = relations.get(anotherGroup);
-        return relation == null ? DefaultRelation.unknownRelation(this) : relation;
-    }
-
-    public void setRelation(Relation relation) {
-        setRelation(relation, true);
-    }
-
-    public void setRelation(Relation relation, boolean override) {
-        setRelation(relation.getTarget(), relation, override);
-    }
-
-    public void setRelation(Group target, Relation relation, boolean override) {
-        if (!relation.contains(this)) {
-            throw new IllegalArgumentException("Relation must contain a target or source identical to \"this\"!");
-        }
-
-        if (!override && !Objects.equal(relation, relations.get(target))) {
-            throw new IllegalStateException("Relation already exists!");
-        }
-
-        relations.put(target, relation);
-
-        if (!target.hasRelation(this)) {
-            target.setRelation(this, relation, override);
-        }
-    }
-
-    public void removeRelation(Group anotherGroup) {
-        if (hasRelation(anotherGroup)) {
-            relations.remove(anotherGroup);
-        }
-
-        if (anotherGroup.hasRelation(this)) {
-            anotherGroup.removeRelation(this);
-        }
-    }
-
-    public boolean hasRelation(Group anotherGroup) {
-        return relations.containsKey(anotherGroup);
-    }
-
-    public Collection<Rank> getRanks() {
-        return Collections.unmodifiableCollection(ranks);
-    }
+    Collection<Rank> getRanks();
 
     @Nullable
-    public Group getParent() {
-        return parent;
-    }
+    Group getParent();
 
-    public Collection<Group> getSubGroups() {
-        return subGroups;
-    }
+    Collection<Group> getSubGroups();
 
-    public void addSubGroup(Group group) {
-        if (group.getParent() != null) {
-            throw new IllegalArgumentException("Group already has a parent!");
-        }
+    void addSubGroup(DefaultGroup group);
 
-        if (!subGroups.add(group)) {
-            throw new IllegalArgumentException("Group is already sub group of \"this\" group!");
-        }
+    boolean isParent(Group group);
 
-        group.parent = this;
-    }
+    List<Member> getMembers();
 
-    public boolean isParent(Group group) {
-        return subGroups.contains(group);
-    }
+    boolean isMember(Member participant);
 
-    public List<Member> getMembers() {
-        return Collections.unmodifiableList(members);
-    }
-
-    public boolean isMember(Member participant) {
-        return members.contains(participant);
-    }
-
-    public void addMember(Member participant) {
-        if (participant.getGroups().contains(this)) {
-            // Make sure he's not part of this group
-            this.members.remove(participant);
-
-            throw new IllegalStateException("Participant already is member of this group!");
-        }
-
-        this.members.add(participant);
-
-        participant.addGroup(this);
-    }
+    void addMember(Member member);
 }

@@ -1,6 +1,7 @@
 package net.catharos.groups;
 
-import java.util.ArrayList;
+import gnu.trove.set.hash.THashSet;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
@@ -12,7 +13,7 @@ public class DefaultMember implements Member {
 
     private final UUID uuid;
 
-    private final ArrayList<Group> groups = new ArrayList<Group>();
+    private final THashSet<Group> groups = new THashSet<Group>();
 
     public DefaultMember(UUID uuid) {this.uuid = uuid;}
 
@@ -33,5 +34,10 @@ public class DefaultMember implements Member {
         if (!group.isMember(this)) {
             group.addMember(this);
         }
+    }
+
+    @Override
+    public boolean hasGroup(Group group) {
+        return groups.contains(group);
     }
 }

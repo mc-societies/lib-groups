@@ -13,4 +13,6 @@ public interface Member {
     Collection<Group> getGroups();
 
     void addGroup(Group group);
+
+    boolean hasGroup(Group group);
 }
