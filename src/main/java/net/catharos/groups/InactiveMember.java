@@ -1,21 +1,16 @@
 package net.catharos.groups;
 
-import gnu.trove.set.hash.THashSet;
-
 import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 
 /**
- * Represents a DefaultMember
+ * Represents a InactiveMember
  */
-public class DefaultMember implements Member {
+public class InactiveMember implements Member {
 
     private final UUID uuid;
 
-    private final THashSet<Group> groups = new THashSet<Group>();
-
-    public DefaultMember(UUID uuid) {this.uuid = uuid;}
+    public InactiveMember(UUID uuid) {this.uuid = uuid;}
 
     @Override
     public UUID getUUID() {
@@ -24,28 +19,23 @@ public class DefaultMember implements Member {
 
     @Override
     public Collection<Group> getGroups() {
-        return Collections.unmodifiableCollection(groups);
+        throw new InactiveException(this);
     }
 
     @Override
     public void addGroup(Group group) {
-        this.groups.add(group);
-
-        if (!group.isMember(this)) {
-            group.addMember(this);
-        }
+        throw new InactiveException(this);
     }
 
     @Override
     public boolean hasGroup(Group group) {
-        return groups.contains(group);
+        throw new InactiveException(this);
     }
 
     @Override
     public String toString() {
-        return "DefaultMember{" +
+        return "InactiveMember{" +
                 "uuid=" + uuid +
-                ", groups=" + groups +
                 '}';
     }
 
@@ -54,7 +44,7 @@ public class DefaultMember implements Member {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DefaultMember that = (DefaultMember) o;
+        InactiveMember that = (InactiveMember) o;
 
         return uuid.equals(that.uuid);
     }

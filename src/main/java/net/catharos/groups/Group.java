@@ -11,8 +11,24 @@ import java.util.UUID;
 /**
  *
  */
-public interface Group extends Subject {
+public interface Group extends Subject, Inactivatable {
+
+    static final String NEW_GROUP_NAME = "new-group";
+
     UUID getUUID();
+
+    String getName();
+
+
+    @Nullable
+    Group getParent();
+
+    void setParent(@Nullable Group group);
+
+    boolean hasParent();
+
+    boolean isParent(Group group);
+
 
     Relation getRelation(Group anotherGroup);
 
@@ -26,16 +42,18 @@ public interface Group extends Subject {
 
     boolean hasRelation(Group anotherGroup);
 
+
     Collection<Rank> getRanks();
 
-    @Nullable
-    Group getParent();
 
     Collection<Group> getSubGroups();
 
-    void addSubGroup(DefaultGroup group);
+    void addSubGroup(Group group);
 
-    boolean isParent(Group group);
+    void removeSubGroup(Group group);
+
+    boolean hasSubGroup(Group group);
+
 
     List<Member> getMembers();
 

@@ -14,8 +14,8 @@ public class GroupTest {
 
     @Before
     public void setup() throws Exception {
-        a = new DefaultGroup(UUID.randomUUID(), null);
-        b = new DefaultGroup(UUID.randomUUID(), null);
+        a = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, null);
+        b = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, null);
     }
 
     @Test

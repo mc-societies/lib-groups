@@ -6,9 +6,10 @@ import java.util.UUID;
 /**
  *
  */
-public interface Member {
+public interface Member extends Inactivatable {
 
     UUID getUUID();
+
 
     Collection<Group> getGroups();
 

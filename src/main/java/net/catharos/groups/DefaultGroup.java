@@ -18,7 +18,9 @@ import java.util.*;
  */
 public class DefaultGroup extends DefaultSubject implements Group {
 
+
     private final UUID uuid;
+    private final String name;
     @Nullable
     private Group parent;
 
@@ -30,24 +32,30 @@ public class DefaultGroup extends DefaultSubject implements Group {
 
 
     @AssistedInject
-    public DefaultGroup(@Assisted UUID uuid, @Assisted @Nullable Group parent) {
+    public DefaultGroup(@Assisted UUID uuid, @Assisted String name, @Assisted @Nullable Group parent) {
         this.uuid = uuid;
+        this.name = name;
         this.parent = parent;
     }
 
     @AssistedInject
-    public DefaultGroup(@Assisted UUID uuid) {
-        this(uuid, null);
+    public DefaultGroup(@Assisted UUID uuid, @Assisted String name) {
+        this(uuid, name, null);
     }
 
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider) {
-        this(uuidProvider.get());
+        this(uuidProvider.get(), NEW_GROUP_NAME);
     }
 
     @Override
     public UUID getUUID() {
         return uuid;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -111,12 +119,36 @@ public class DefaultGroup extends DefaultSubject implements Group {
     }
 
     @Override
+    public void setParent(@Nullable Group group) {
+        if (group == null) {
+            Group parent = getParent();
+
+            if (parent != null) {
+                parent.removeSubGroup(this);
+            }
+
+        } else {
+
+            if (!group.hasSubGroup(this)) {
+                group.addSubGroup(this);
+            }
+        }
+
+        this.parent = group;
+    }
+
+    @Override
+    public boolean hasParent() {
+        return parent != null;
+    }
+
+    @Override
     public Collection<Group> getSubGroups() {
         return subGroups;
     }
 
     @Override
-    public void addSubGroup(DefaultGroup group) {
+    public void addSubGroup(Group group) {
         if (group.getParent() != null) {
             throw new IllegalArgumentException("Group already has a parent!");
         }
@@ -125,12 +157,26 @@ public class DefaultGroup extends DefaultSubject implements Group {
             throw new IllegalArgumentException("Group is already sub group of \"this\" group!");
         }
 
-        group.parent = this;
+        group.setParent(this);
+    }
+
+    @Override
+    public void removeSubGroup(Group group) {
+        subGroups.remove(group);
+
+        if (group.isParent(this)) {
+            group.setParent(null);
+        }
+    }
+
+    @Override
+    public boolean hasSubGroup(Group group) {
+        return subGroups.contains(group);
     }
 
     @Override
     public boolean isParent(Group group) {
-        return subGroups.contains(group);
+        return equals(group.getParent());
     }
 
     @Override
@@ -156,4 +202,32 @@ public class DefaultGroup extends DefaultSubject implements Group {
 
         member.addGroup(this);
     }
+
+    @Override
+    public String toString() {
+        return "DefaultGroup{" +
+                "uuid=" + uuid +
+                ", parent=" + parent +
+                ", relations=" + relations +
+                ", ranks=" + ranks +
+                ", members=" + members +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DefaultGroup that = (DefaultGroup) o;
+
+        return uuid.equals(that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
 }
+
+
