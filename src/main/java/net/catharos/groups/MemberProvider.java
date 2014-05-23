@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Represents a ParticipantProvider
  */
-public interface MemberCache {
+public interface MemberProvider {
 
     Member getMember(UUID uuid);
 

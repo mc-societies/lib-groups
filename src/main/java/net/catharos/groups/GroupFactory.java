@@ -7,5 +7,5 @@ import java.util.UUID;
  */
 public interface GroupFactory {
 
-    Group create(UUID uuid);
+    Group create(UUID uuid, String name);
 }

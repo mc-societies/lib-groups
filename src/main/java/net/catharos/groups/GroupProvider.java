@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Represents a GroupProvider
  */
-public interface GroupCache {
+public interface GroupProvider {
 
     Group getGroup(UUID uuid);
 }

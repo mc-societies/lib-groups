@@ -13,7 +13,8 @@ import java.util.UUID;
  */
 public interface Group extends Subject, Inactivatable {
 
-    static final String NEW_GROUP_NAME = "new-group";
+    String NEW_GROUP_NAME = "new-group";
+
 
     UUID getUUID();
 
