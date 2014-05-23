@@ -5,9 +5,9 @@ import java.util.UUID;
 /**
  * Represents a ParticipantProvider
  */
-public interface MemberProvider {
+public interface MemberProvider<M extends Member> {
 
-    Member getMember(UUID uuid);
+    M getMember(UUID uuid);
 
-    Member getMember(String name);
+    M getMember(String name);
 }

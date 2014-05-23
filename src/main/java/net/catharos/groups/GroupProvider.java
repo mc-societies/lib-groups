@@ -8,4 +8,8 @@ import java.util.UUID;
 public interface GroupProvider {
 
     Group getGroup(UUID uuid);
+
+    Group getGroup(String name);
+
+    Iterable<Group> getGroups();
 }
