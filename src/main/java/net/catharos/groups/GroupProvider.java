@@ -1,5 +1,7 @@
 package net.catharos.groups;
 
+import net.catharos.lib.core.concurrent.Future;
+
 import java.util.Set;
 import java.util.UUID;
 
@@ -8,9 +10,9 @@ import java.util.UUID;
  */
 public interface GroupProvider {
 
-    Group getGroup(UUID uuid);
+    Future<Group> getGroup(UUID uuid);
 
-    Set<Group> getGroup(String name);
+    Future<Set<Group>> getGroup(String name);
 
-    Set<Group> getGroups();
+    Future<Set<Group>> getGroups();
 }

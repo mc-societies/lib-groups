@@ -1,5 +1,7 @@
 package net.catharos.groups;
 
+import net.catharos.lib.core.concurrent.Future;
+
 import java.util.UUID;
 
 /**
@@ -7,7 +9,7 @@ import java.util.UUID;
  */
 public interface MemberProvider<M extends Member> {
 
-    M getMember(UUID uuid);
+    Future<M> getMember(UUID uuid);
 
-    M getMember(String name);
+    Future<M> getMember(String name);
 }

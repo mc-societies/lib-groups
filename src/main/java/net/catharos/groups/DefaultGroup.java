@@ -35,7 +35,7 @@ public class DefaultGroup extends DefaultSubject implements Group {
     public DefaultGroup(@Assisted UUID uuid, @Assisted String name, @Assisted @Nullable Group parent) {
         this.uuid = uuid;
         this.name = name;
-        this.parent = parent;
+        setParent(parent);
     }
 
     @AssistedInject
