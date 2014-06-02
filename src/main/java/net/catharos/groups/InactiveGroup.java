@@ -154,4 +154,14 @@ public class InactiveGroup implements Group {
     public int hashCode() {
         return uuid.hashCode();
     }
+
+    @Override
+    public int getColumns() {
+        return 1;
+    }
+
+    @Override
+    public String getColumn(int column) {
+        return getName();
+    }
 }
