@@ -1,11 +1,11 @@
 package net.catharos.groups;
 
-import net.catharos.lib.core.concurrent.Future;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  *
  */
 public interface GroupPublisher {
 
-    Future<Group> publish(Group group);
+    ListenableFuture<Group> publish(Group group);
 }

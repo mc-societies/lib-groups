@@ -1,6 +1,6 @@
 package net.catharos.groups;
 
-import net.catharos.lib.core.concurrent.Future;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.UUID;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public interface MemberProvider<M extends Member> {
 
-    Future<M> getMember(UUID uuid);
+    ListenableFuture<M> getMember(UUID uuid);
 
-    Future<M> getMember(String name);
+    ListenableFuture<M> getMember(String name);
 }
