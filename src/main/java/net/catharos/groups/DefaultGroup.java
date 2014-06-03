@@ -43,6 +43,11 @@ public class DefaultGroup extends DefaultSubject implements Group {
         this(uuid, name, null);
     }
 
+    @AssistedInject
+    public DefaultGroup(@Assisted String name, Provider<UUID> uuidProvider) {
+        this(uuidProvider.get(), name, null);
+    }
+
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider) {
         this(uuidProvider.get(), NEW_GROUP_NAME);
