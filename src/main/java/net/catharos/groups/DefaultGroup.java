@@ -9,6 +9,7 @@ import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.setting.subject.DefaultSubject;
 import org.jetbrains.annotations.Nullable;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -21,6 +22,7 @@ public class DefaultGroup extends DefaultSubject implements Group {
 
     private final UUID uuid;
     private final String name;
+    private final DateTime lastActive;
     @Nullable
     private Group parent;
 
@@ -36,6 +38,8 @@ public class DefaultGroup extends DefaultSubject implements Group {
         this.uuid = uuid;
         this.name = name;
         setParent(parent);
+
+        lastActive = DateTime.now();
     }
 
     @AssistedInject
@@ -61,6 +65,11 @@ public class DefaultGroup extends DefaultSubject implements Group {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public DateTime getLastActive() {
+        return lastActive;
     }
 
     @Override

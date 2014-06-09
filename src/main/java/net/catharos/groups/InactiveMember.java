@@ -23,6 +23,11 @@ public class InactiveMember implements Member {
     }
 
     @Override
+    public Group getGroup() {
+        throw new InactiveException(this);
+    }
+
+    @Override
     public void addGroup(Group group) {
         throw new InactiveException(this);
     }

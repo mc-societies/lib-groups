@@ -13,6 +13,8 @@ public interface Member extends Inactivatable {
 
     Collection<Group> getGroups();
 
+    Group getGroup();
+
     void addGroup(Group group);
 
     boolean hasGroup(Group group);

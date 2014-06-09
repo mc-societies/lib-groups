@@ -28,6 +28,19 @@ public class DefaultMember implements Member {
     }
 
     @Override
+    public Group getGroup() {
+        Group found = null;
+
+        for (Group group : groups) {
+            if (found == null || group.getLastActive().isAfter(found.getLastActive())) {
+                found = group;
+            }
+        }
+
+        return found;
+    }
+
+    @Override
     public void addGroup(Group group) {
         this.groups.add(group);
 

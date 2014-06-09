@@ -5,6 +5,7 @@ import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
 import net.catharos.groups.setting.value.SettingValue;
 import org.jetbrains.annotations.Nullable;
+import org.joda.time.DateTime;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,6 +31,11 @@ public class InactiveGroup implements Group {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public DateTime getLastActive() {
+        throw new InactiveException(this);
     }
 
     @Override
