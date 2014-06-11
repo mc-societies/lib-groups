@@ -9,5 +9,5 @@ public interface GroupPublisher {
 
     ListenableFuture<Group> publish(Group group);
 
-    ListenableFuture<Group> drop(Group group);
+    ListenableFuture<?> drop(Group group);
 }
