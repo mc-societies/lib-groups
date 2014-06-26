@@ -7,6 +7,7 @@ import com.google.inject.assistedinject.AssistedInject;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.rank.Rank;
+import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.subject.DefaultSubject;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
@@ -251,6 +252,16 @@ public class DefaultGroup extends DefaultSubject implements Group {
     @Override
     public String getColumn(int column) {
         return getName();
+    }
+
+    @Override
+    public boolean isInvolved(Participant participant) {
+        return members.contains(participant);
+    }
+
+    @Override
+    public Collection<? extends Participant> getInvolved() {
+        return members;
     }
 }
 

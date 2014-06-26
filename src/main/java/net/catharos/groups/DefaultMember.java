@@ -1,6 +1,8 @@
 package net.catharos.groups;
 
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.request.Request;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +16,7 @@ public class DefaultMember implements Member {
     private final UUID uuid;
 
     private final THashSet<Group> groups = new THashSet<Group>();
+    private Request activeRequest;
 
     public DefaultMember(UUID uuid) {this.uuid = uuid;}
 
@@ -75,5 +78,23 @@ public class DefaultMember implements Member {
     @Override
     public int hashCode() {
         return uuid.hashCode();
+    }
+
+    @Nullable
+    @Override
+    public Request getActiveRequest() {
+        return activeRequest;
+    }
+
+    @Override
+    public void setActiveRequest(Request activeRequest) {
+        this.activeRequest = activeRequest;
+    }
+
+    @Override
+    public boolean clearRequest() {
+        boolean value = activeRequest != null;
+        activeRequest = null;
+        return value;
     }
 }

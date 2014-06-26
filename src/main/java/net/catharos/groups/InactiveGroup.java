@@ -1,6 +1,7 @@
 package net.catharos.groups;
 
 import net.catharos.groups.rank.Rank;
+import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
 import net.catharos.groups.setting.value.SettingValue;
@@ -19,7 +20,8 @@ public class InactiveGroup implements Group {
     private final UUID uuid;
     private final String name;
 
-    public InactiveGroup(UUID uuid, String name) {this.uuid = uuid;
+    public InactiveGroup(UUID uuid, String name) {
+        this.uuid = uuid;
         this.name = name;
     }
 
@@ -169,5 +171,15 @@ public class InactiveGroup implements Group {
     @Override
     public String getColumn(int column) {
         return getName();
+    }
+
+    @Override
+    public boolean isInvolved(Participant participant) {
+        throw new InactiveException(this);
+    }
+
+    @Override
+    public Collection<? extends Participant> getInvolved() {
+        throw new InactiveException(this);
     }
 }

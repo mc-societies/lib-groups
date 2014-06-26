@@ -1,6 +1,7 @@
 package net.catharos.groups;
 
 import net.catharos.groups.rank.Rank;
+import net.catharos.groups.request.Involved;
 import net.catharos.groups.setting.subject.Subject;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ import java.util.UUID;
 /**
  *
  */
-public interface Group extends Subject, Inactivatable, RowForwarder {
+public interface Group extends Subject, Inactivatable, RowForwarder, Involved {
 
     String NEW_GROUP_NAME = "new-group";
 

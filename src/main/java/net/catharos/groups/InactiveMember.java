@@ -1,5 +1,8 @@
 package net.catharos.groups;
 
+import net.catharos.groups.request.Request;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.UUID;
 
@@ -57,5 +60,21 @@ public class InactiveMember implements Member {
     @Override
     public int hashCode() {
         return uuid.hashCode();
+    }
+
+    @Nullable
+    @Override
+    public Request getActiveRequest() {
+        return null;
+    }
+
+    @Override
+    public void setActiveRequest(Request activeRequest) {
+        throw new InactiveException(this);
+    }
+
+    @Override
+    public boolean clearRequest() {
+        return false;
     }
 }

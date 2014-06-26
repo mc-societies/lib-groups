@@ -1,12 +1,14 @@
 package net.catharos.groups;
 
+import net.catharos.groups.request.Participant;
+
 import java.util.Collection;
 import java.util.UUID;
 
 /**
  *
  */
-public interface Member extends Inactivatable {
+public interface Member extends Inactivatable, Participant {
 
     UUID getUUID();
 
