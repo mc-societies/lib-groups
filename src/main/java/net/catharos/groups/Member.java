@@ -12,7 +12,6 @@ public interface Member extends Inactivatable, Participant {
 
     UUID getUUID();
 
-
     Collection<Group> getGroups();
 
     Group getGroup();

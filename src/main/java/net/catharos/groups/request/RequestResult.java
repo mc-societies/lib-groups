@@ -5,7 +5,7 @@ package net.catharos.groups.request;
  */
 public interface RequestResult {
 
-    Request getRequest() throws RequestFailedException;
+    Request getRequest();
 
-    Choice getChoice() throws RequestFailedException;
+    Choice getChoice();
 }

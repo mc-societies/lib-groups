@@ -6,13 +6,13 @@ import org.joda.time.DateTime;
 /**
  * Represents a Request
  */
-public interface Request extends Involved {
+public interface Request<C extends Choice> extends Involved {
 
-    void vote(Participant participant, Choice choice);
+    void vote(Participant participant, C choice);
 
     boolean isPending();
 
     DateTime getDateCreated();
 
-    ListenableFuture<SimpleRequestResult> result();
+    ListenableFuture<SimpleRequestResult<C>> result();
 }

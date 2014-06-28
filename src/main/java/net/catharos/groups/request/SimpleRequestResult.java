@@ -5,31 +5,23 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Represents a RequestResult
  */
-public class SimpleRequestResult implements RequestResult {
+public class SimpleRequestResult<C extends Choice> implements RequestResult {
 
-    private final Choice choice;
+    private final C choice;
     private final Request request;
 
-    public SimpleRequestResult() {this(null, null);}
-
-    public SimpleRequestResult(Choice choice, Request request) {
+    public SimpleRequestResult(C choice, Request request) {
         this.choice = choice;
         this.request = request;
     }
 
     @Override
-    public Request getRequest() throws RequestFailedException {
-        if (request == null) {
-            throw new RequestFailedException();
-        }
+    public Request getRequest() {
         return request;
     }
 
     @Override
-    public Choice getChoice() throws RequestFailedException {
-        if (choice == null) {
-            throw new RequestFailedException();
-        }
+    public C getChoice() {
         return choice;
     }
 

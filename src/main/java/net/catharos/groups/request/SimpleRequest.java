@@ -1,6 +1,5 @@
 package net.catharos.groups.request;
 
-import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import gnu.trove.map.hash.THashMap;
@@ -15,18 +14,19 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
-import static java.util.Collections.reverseOrder;
+import static com.google.common.collect.Iterables.getLast;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.sort;
 
 /**
  * Represents a SimpleRequest
  */
-public class SimpleRequest implements Request {
+public class SimpleRequest implements Request<SimpleRequest.Choices> {
 
     private final Involved involved;
-    private final SettableFuture<SimpleRequestResult> future = SettableFuture.create();
+    private final SettableFuture<SimpleRequestResult<SimpleRequest.Choices>> future = SettableFuture.create();
 
-    private final THashMap<Participant, Choice> results = new THashMap<Participant, Choice>();
+    private final THashMap<Participant, SimpleRequest.Choices> results = new THashMap<Participant, SimpleRequest.Choices>();
 
     private final DateTime created;
 
@@ -56,23 +56,23 @@ public class SimpleRequest implements Request {
     }
 
     @Override
-    public void vote(Participant participant, Choice choice) {
+    public void vote(Participant participant, SimpleRequest.Choices choice) {
         if (isInvolved(participant)) {
             results.put(participant, choice);
             check();
         }
     }
 
-    public Map<Choice, Number> stats() {
+    public Map<SimpleRequest.Choices, Number> stats() {
         return CastSafe.toGeneric(internalStats());
     }
 
-    private Map<Choice, MutableInt> internalStats() {
-        final THashMap<Choice, MutableInt> stats = new THashMap<Choice, MutableInt>();
+    private Map<SimpleRequest.Choices, MutableInt> internalStats() {
+        final THashMap<SimpleRequest.Choices, MutableInt> stats = new THashMap<SimpleRequest.Choices, MutableInt>();
 
-        results.forEachValue(new TObjectProcedure<Choice>() {
+        results.forEachValue(new TObjectProcedure<SimpleRequest.Choices>() {
             @Override
-            public boolean execute(Choice object) {
+            public boolean execute(SimpleRequest.Choices object) {
                 MutableInt count = stats.get(object);
 
                 if (count == null) {
@@ -92,16 +92,14 @@ public class SimpleRequest implements Request {
             return;
         }
 
-        Map<Choice, MutableInt> stats = internalStats();
-
-        ArrayList<Map.Entry<Choice, MutableInt>> sorted = Lists.newArrayList(stats.entrySet());
-        sort(sorted, reverseOrder(new EntryValueComparator<Choice, MutableInt>()));
+        ArrayList<Map.Entry<SimpleRequest.Choices, MutableInt>> sorted = newArrayList(internalStats().entrySet());
+        sort(sorted, new EntryValueComparator<SimpleRequest.Choices, MutableInt>());
 
         //Check for duplicates
         MutableInt last = null;
-        for (Map.Entry<Choice, MutableInt> entry : sorted) {
+        for (Map.Entry<SimpleRequest.Choices, MutableInt> entry : sorted) {
             if (entry.getValue().equals(last)) {
-                future.set(new SimpleRequestResult());
+                future.setException(new RequestFailedException());
                 return;
             }
 
@@ -112,7 +110,8 @@ public class SimpleRequest implements Request {
             return;
         }
 
-        future.set(new SimpleRequestResult(sorted.get(0).getKey(), this));
+        SimpleRequest.Choices choice = getLast(sorted).getKey();
+        future.set(new SimpleRequestResult<SimpleRequest.Choices>(choice, this));
     }
 
     @Override
@@ -126,7 +125,7 @@ public class SimpleRequest implements Request {
     }
 
     @Override
-    public ListenableFuture<SimpleRequestResult> result() {
+    public ListenableFuture<SimpleRequestResult<SimpleRequest.Choices>> result() {
         return future;
     }
 
