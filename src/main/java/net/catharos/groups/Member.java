@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  *
  */
-public interface Member extends Inactivatable, Participant {
+public interface Member extends Participant {
 
     UUID getUUID();
 

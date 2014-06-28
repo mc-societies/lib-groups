@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 /**
- * Represents a DefaultMember
+ * Default implementation for a Member
  */
 public class DefaultMember implements Member {
 

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
- * Represents a InactiveMember
+ * Default implementation for a inactive Member
  */
 public class InactiveMember implements Member {
 

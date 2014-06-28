@@ -10,8 +10,8 @@ public class InactiveException extends ArgumentRuntimeException {
     public InactiveException() {
     }
 
-    public InactiveException(Inactivatable inactive) {
-        this(inactive + " is inactive!");
+    public InactiveException(Object inactive) {
+        super(inactive + " is inactive!");
     }
 
     public InactiveException(String message, Object... args) {

@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents a UnknownRelation
+ * Default implementation for a Relation
  */
 public class DefaultRelation implements Relation {
 

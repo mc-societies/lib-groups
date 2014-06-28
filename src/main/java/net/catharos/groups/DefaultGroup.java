@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import java.util.*;
 
 /**
- * Represents a Group
+ * Default implementation for a Group
  */
 public class DefaultGroup extends DefaultSubject implements Group {
 
@@ -200,8 +200,8 @@ public class DefaultGroup extends DefaultSubject implements Group {
     }
 
     @Override
-    public boolean isMember(Member participant) {
-        return members.contains(participant);
+    public boolean isMember(Member member) {
+        return members.contains(member);
     }
 
     @Override

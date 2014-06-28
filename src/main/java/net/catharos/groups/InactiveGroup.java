@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Represents a InactiveGroup
+ * Default implementation for a inactive group
  */
 public class InactiveGroup implements Group {
 
@@ -122,7 +122,7 @@ public class InactiveGroup implements Group {
     }
 
     @Override
-    public boolean isMember(Member participant) {
+    public boolean isMember(Member member) {
         throw new InactiveException(this);
     }
 
