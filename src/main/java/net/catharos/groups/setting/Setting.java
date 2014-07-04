@@ -7,7 +7,9 @@ public class Setting {
 
     private final String name, description;
 
-    protected Setting(String name, String description) {
+    public Setting(String name) {this(name, "");}
+
+    public Setting(String name, String description) {
         this.name = name;
         this.description = description;
     }

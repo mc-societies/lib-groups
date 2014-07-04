@@ -1,8 +1,9 @@
 package net.catharos.groups;
 
+import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -12,11 +13,14 @@ public interface Member extends Participant {
 
     UUID getUUID();
 
-    Collection<Group> getGroups();
+    Rank getRank();
 
+    void setRank(Rank rank);
+
+    @Nullable
     Group getGroup();
 
-    void addGroup(Group group);
+    void setGroup(@Nullable Group group);
 
-    boolean hasGroup(Group group);
+    boolean isGroup(Group group);
 }

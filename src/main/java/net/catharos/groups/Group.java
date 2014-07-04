@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -111,6 +112,12 @@ public interface Group extends Subject, RowForwarder, Involved {
     Collection<Rank> getRanks();
 
     /**
+     * @param permission The permission to look by
+     * @return The ranks of this group
+     */
+    Collection<Rank> getRanks(String permission);
+
+    /**
      * @return All sub groups of this group
      */
     Collection<Group> getSubGroups();
@@ -141,6 +148,12 @@ public interface Group extends Subject, RowForwarder, Involved {
     List<Member> getMembers();
 
     /**
+     * @param permission The permission to look by
+     * @return The members which have this permission
+     */
+    Set<Member> getMembers(String permission);
+
+    /**
      * @param member The member
      * @return Whether the member is a member of this group
      */
@@ -152,4 +165,11 @@ public interface Group extends Subject, RowForwarder, Involved {
      * @param member The member
      */
     void addMember(Member member);
+
+    /**
+     * Removes a member from this group
+     *
+     * @param member The member
+     */
+    void removeMember(Member member);
 }

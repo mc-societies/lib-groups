@@ -8,6 +8,7 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
+import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.subject.DefaultSubject;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
@@ -128,6 +129,11 @@ public class DefaultGroup extends DefaultSubject implements Group {
     }
 
     @Override
+    public Collection<Rank> getRanks(String permission) {
+        return null;
+    }
+
+    @Override
     @Nullable
     public Group getParent() {
         return parent;
@@ -200,13 +206,26 @@ public class DefaultGroup extends DefaultSubject implements Group {
     }
 
     @Override
+    public Set<Member> getMembers(String permission) {
+        THashSet<Member> out = new THashSet<Member>();
+
+        for (Member member : members) {
+            if (member.getRank().get(new Setting(permission, null), null).booleanValue()) {
+                out.add(member);
+            }
+        }
+
+        return out;
+    }
+
+    @Override
     public boolean isMember(Member member) {
         return members.contains(member);
     }
 
     @Override
     public void addMember(Member member) {
-        if (member.hasGroup(this)) {
+        if (member.isGroup(this)) {
             // Make sure he's not part of this group
             this.members.remove(member);
 
@@ -215,7 +234,15 @@ public class DefaultGroup extends DefaultSubject implements Group {
 
         this.members.add(member);
 
-        member.addGroup(this);
+        member.setGroup(this);
+    }
+
+    @Override
+    public void removeMember(Member member) {
+        if (member.isGroup(this)) {
+            this.members.remove(member);
+            member.setGroup(null);
+        }
     }
 
     @Override

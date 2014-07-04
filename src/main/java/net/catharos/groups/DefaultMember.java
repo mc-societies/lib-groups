@@ -1,11 +1,9 @@
 package net.catharos.groups;
 
-import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -15,7 +13,9 @@ public class DefaultMember implements Member {
 
     private final UUID uuid;
 
-    private final THashSet<Group> groups = new THashSet<Group>();
+    @Nullable
+    private Group group;
+    private Rank rank;
     private Request activeRequest;
 
     public DefaultMember(UUID uuid) {this.uuid = uuid;}
@@ -26,42 +26,40 @@ public class DefaultMember implements Member {
     }
 
     @Override
-    public Collection<Group> getGroups() {
-        return Collections.unmodifiableCollection(groups);
+    public Rank getRank() {
+        return rank;
     }
 
     @Override
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    @Override
+    @Nullable
     public Group getGroup() {
-        Group found = null;
-
-        for (Group group : groups) {
-            if (found == null || group.getLastActive().isAfter(found.getLastActive())) {
-                found = group;
-            }
-        }
-
-        return found;
+        return group;
     }
 
     @Override
-    public void addGroup(Group group) {
-        this.groups.add(group);
+    public void setGroup(@Nullable Group group) {
+        this.group = group;
 
-        if (!group.isMember(this)) {
+        if (group != null && !group.isMember(this)) {
             group.addMember(this);
         }
     }
 
     @Override
-    public boolean hasGroup(Group group) {
-        return groups.contains(group);
+    public boolean isGroup(Group group) {
+        return this.group != null && this.group.equals(group);
     }
 
     @Override
     public String toString() {
         return "DefaultMember{" +
                 "uuid=" + uuid +
-                ", groups=" + groups +
+                ", group=" + group +
                 '}';
     }
 
@@ -97,4 +95,6 @@ public class DefaultMember implements Member {
         activeRequest = null;
         return value;
     }
+
+
 }
