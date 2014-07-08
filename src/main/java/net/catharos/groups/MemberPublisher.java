@@ -15,6 +15,8 @@ public interface MemberPublisher<M extends Member> {
      */
     ListenableFuture<M> publish(M member);
 
+    ListenableFuture<M> update(M member);
+
     /**
      * Drops a member from a data source
      *

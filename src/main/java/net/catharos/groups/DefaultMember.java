@@ -1,9 +1,14 @@
 package net.catharos.groups;
 
+import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
+import net.catharos.groups.setting.Setting;
+import net.catharos.groups.setting.target.Target;
+import net.catharos.groups.setting.value.SettingValue;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -15,7 +20,7 @@ public class DefaultMember implements Member {
 
     @Nullable
     private Group group;
-    private Rank rank;
+    private THashSet<Rank> ranks = new THashSet<Rank>();
     private Request activeRequest;
 
     public DefaultMember(UUID uuid) {this.uuid = uuid;}
@@ -26,13 +31,19 @@ public class DefaultMember implements Member {
     }
 
     @Override
-    public Rank getRank() {
-        return rank;
+    public Set<Rank> getRanks() {
+        return ranks;
     }
 
     @Override
-    public void setRank(Rank rank) {
-        this.rank = rank;
+    public void addRank(Rank rank) {
+        this.ranks.add(rank);
+    }
+
+    @Override
+    public SettingValue get(Setting setting, Target target) {
+        //fixme
+        return null;
     }
 
     @Override

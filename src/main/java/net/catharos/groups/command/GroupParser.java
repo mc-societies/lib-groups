@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import net.catharos.groups.Group;
 import net.catharos.groups.GroupProvider;
+import net.catharos.lib.core.command.CommandContext;
 import net.catharos.lib.core.command.ParsingException;
 import net.catharos.lib.core.command.parser.ArgumentParser;
 import org.jetbrains.annotations.NotNull;
@@ -23,19 +24,19 @@ public class GroupParser implements ArgumentParser<Group> {
 
     @NotNull
     @Override
-    public Group parse(String input) throws ParsingException {
+    public Group parse(String input, CommandContext<?> ctx) throws ParsingException {
         try {
             Set<Group> groups = provider.getGroup(input).get();
 
             if (groups.isEmpty()) {
-                throw new ParsingException("Not found!");
+                throw new ParsingException("Not found!", ctx);
             }
 
             return Iterables.getOnlyElement(groups);
         } catch (InterruptedException e) {
-            throw new ParsingException("Not found!");
+            throw new ParsingException("Not found!", ctx);
         } catch (ExecutionException e) {
-            throw new ParsingException(e, "Not found!");
+            throw new ParsingException(e, "Not found!", ctx);
         }
     }
 }

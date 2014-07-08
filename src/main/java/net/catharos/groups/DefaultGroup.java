@@ -210,7 +210,7 @@ public class DefaultGroup extends DefaultSubject implements Group {
         THashSet<Member> out = new THashSet<Member>();
 
         for (Member member : members) {
-            if (member.getRank().get(new Setting(permission, null), null).booleanValue()) {
+            if (member.get(new Setting(permission, null), null).booleanValue()) {
                 out.add(member);
             }
         }
