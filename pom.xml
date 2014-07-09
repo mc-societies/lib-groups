@@ -46,6 +46,20 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>frederik-schmitt-releases</id>
+            <name>Releases</name>
+            <url>http://repo.frederik-schmitt.de/content/repositories/releases</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>frederik-schmitt-snapshots</id>
+            <name>Snapshots</name>
+            <url>http://repo.frederik-schmitt.de/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
