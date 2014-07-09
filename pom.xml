@@ -48,17 +48,18 @@
 
     <distributionManagement>
         <repository>
-            <id>frederik-schmitt-releases</id>
+            <id>frederik-schmitt</id>
             <name>Releases</name>
-            <url>http://repo.frederik-schmitt.de/content/repositories/releases</url>
+            <url>http://repo.frederik-schmitt.de/content/repositories/oss-releases</url>
         </repository>
 
         <snapshotRepository>
-            <id>frederik-schmitt-snapshots</id>
+            <id>frederik-schmitt</id>
             <name>Snapshots</name>
-            <url>http://repo.frederik-schmitt.de/content/repositories/snapshots</url>
+            <url>http://repo.frederik-schmitt.de/content/repositories/oss-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
 
     <build>
         <plugins>
