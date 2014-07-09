@@ -124,6 +124,11 @@ public class DefaultGroup extends DefaultSubject implements Group {
     }
 
     @Override
+    public void addRank(Rank rank) {
+        this.ranks.add(rank);
+    }
+
+    @Override
     public Collection<Rank> getRanks() {
         return Collections.unmodifiableCollection(ranks);
     }

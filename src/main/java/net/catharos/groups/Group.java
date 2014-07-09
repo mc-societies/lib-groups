@@ -106,6 +106,8 @@ public interface Group extends Subject, RowForwarder, Involved {
      */
     boolean hasRelation(Group anotherGroup);
 
+    void addRank(Rank rank);
+
     /**
      * @return The ranks of this group
      */

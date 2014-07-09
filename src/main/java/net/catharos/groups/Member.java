@@ -5,6 +5,7 @@ import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
 import net.catharos.groups.setting.value.SettingValue;
+import net.catharos.lib.core.command.sender.Sender;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.UUID;
 /**
  *
  */
-public interface Member extends Participant {
+public interface Member extends Participant, Sender {
 
     UUID getUUID();
 

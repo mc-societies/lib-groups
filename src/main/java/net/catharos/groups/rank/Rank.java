@@ -9,6 +9,8 @@ import java.util.UUID;
  */
 public interface Rank extends Comparable<Rank>, Subject {
 
+    int DEFAULT_PRIORITY = 0;
+
     UUID getUUID();
 
     String getName();

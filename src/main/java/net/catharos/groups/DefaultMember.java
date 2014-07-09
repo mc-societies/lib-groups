@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * Default implementation for a Member
  */
-public class DefaultMember implements Member {
+public abstract class DefaultMember implements Member {
 
     private final UUID uuid;
 

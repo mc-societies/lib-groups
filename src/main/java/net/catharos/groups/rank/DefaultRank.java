@@ -1,9 +1,12 @@
 package net.catharos.groups.rank;
 
 import com.google.common.primitives.Ints;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import net.catharos.groups.setting.subject.DefaultSubject;
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Provider;
 import java.util.UUID;
 
 /**
@@ -11,15 +14,17 @@ import java.util.UUID;
  */
 public class DefaultRank extends DefaultSubject implements Rank {
 
-    public static final int DEFAULT_PRIORITY = 0;
-
     private final UUID uuid;
     private final String name;
     private final int priority;
 
-    public DefaultRank(UUID uuid, String name) {this(uuid, name, DEFAULT_PRIORITY);}
+    @AssistedInject
+    public DefaultRank(Provider<UUID> uuid, @Assisted String name, @Assisted int priority) {
+        this(uuid.get(), name, priority);
+    }
 
-    public DefaultRank(UUID uuid, String name, int priority) {
+    @AssistedInject
+    public DefaultRank(@Assisted UUID uuid, @Assisted String name, @Assisted int priority) {
         this.uuid = uuid;
         this.name = name;
         this.priority = priority;
