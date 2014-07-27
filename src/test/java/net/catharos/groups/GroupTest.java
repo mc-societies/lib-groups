@@ -1,5 +1,6 @@
 package net.catharos.groups;
 
+import net.catharos.groups.publisher.VoidPublisher;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +15,8 @@ public class GroupTest {
 
     @Before
     public void setup() throws Exception {
-        a = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, null);
-        b = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, null);
+        a = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, new VoidPublisher<Group>(), new VoidPublisher<Group>());
+        b = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, new VoidPublisher<Group>(), new VoidPublisher<Group>());
     }
 
     @Test

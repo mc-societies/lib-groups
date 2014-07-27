@@ -4,8 +4,10 @@ import com.google.common.base.Objects;
 import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.google.inject.name.Named;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.publisher.Publisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
@@ -23,8 +25,10 @@ public class DefaultGroup extends DefaultSubject implements Group {
 
 
     private final UUID uuid;
-    private final String name;
-    private final DateTime lastActive;
+    private String name;
+    private final Publisher<Group> namePublisher;
+    private final Publisher<Group> lastactivePublisher;
+    private DateTime lastActive;
     @Nullable
     private Group parent;
 
@@ -36,27 +40,41 @@ public class DefaultGroup extends DefaultSubject implements Group {
 
 
     @AssistedInject
-    public DefaultGroup(@Assisted UUID uuid, @Assisted String name, @Assisted @Nullable Group parent) {
+    public DefaultGroup(@Assisted UUID uuid,
+                        @Assisted String name,
+                        @Assisted @Nullable Group parent,
+                        @Named("name-publisher") Publisher<Group> namePublisher,
+                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
         this.uuid = uuid;
         this.name = name;
+        this.namePublisher = namePublisher;
+        this.lastactivePublisher = lastactivePublisher;
         setParent(parent);
 
         lastActive = DateTime.now();
     }
 
     @AssistedInject
-    public DefaultGroup(@Assisted UUID uuid, @Assisted String name) {
-        this(uuid, name, null);
+    public DefaultGroup(@Assisted UUID uuid,
+                        @Assisted String name,
+                        @Named("name-publisher") Publisher<Group> namePublisher,
+                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
+        this(uuid, name, null, namePublisher, lastactivePublisher);
     }
 
     @AssistedInject
-    public DefaultGroup(@Assisted String name, Provider<UUID> uuidProvider) {
-        this(uuidProvider.get(), name, null);
+    public DefaultGroup(@Assisted String name,
+                        Provider<UUID> uuidProvider,
+                        @Named("name-publisher") Publisher<Group> namePublisher,
+                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
+        this(uuidProvider.get(), name, null, namePublisher, lastactivePublisher);
     }
 
     @Inject
-    public DefaultGroup(Provider<UUID> uuidProvider) {
-        this(uuidProvider.get(), NEW_GROUP_NAME);
+    public DefaultGroup(Provider<UUID> uuidProvider,
+                        @Named("name-publisher") Publisher<Group> namePublisher,
+                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
+        this(uuidProvider.get(), NEW_GROUP_NAME, namePublisher, lastactivePublisher);
     }
 
     @Override
@@ -70,8 +88,19 @@ public class DefaultGroup extends DefaultSubject implements Group {
     }
 
     @Override
+    public void setName(String name) {
+        this.name = name;
+        this.namePublisher.update(this);
+    }
+
+    @Override
     public DateTime getLastActive() {
         return lastActive;
+    }
+
+    public void active() {
+        this.lastActive = DateTime.now();
+        this.lastactivePublisher.update(this);
     }
 
     @Override

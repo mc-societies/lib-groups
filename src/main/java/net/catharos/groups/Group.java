@@ -14,9 +14,9 @@ import java.util.UUID;
 
 /**
  * This represents a generic group. A group can be a party, where {@link net.catharos.groups.Member}s participate, a town with citizens or a guild.
- * <p/>
+ * <p>
  * A group can have a parent and child groups.
- * <p/>
+ * <p>
  * {@link net.catharos.groups.Relation}s are bidirectional between groups. This means they are mirrored to each other.
  */
 public interface Group extends Subject, RowForwarder, Involved {
@@ -35,6 +35,13 @@ public interface Group extends Subject, RowForwarder, Involved {
      * @return The name
      */
     String getName();
+
+    /**
+     * Sets the new name
+     *
+     * @param name The name
+     */
+    void setName(String name);
 
     /**
      * @return The last date this group showed any sign of living

@@ -1,6 +1,7 @@
 package net.catharos.groups;
 
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.publisher.Publisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
@@ -23,7 +24,13 @@ public abstract class DefaultMember implements Member {
     private THashSet<Rank> ranks = new THashSet<Rank>();
     private Request activeRequest;
 
-    public DefaultMember(UUID uuid) {this.uuid = uuid;}
+    private final Publisher<Member> societyPublisher;
+
+    public DefaultMember(UUID uuid,
+                         Publisher<Member> societyPublisher) {
+        this.uuid = uuid;
+        this.societyPublisher = societyPublisher;
+    }
 
     @Override
     public UUID getUUID() {
@@ -55,6 +62,8 @@ public abstract class DefaultMember implements Member {
     @Override
     public void setGroup(@Nullable Group group) {
         this.group = group;
+
+        societyPublisher.update(this);
 
         if (group != null && !group.isMember(this)) {
             group.addMember(this);
