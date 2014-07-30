@@ -9,8 +9,8 @@ public class SettingGroup extends Setting {
 
     private final THashSet<Setting> settings = new THashSet<Setting>();
 
-    protected SettingGroup(String name, String description) {
-        super(name, description);
+    protected SettingGroup(int id, String description) {
+        super(id, description);
     }
 
     public void addSetting(Setting setting) {

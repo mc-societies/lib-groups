@@ -3,7 +3,7 @@ package net.catharos.groups.rank;
 import com.google.common.primitives.Ints;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import net.catharos.groups.setting.subject.DefaultSubject;
+import net.catharos.groups.setting.subject.AbstractSubject;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Provider;
@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Represents a DefaultRank
  */
-public class DefaultRank extends DefaultSubject implements Rank {
+public class DefaultRank extends AbstractSubject implements Rank {
 
     private final UUID uuid;
     private final String name;

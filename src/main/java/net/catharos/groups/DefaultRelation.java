@@ -1,6 +1,8 @@
 package net.catharos.groups;
 
 import com.google.common.base.Objects;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,7 +16,8 @@ public class DefaultRelation implements Relation {
 
     public DefaultRelation(Group source) {this(source, null);}
 
-    public DefaultRelation(Group source, @Nullable Group target) {
+    @AssistedInject
+    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") @Nullable Group target) {
         this.source = source;
         this.target = target;
     }

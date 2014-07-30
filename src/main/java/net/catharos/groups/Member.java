@@ -22,6 +22,8 @@ public interface Member extends Participant, Sender {
 
     void addRank(Rank rank);
 
+    SettingValue get(Setting setting);
+
     SettingValue get(Setting setting, Target target);
 
     @Nullable

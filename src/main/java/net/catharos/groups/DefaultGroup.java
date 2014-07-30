@@ -11,7 +11,7 @@ import net.catharos.groups.publisher.Publisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
-import net.catharos.groups.setting.subject.DefaultSubject;
+import net.catharos.groups.setting.subject.AbstractSubject;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * Default implementation for a Group
  */
-public class DefaultGroup extends DefaultSubject implements Group {
+public class DefaultGroup extends AbstractSubject implements Group {
 
 
     private final UUID uuid;
@@ -240,11 +240,11 @@ public class DefaultGroup extends DefaultSubject implements Group {
     }
 
     @Override
-    public Set<Member> getMembers(String permission) {
+    public Set<Member> getMembers(Setting setting) {
         THashSet<Member> out = new THashSet<Member>();
 
         for (Member member : members) {
-            if (member.get(new Setting(permission, null), null).booleanValue()) {
+            if (member.get(setting, null).booleanValue()) {
                 out.add(member);
             }
         }

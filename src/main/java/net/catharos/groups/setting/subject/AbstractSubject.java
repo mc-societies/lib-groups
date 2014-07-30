@@ -10,7 +10,7 @@ import net.catharos.groups.setting.value.SettingValue;
 /**
  * Represents a PermissionBase
  */
-public class DefaultSubject implements Subject {
+public abstract class AbstractSubject implements Subject {
 
     private final Table<Setting, Target, SettingValue> permissions = HashBasedTable.create();
 
@@ -22,5 +22,15 @@ public class DefaultSubject implements Subject {
     @Override
     public SettingValue get(Setting setting, Target target) {
         return permissions.get(setting, target);
+    }
+
+    @Override
+    public void set(Setting setting, SettingValue value) {
+        set(setting, Target.NO_TARGET, value);
+    }
+
+    @Override
+    public SettingValue get(Setting setting) {
+        return get(setting, Target.NO_TARGET);
     }
 }

@@ -1,25 +1,32 @@
 package net.catharos.groups.setting.value;
 
-import net.catharos.groups.setting.Setting;
-
 /**
  * Represents a EmptyPermissionValue
  */
 public class DefaultSettingValue implements SettingValue {
 
-    public static final DefaultSettingValue EMPTY = new DefaultSettingValue(null, SettingState.FALSE);
+    public static final DefaultSettingValue FALSE = new DefaultSettingValue(SettingState.FALSE);
+    public static final DefaultSettingValue TRUE = new DefaultSettingValue(SettingState.TRUE);
+    public static final DefaultSettingValue UNSET = new DefaultSettingValue(SettingState.UNSET);
 
-    private final Setting setting;
     private final SettingState state;
 
-    public DefaultSettingValue(Setting setting, SettingState state) {
-        this.setting = setting;
+    public DefaultSettingValue(SettingState state) {
         this.state = state;
     }
 
     @Override
-    public Setting getSetting() {
-        return setting;
+    public byte[] binaryValue() {
+        switch (state) {
+            case TRUE:
+                return new byte[]{1};
+            case FALSE:
+                return new byte[]{2};
+            case UNSET:
+                return new byte[]{3};
+            default:
+                throw new IllegalStateException("Invalid SettingState!");
+        }
     }
 
     @Override

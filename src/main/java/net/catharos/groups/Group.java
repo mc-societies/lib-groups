@@ -2,6 +2,7 @@ package net.catharos.groups;
 
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Involved;
+import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.subject.Subject;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,7 @@ public interface Group extends Subject, RowForwarder, Involved {
     /**
      * @return The uuid
      */
+    @Override
     UUID getUUID();
 
     /**
@@ -157,10 +159,10 @@ public interface Group extends Subject, RowForwarder, Involved {
     List<Member> getMembers();
 
     /**
-     * @param permission The permission to look by
-     * @return The members which have this permission
+     * @param setting The setting to look by
+     * @return The members which have this setting and {@link net.catharos.groups.setting.value.SettingValue#booleanValue()} returns true
      */
-    Set<Member> getMembers(String permission);
+    Set<Member> getMembers(Setting setting);
 
     /**
      * @param member The member

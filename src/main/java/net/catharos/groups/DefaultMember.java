@@ -48,6 +48,11 @@ public abstract class DefaultMember implements Member {
     }
 
     @Override
+    public SettingValue get(Setting setting) {
+        return get(setting, Target.NO_TARGET);
+    }
+
+    @Override
     public SettingValue get(Setting setting, Target target) {
         //fixme
         return null;
