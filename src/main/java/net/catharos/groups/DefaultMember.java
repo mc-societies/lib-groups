@@ -84,7 +84,7 @@ public abstract class DefaultMember implements Member {
     public String toString() {
         return "DefaultMember{" +
                 "uuid=" + uuid +
-                ", group=" + group +
+                ", group=" + group.getName() +
                 '}';
     }
 
