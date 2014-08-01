@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -156,7 +155,7 @@ public interface Group extends Subject, RowForwarder, Involved {
     /**
      * @return All members of this group
      */
-    List<Member> getMembers();
+    Set<Member> getMembers();
 
     /**
      * @param setting The setting to look by

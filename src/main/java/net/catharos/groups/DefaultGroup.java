@@ -35,7 +35,7 @@ public class DefaultGroup extends AbstractSubject implements Group {
     private final THashMap<Group, Relation> relations = new THashMap<Group, Relation>();
     private final THashSet<Rank> ranks = new THashSet<Rank>();
 
-    private final ArrayList<Member> members = new ArrayList<Member>();
+    private final THashSet<Member> members = new THashSet<Member>();
     private final THashSet<Group> subGroups = new THashSet<Group>();
 
 
@@ -235,8 +235,8 @@ public class DefaultGroup extends AbstractSubject implements Group {
     }
 
     @Override
-    public List<Member> getMembers() {
-        return Collections.unmodifiableList(members);
+    public Set<Member> getMembers() {
+        return Collections.unmodifiableSet(members);
     }
 
     @Override
@@ -259,13 +259,6 @@ public class DefaultGroup extends AbstractSubject implements Group {
 
     @Override
     public void addMember(Member member) {
-        if (member.isGroup(this)) {
-            // Make sure he's not part of this group
-            this.members.remove(member);
-
-            throw new IllegalStateException("Participant already is member of this group!");
-        }
-
         this.members.add(member);
 
         member.setGroup(this);

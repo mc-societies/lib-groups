@@ -1,5 +1,6 @@
 package net.catharos.groups;
 
+import com.google.common.base.Objects;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.Publisher;
 import net.catharos.groups.rank.Rank;
@@ -66,6 +67,10 @@ public abstract class DefaultMember implements Member {
 
     @Override
     public void setGroup(@Nullable Group group) {
+        if (Objects.equal(this.group, group)) {
+            return;
+        }
+
         this.group = group;
 
         societyPublisher.update(this);
@@ -84,7 +89,7 @@ public abstract class DefaultMember implements Member {
     public String toString() {
         return "DefaultMember{" +
                 "uuid=" + uuid +
-                ", group=" + group.getName() +
+                ", group=" + (group != null ? group.getName() : null) +
                 '}';
     }
 
