@@ -23,6 +23,7 @@ import static java.util.Collections.sort;
  */
 public class SimpleRequest implements Request<SimpleRequest.Choices> {
 
+    private final RequestMessenger messenger;
     private final Involved involved;
     private final SettableFuture<SimpleRequestResult<SimpleRequest.Choices>> future = SettableFuture.create();
 
@@ -30,7 +31,10 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
 
     private final DateTime created;
 
-    public SimpleRequest(Involved delegate) {
+    private boolean started = false;
+
+    public SimpleRequest(RequestMessenger messenger, Involved delegate) {
+        this.messenger = messenger;
         this.involved = delegate;
         this.created = DateTime.now();
     }
@@ -56,10 +60,21 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
     }
 
     @Override
+    public void start() {
+        for (Participant participant : involved.getInvolved()) {
+            participant.setActiveRequest(this);
+            messenger.start(this, participant);
+        }
+
+        started = true;
+    }
+
+    @Override
     public void vote(Participant participant, SimpleRequest.Choices choice) {
         if (isInvolved(participant)) {
             results.put(participant, choice);
             check();
+            messenger.voted(this, participant);
         }
     }
 
@@ -112,6 +127,7 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
 
         SimpleRequest.Choices choice = getLast(sorted).getKey();
         future.set(new SimpleRequestResult<SimpleRequest.Choices>(choice, this));
+        messenger.end(this);
     }
 
     @Override
@@ -126,6 +142,11 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
 
     @Override
     public ListenableFuture<SimpleRequestResult<SimpleRequest.Choices>> result() {
+
+        if (!started) {
+            throw new RuntimeException("Request not started yet!");
+        }
+
         return future;
     }
 

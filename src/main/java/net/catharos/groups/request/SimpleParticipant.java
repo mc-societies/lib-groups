@@ -29,4 +29,9 @@ public class SimpleParticipant implements Participant {
     public void setActiveRequest(Request request) {
         this.request = request;
     }
+
+    @Override
+    public void send(String msg) {
+        System.out.println(msg);
+    }
 }

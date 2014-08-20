@@ -32,7 +32,7 @@ public class SimpleRequestTest {
         };
 
 
-        SimpleRequest request = new SimpleRequest(involved);
+        SimpleRequest request = new SimpleRequest(new SimpleRequestMessenger(), involved);
 
 
         request.vote(elements[0], SimpleRequest.Choices.ACCEPT);

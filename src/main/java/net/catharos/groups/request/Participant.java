@@ -12,5 +12,7 @@ public interface Participant {
 
     void setActiveRequest(Request activeRequest);
 
+    void send(String msg);
+
     boolean clearRequest();
 }
