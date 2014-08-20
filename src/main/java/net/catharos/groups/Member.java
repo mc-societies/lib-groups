@@ -5,6 +5,7 @@ import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
 import net.catharos.groups.setting.value.SettingValue;
+import net.catharos.lib.core.command.format.table.RowForwarder;
 import net.catharos.lib.core.command.sender.Sender;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,9 +15,11 @@ import java.util.UUID;
 /**
  *
  */
-public interface Member extends Participant, Sender {
+public interface Member extends Participant, Sender, RowForwarder {
 
     UUID getUUID();
+
+    String getName();
 
     Set<Rank> getRanks();
 

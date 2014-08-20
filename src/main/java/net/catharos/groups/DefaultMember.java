@@ -126,5 +126,13 @@ public abstract class DefaultMember implements Member {
         return value;
     }
 
+    @Override
+    public String getColumn(int column) {
+        return getName();
+    }
 
+    @Override
+    public int getColumns() {
+        return 1;
+    }
 }
