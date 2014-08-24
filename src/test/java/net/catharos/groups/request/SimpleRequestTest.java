@@ -34,6 +34,7 @@ public class SimpleRequestTest {
 
         SimpleRequest request = new SimpleRequest(new SimpleRequestMessenger(), involved);
 
+        request.start();
 
         request.vote(elements[0], SimpleRequest.Choices.ACCEPT);
         request.vote(elements[1], SimpleRequest.Choices.ACCEPT);
