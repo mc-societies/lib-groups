@@ -26,6 +26,8 @@ public interface Group extends Subject, RowForwarder, Involved {
      */
     String NEW_GROUP_NAME = "new-group";
 
+    String NEW_GROUP_TAG = "ng";
+
     /**
      * @return The uuid
      */

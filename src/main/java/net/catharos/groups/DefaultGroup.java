@@ -76,7 +76,7 @@ public class DefaultGroup extends AbstractSubject implements Group {
     public DefaultGroup(Provider<UUID> uuidProvider,
                         @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
-        this(uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_NAME, namePublisher, lastactivePublisher);
+        this(uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher);
     }
 
     @Override
