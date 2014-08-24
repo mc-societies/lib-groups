@@ -13,7 +13,7 @@ public interface GroupFactory {
      * @param name The name
      * @return A brand new group
      */
-    Group create(String name);
+    Group create(String name, String tag);
 
     /**
      * Creates a group by name and uuid.
@@ -22,7 +22,7 @@ public interface GroupFactory {
      * @param name The name
      * @return A brand new group
      */
-    Group create(UUID uuid, String name);
+    Group create(UUID uuid, String name, String tag);
 
     /**
      * Creates a group by name and uuid and specifies a parent.
@@ -32,5 +32,5 @@ public interface GroupFactory {
      * @param parent The parent
      * @return A brand new group
      */
-    Group create(UUID uuid, String name, Group parent);
+    Group create(UUID uuid, String name, String tag, Group parent);
 }

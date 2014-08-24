@@ -15,8 +15,8 @@ public class GroupTest {
 
     @Before
     public void setup() throws Exception {
-        a = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, new VoidPublisher<Group>(), new VoidPublisher<Group>());
-        b = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, new VoidPublisher<Group>(), new VoidPublisher<Group>());
+        a = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, new VoidPublisher<Group>(), new VoidPublisher<Group>());
+        b = new DefaultGroup(UUID.randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, new VoidPublisher<Group>(), new VoidPublisher<Group>());
     }
 
     @Test

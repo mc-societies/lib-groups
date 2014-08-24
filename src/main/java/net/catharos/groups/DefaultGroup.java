@@ -25,7 +25,7 @@ public class DefaultGroup extends AbstractSubject implements Group {
 
 
     private final UUID uuid;
-    private String name;
+    private String name, tag;
     private final Publisher<Group> namePublisher;
     private final Publisher<Group> lastactivePublisher;
     private DateTime lastActive;
@@ -42,11 +42,12 @@ public class DefaultGroup extends AbstractSubject implements Group {
     @AssistedInject
     public DefaultGroup(@Assisted UUID uuid,
                         @Assisted String name,
-                        @Assisted @Nullable Group parent,
+                        @Assisted String tag, @Assisted @Nullable Group parent,
                         @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
         this.uuid = uuid;
         this.name = name;
+        this.tag = tag;
         this.namePublisher = namePublisher;
         this.lastactivePublisher = lastactivePublisher;
         setParent(parent);
@@ -57,24 +58,25 @@ public class DefaultGroup extends AbstractSubject implements Group {
     @AssistedInject
     public DefaultGroup(@Assisted UUID uuid,
                         @Assisted String name,
-                        @Named("name-publisher") Publisher<Group> namePublisher,
+                        @Assisted String tag, @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
-        this(uuid, name, null, namePublisher, lastactivePublisher);
+        this(uuid, name, tag, null, namePublisher, lastactivePublisher);
     }
 
     @AssistedInject
     public DefaultGroup(@Assisted String name,
+                        @Assisted String tag,
                         Provider<UUID> uuidProvider,
                         @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
-        this(uuidProvider.get(), name, null, namePublisher, lastactivePublisher);
+        this(uuidProvider.get(), name, tag, null, namePublisher, lastactivePublisher);
     }
 
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider,
                         @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
-        this(uuidProvider.get(), NEW_GROUP_NAME, namePublisher, lastactivePublisher);
+        this(uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_NAME, namePublisher, lastactivePublisher);
     }
 
     @Override
@@ -85,6 +87,11 @@ public class DefaultGroup extends AbstractSubject implements Group {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getTag() {
+        return tag;
     }
 
     @Override
