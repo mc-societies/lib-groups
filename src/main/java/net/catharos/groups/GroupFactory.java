@@ -1,5 +1,7 @@
 package net.catharos.groups;
 
+import com.google.inject.assistedinject.Assisted;
+
 import java.util.UUID;
 
 /**
@@ -13,7 +15,7 @@ public interface GroupFactory {
      * @param name The name
      * @return A brand new group
      */
-    Group create(String name, String tag);
+    Group create(@Assisted("name") String name, @Assisted("tag") String tag);
 
     /**
      * Creates a group by name and uuid.
@@ -22,7 +24,7 @@ public interface GroupFactory {
      * @param name The name
      * @return A brand new group
      */
-    Group create(UUID uuid, String name, String tag);
+    Group create(UUID uuid, @Assisted("name") String name, @Assisted("tag") String tag);
 
     /**
      * Creates a group by name and uuid and specifies a parent.
@@ -32,5 +34,5 @@ public interface GroupFactory {
      * @param parent The parent
      * @return A brand new group
      */
-    Group create(UUID uuid, String name, String tag, Group parent);
+    Group create(UUID uuid, @Assisted("name") String name, @Assisted("tag") String tag, Group parent);
 }

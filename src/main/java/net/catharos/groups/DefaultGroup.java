@@ -16,7 +16,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Default implementation for a Group
@@ -41,8 +44,9 @@ public class DefaultGroup extends AbstractSubject implements Group {
 
     @AssistedInject
     public DefaultGroup(@Assisted UUID uuid,
-                        @Assisted String name,
-                        @Assisted String tag, @Assisted @Nullable Group parent,
+                        @Assisted("name") String name,
+                        @Assisted("tag") String tag,
+                        @Assisted @Nullable Group parent,
                         @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
         this.uuid = uuid;
@@ -57,15 +61,16 @@ public class DefaultGroup extends AbstractSubject implements Group {
 
     @AssistedInject
     public DefaultGroup(@Assisted UUID uuid,
-                        @Assisted String name,
-                        @Assisted String tag, @Named("name-publisher") Publisher<Group> namePublisher,
+                        @Assisted("name") String name,
+                        @Assisted("tag") String tag,
+                        @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
         this(uuid, name, tag, null, namePublisher, lastactivePublisher);
     }
 
     @AssistedInject
-    public DefaultGroup(@Assisted String name,
-                        @Assisted String tag,
+    public DefaultGroup(@Assisted("name") String name,
+                        @Assisted("tag") String tag,
                         Provider<UUID> uuidProvider,
                         @Named("name-publisher") Publisher<Group> namePublisher,
                         @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
