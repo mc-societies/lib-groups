@@ -2,7 +2,6 @@ package net.catharos.groups.setting.subject;
 
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
-import net.catharos.groups.setting.value.SettingValue;
 
 import java.util.UUID;
 
@@ -14,12 +13,12 @@ public interface Subject extends Target {
     @Override
     UUID getUUID();
 
-    void set(Setting setting, Target target, SettingValue value);
+    <V> void set(Setting<V> setting, Target target, V value);
 
-    void set(Setting setting, SettingValue value);
+    <V> void set(Setting<V> setting, V value);
 
 
-    SettingValue get(Setting setting, Target target);
+    <V> V get(Setting<V> setting, Target target);
 
-    SettingValue get(Setting setting);
+    <V> V get(Setting<V> setting);
 }

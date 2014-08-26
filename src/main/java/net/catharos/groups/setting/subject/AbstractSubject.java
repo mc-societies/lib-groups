@@ -5,32 +5,32 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
-import net.catharos.groups.setting.value.SettingValue;
+import net.catharos.lib.core.util.CastSafe;
 
 /**
  * Represents a PermissionBase
  */
 public abstract class AbstractSubject implements Subject {
 
-    private final Table<Setting, Target, SettingValue> permissions = HashBasedTable.create();
+    private final Table<Setting, Target, Object> permissions = HashBasedTable.create();
 
     @Override
-    public void set(Setting setting, Target target, SettingValue value) {
+    public <V> void set(Setting<V> setting, Target target, V value) {
         permissions.put(setting, target, value);
     }
 
     @Override
-    public SettingValue get(Setting setting, Target target) {
-        return permissions.get(setting, target);
+    public <V> V get(Setting<V> setting, Target target) {
+        return CastSafe.toGeneric(permissions.get(setting, target));
     }
 
     @Override
-    public void set(Setting setting, SettingValue value) {
+    public <V> void set(Setting<V> setting, V value) {
         set(setting, Target.NO_TARGET, value);
     }
 
     @Override
-    public SettingValue get(Setting setting) {
+    public <V> V get(Setting<V> setting) {
         return get(setting, Target.NO_TARGET);
     }
 }
