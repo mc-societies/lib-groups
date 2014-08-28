@@ -17,6 +17,10 @@ public interface Subject extends Target {
 
     <V> void set(Setting<V> setting, V value);
 
+    <V> void remove(Setting<V> setting, Target target);
+
+    <V> void remove(Setting<V> setting);
+
 
     <V> V get(Setting<V> setting, Target target);
 

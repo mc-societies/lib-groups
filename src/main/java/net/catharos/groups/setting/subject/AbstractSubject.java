@@ -24,6 +24,17 @@ public abstract class AbstractSubject implements Subject {
         return CastSafe.toGeneric(permissions.get(setting, target));
     }
 
+
+    @Override
+    public <V> void remove(Setting<V> setting, Target target) {
+        permissions.remove(setting, target);
+    }
+
+    @Override
+    public <V> void remove(Setting<V> setting) {
+        remove(setting, Target.NO_TARGET);
+    }
+
     @Override
     public <V> void set(Setting<V> setting, V value) {
         set(setting, Target.NO_TARGET, value);

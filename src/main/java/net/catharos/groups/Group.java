@@ -120,6 +120,10 @@ public interface Group extends Subject, RowForwarder, Involved {
 
     void addRank(Rank rank);
 
+    void removeRank(Rank rank);
+
+    Rank getRank(String name);
+
     /**
      * @return The ranks of this group
      */
