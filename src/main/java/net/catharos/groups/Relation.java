@@ -16,7 +16,6 @@ public interface Relation {
     /**
      * @return The target
      */
-    @Nullable
     Group getTarget();
 
     /**

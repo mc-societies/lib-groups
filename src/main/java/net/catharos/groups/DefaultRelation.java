@@ -11,13 +11,12 @@ import org.jetbrains.annotations.Nullable;
 public class DefaultRelation implements Relation {
 
     private final Group source;
-    @Nullable
     private final Group target;
 
     public DefaultRelation(Group source) {this(source, null);}
 
     @AssistedInject
-    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") @Nullable Group target) {
+    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") Group target) {
         this.source = source;
         this.target = target;
     }
