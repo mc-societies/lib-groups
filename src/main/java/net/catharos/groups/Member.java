@@ -20,9 +20,9 @@ public interface Member extends Participant, Sender, RowForwarder {
 
     String getName();
 
-    short getState();
+    int getState();
 
-    void setState(short state);
+    void setState(int state);
 
     Set<Rank> getRanks();
 
