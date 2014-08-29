@@ -28,9 +28,7 @@ public interface Member extends Participant, Sender, RowForwarder {
 
     void addRank(Rank rank);
 
-    <V> V get(Setting<V> setting);
-
-    <V> V get(Setting<V> setting, Target target);
+    <V> V getSingle(Setting<V> setting);
 
     @Nullable
     Group getGroup();

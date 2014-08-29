@@ -7,7 +7,6 @@ import net.catharos.groups.publisher.MemberStatePublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
-import net.catharos.groups.setting.target.Target;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -53,13 +52,15 @@ public abstract class DefaultMember implements Member {
     }
 
     @Override
-    public <V> V get(Setting<V> setting) {
-        return null; //fixme
-    }
+    public <V> V getSingle(Setting<V> setting) {
+        for (Rank rank : ranks) {
+            V value = rank.get(setting);
 
-    @Override
-    public <V> V get(Setting<V> setting, Target target) {
-        //fixme
+            if (value != null) {
+                return value;
+            }
+        }
+
         return null;
     }
 

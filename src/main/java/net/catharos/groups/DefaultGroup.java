@@ -42,7 +42,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private Group parent;
 
     private final THashMap<Group, Relation> relations = new THashMap<Group, Relation>();
-    private final THashSet<Rank> ranks = new THashSet<Rank>();
+    private final THashMap<UUID, Rank> ranks = new THashMap<UUID, Rank>();
 
     private final THashSet<Member> members = new THashSet<Member>();
     private final THashSet<Group> subGroups = new THashSet<Group>();
@@ -207,23 +207,32 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public void addRank(Rank rank) {
-        this.ranks.add(rank);
+        this.ranks.put(rank.getUUID(), rank);
     }
 
     @Override
     public void removeRank(Rank rank) {
-        //todo
+        this.ranks.remove(rank.getUUID());
     }
 
     @Override
     public Rank getRank(String name) {
-        //todo
+        for (Rank rank : ranks.values()) {
+            if (rank.getName().equals(name)) {
+                return rank;
+            }
+        }
         return null;
     }
 
     @Override
+    public Rank getRank(UUID uuid) {
+        return this.ranks.get(uuid);
+    }
+
+    @Override
     public Collection<Rank> getRanks() {
-        return Collections.unmodifiableCollection(ranks);
+        return Collections.unmodifiableCollection(ranks.values());
     }
 
     @Override
@@ -308,7 +317,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         THashSet<Member> out = new THashSet<Member>();
 
         for (Member member : members) {
-            if (member.<Boolean>get(setting, null)) {
+            if (member.<Boolean>getSingle(setting)) {
                 out.add(member);
             }
         }

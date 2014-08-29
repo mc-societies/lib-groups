@@ -130,6 +130,8 @@ public interface Group extends Subject, RowForwarder, Involved {
 
     Rank getRank(String name);
 
+    Rank getRank(UUID uuid);
+
     /**
      * @return The ranks of this group
      */
