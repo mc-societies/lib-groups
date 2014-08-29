@@ -83,6 +83,8 @@ public interface Group extends Subject, RowForwarder, Involved {
      */
     Relation getRelation(Group anotherGroup);
 
+    Collection<Relation> getRelations();
+
     /**
      * Sets the relation to an other group
      *

@@ -132,6 +132,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     }
 
     @Override
+    public Collection<Relation> getRelations() {
+        return relations.values();
+    }
+
+    @Override
     public void setRelation(Relation relation) {
         setRelation(relation, true);
     }
