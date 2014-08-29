@@ -118,17 +118,19 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     }
 
     @Override
-    public short getState() {
+    public int getState() {
         return state;
     }
 
     @Override
-    public void setState(short state) {
-        if (this.state != state) {
-            groupStatePublisher.publish(this, state);
+    public void setState(int state) {
+        short sstate = (short) state;
+
+        if (this.state != sstate) {
+            groupStatePublisher.publish(this, sstate);
         }
 
-        this.state = state;
+        this.state = sstate;
     }
 
     @Override

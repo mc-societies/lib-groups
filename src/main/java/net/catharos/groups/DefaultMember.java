@@ -141,16 +141,17 @@ public abstract class DefaultMember implements Member {
     }
 
     @Override
-    public short getState() {
+    public int getState() {
         return state;
     }
 
     @Override
-    public void setState(short state) {
+    public void setState(int state) {
+        short sstate = (short) state;
         if (this.state != state) {
-            memberStatePublisher.publish(this, state);
+            memberStatePublisher.publish(this, sstate);
         }
 
-        this.state = state;
+        this.state = sstate;
     }
 }
