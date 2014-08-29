@@ -4,10 +4,10 @@ import com.google.common.base.Objects;
 import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import com.google.inject.name.Named;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
-import net.catharos.groups.publisher.Publisher;
+import net.catharos.groups.publisher.LastActivePublisher;
+import net.catharos.groups.publisher.NamePublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
@@ -29,8 +29,8 @@ public class DefaultGroup extends AbstractSubject implements Group {
 
     private final UUID uuid;
     private String name, tag;
-    private final Publisher<Group> namePublisher;
-    private final Publisher<Group> lastactivePublisher;
+    private final NamePublisher namePublisher;
+    private final LastActivePublisher lastactivePublisher;
     private DateTime lastActive;
     @Nullable
     private Group parent;
@@ -47,8 +47,8 @@ public class DefaultGroup extends AbstractSubject implements Group {
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
                         @Assisted @Nullable Group parent,
-                        @Named("name-publisher") Publisher<Group> namePublisher,
-                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
+                        NamePublisher namePublisher,
+                        LastActivePublisher lastactivePublisher) {
         this.uuid = uuid;
         this.name = name;
         this.tag = tag;
@@ -63,8 +63,8 @@ public class DefaultGroup extends AbstractSubject implements Group {
     public DefaultGroup(@Assisted UUID uuid,
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
-                        @Named("name-publisher") Publisher<Group> namePublisher,
-                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
+                        NamePublisher namePublisher,
+                        LastActivePublisher lastactivePublisher) {
         this(uuid, name, tag, null, namePublisher, lastactivePublisher);
     }
 
@@ -72,15 +72,15 @@ public class DefaultGroup extends AbstractSubject implements Group {
     public DefaultGroup(@Assisted("name") String name,
                         @Assisted("tag") String tag,
                         Provider<UUID> uuidProvider,
-                        @Named("name-publisher") Publisher<Group> namePublisher,
-                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
+                        NamePublisher namePublisher,
+                        LastActivePublisher lastactivePublisher) {
         this(uuidProvider.get(), name, tag, null, namePublisher, lastactivePublisher);
     }
 
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider,
-                        @Named("name-publisher") Publisher<Group> namePublisher,
-                        @Named("lastactive-publisher") Publisher<Group> lastactivePublisher) {
+                        NamePublisher namePublisher,
+                        LastActivePublisher lastactivePublisher) {
         this(uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher);
     }
 
@@ -102,7 +102,8 @@ public class DefaultGroup extends AbstractSubject implements Group {
     @Override
     public void setName(String name) {
         this.name = name;
-        this.namePublisher.update(this);
+
+        namePublisher.publish(this, name);
     }
 
     @Override
@@ -112,7 +113,8 @@ public class DefaultGroup extends AbstractSubject implements Group {
 
     public void active() {
         this.lastActive = DateTime.now();
-        this.lastactivePublisher.update(this);
+
+        lastactivePublisher.publish(this, lastActive);
     }
 
     @Override
@@ -167,6 +169,17 @@ public class DefaultGroup extends AbstractSubject implements Group {
     @Override
     public void addRank(Rank rank) {
         this.ranks.add(rank);
+    }
+
+    @Override
+    public void removeRank(Rank rank) {
+        //todo
+    }
+
+    @Override
+    public Rank getRank(String name) {
+        //todo
+        return null;
     }
 
     @Override
@@ -252,11 +265,11 @@ public class DefaultGroup extends AbstractSubject implements Group {
     }
 
     @Override
-    public Set<Member> getMembers(Setting setting) {
+    public Set<Member> getMembers(Setting<Boolean> setting) {
         THashSet<Member> out = new THashSet<Member>();
 
         for (Member member : members) {
-            if (member.get(setting, null).booleanValue()) {
+            if (member.<Boolean>get(setting, null)) {
                 out.add(member);
             }
         }

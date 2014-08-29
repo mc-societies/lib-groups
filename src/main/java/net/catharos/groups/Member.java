@@ -4,7 +4,6 @@ import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
-import net.catharos.groups.setting.value.SettingValue;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import net.catharos.lib.core.command.sender.Sender;
 import org.jetbrains.annotations.Nullable;
@@ -25,9 +24,9 @@ public interface Member extends Participant, Sender, RowForwarder {
 
     void addRank(Rank rank);
 
-    SettingValue get(Setting setting);
+    <V> V get(Setting<V> setting);
 
-    SettingValue get(Setting setting, Target target);
+    <V> V get(Setting<V> setting, Target target);
 
     @Nullable
     Group getGroup();

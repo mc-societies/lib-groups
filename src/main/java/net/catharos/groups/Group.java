@@ -169,7 +169,7 @@ public interface Group extends Subject, RowForwarder, Involved {
      * @param setting The setting to look by
      * @return The members which have this setting and {@link net.catharos.groups.setting.value.SettingValue#booleanValue()} returns true
      */
-    Set<Member> getMembers(Setting setting);
+    public Set<Member> getMembers(Setting<Boolean> setting);
 
     /**
      * @param member The member

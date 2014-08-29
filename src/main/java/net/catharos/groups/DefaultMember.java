@@ -1,14 +1,12 @@
 package net.catharos.groups;
 
 import com.google.common.base.Objects;
-import com.google.inject.name.Named;
 import gnu.trove.set.hash.THashSet;
-import net.catharos.groups.publisher.Publisher;
+import net.catharos.groups.publisher.MemberGroupPublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
-import net.catharos.groups.setting.value.SettingValue;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -26,10 +24,10 @@ public abstract class DefaultMember implements Member {
     private THashSet<Rank> ranks = new THashSet<Rank>();
     private Request activeRequest;
 
-    private final Publisher<Member> groupPublisher;
+    private final MemberGroupPublisher groupPublisher;
 
     public DefaultMember(UUID uuid,
-                         @Named("group-publisher") Publisher<Member> groupPublisher) {
+                         MemberGroupPublisher groupPublisher) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
     }
@@ -50,12 +48,12 @@ public abstract class DefaultMember implements Member {
     }
 
     @Override
-    public SettingValue get(Setting setting) {
+    public <V> V get(Setting<V> setting) {
         return get(setting, Target.NO_TARGET);
     }
 
     @Override
-    public SettingValue get(Setting setting, Target target) {
+    public <V> V get(Setting<V> setting, Target target) {
         //fixme
         return null;
     }
@@ -74,7 +72,7 @@ public abstract class DefaultMember implements Member {
 
         this.group = group;
 
-        groupPublisher.update(this);
+        groupPublisher.publish(this, group);
 
         if (group != null && !group.isMember(this)) {
             group.addMember(this);
