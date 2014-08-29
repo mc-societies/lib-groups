@@ -1,9 +1,6 @@
 package net.catharos.groups;
 
-import net.catharos.groups.publisher.GroupStatePublisher;
-import net.catharos.groups.publisher.LastActivePublisher;
-import net.catharos.groups.publisher.NamePublisher;
-import net.catharos.groups.publisher.SettingPublisher;
+import net.catharos.groups.publisher.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,14 +24,18 @@ public class GroupTest {
     private SettingPublisher settingPublisher;
     @Mock
     private GroupStatePublisher groupStatePublisher;
+    @Mock
+    private GroupRankPublisher groupRankPublisher;
+    @Mock
+    private RankDropPublisher rankDropPublisher;
 
     @Before
     public void setup() throws Exception {
 
         a = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, lastActivePublisher, settingPublisher, groupStatePublisher);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, lastActivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
         b = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, lastActivePublisher, settingPublisher, groupStatePublisher);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, lastActivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @Test

@@ -6,10 +6,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
-import net.catharos.groups.publisher.GroupStatePublisher;
-import net.catharos.groups.publisher.LastActivePublisher;
-import net.catharos.groups.publisher.NamePublisher;
-import net.catharos.groups.publisher.SettingPublisher;
+import net.catharos.groups.publisher.*;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
@@ -36,6 +33,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final NamePublisher namePublisher;
     private final LastActivePublisher lastactivePublisher;
     private final GroupStatePublisher groupStatePublisher;
+    private final GroupRankPublisher groupRankPublisher;
+    private final RankDropPublisher rankDropPublisher;
 
     private DateTime lastActive;
     @Nullable
@@ -56,7 +55,9 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher) {
+                        GroupStatePublisher groupStatePublisher,
+                        GroupRankPublisher groupRankPublisher,
+                        RankDropPublisher rankDropPublisher) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
@@ -64,6 +65,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.namePublisher = namePublisher;
         this.lastactivePublisher = lastactivePublisher;
         this.groupStatePublisher = groupStatePublisher;
+        this.groupRankPublisher = groupRankPublisher;
+        this.rankDropPublisher = rankDropPublisher;
         setParent(parent);
 
         lastActive = DateTime.now();
@@ -76,8 +79,10 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher) {
-        this(uuid, name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher);
+                        GroupStatePublisher groupStatePublisher,
+                        GroupRankPublisher groupRankPublisher,
+                        RankDropPublisher rankDropPublisher) {
+        this(uuid, name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @AssistedInject
@@ -87,9 +92,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher) {
+                        GroupStatePublisher groupStatePublisher,
+                        GroupRankPublisher groupRankPublisher,
+                        RankDropPublisher rankDropPublisher) {
         this(uuidProvider
-                .get(), name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher);
+                .get(), name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @Inject
@@ -97,9 +104,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher) {
+                        GroupStatePublisher groupStatePublisher,
+                        GroupRankPublisher groupRankPublisher,
+                        RankDropPublisher rankDropPublisher) {
         this(uuidProvider
-                .get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher);
+                .get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @Override
@@ -207,12 +216,16 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public void addRank(Rank rank) {
-        this.ranks.put(rank.getUUID(), rank);
+        if (!rank.equals(this.ranks.put(rank.getUUID(), rank))) {
+            groupRankPublisher.publish(this, rank);
+        }
     }
 
     @Override
     public void removeRank(Rank rank) {
-        this.ranks.remove(rank.getUUID());
+        if (this.ranks.remove(rank.getUUID()) != null) {
+            rankDropPublisher.drop(rank);
+        }
     }
 
     @Override
