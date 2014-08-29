@@ -6,6 +6,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.publisher.GroupStatePublisher;
 import net.catharos.groups.publisher.LastActivePublisher;
 import net.catharos.groups.publisher.NamePublisher;
 import net.catharos.groups.publisher.SettingPublisher;
@@ -31,8 +32,10 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     private final UUID uuid;
     private String name, tag;
+    private short state;
     private final NamePublisher namePublisher;
     private final LastActivePublisher lastactivePublisher;
+    private final GroupStatePublisher groupStatePublisher;
 
     private DateTime lastActive;
     @Nullable
@@ -52,13 +55,15 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted @Nullable Group parent,
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
-                        SettingPublisher settingPublisher) {
+                        SettingPublisher settingPublisher,
+                        GroupStatePublisher groupStatePublisher) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
         this.tag = tag;
         this.namePublisher = namePublisher;
         this.lastactivePublisher = lastactivePublisher;
+        this.groupStatePublisher = groupStatePublisher;
         setParent(parent);
 
         lastActive = DateTime.now();
@@ -70,8 +75,9 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("tag") String tag,
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
-                        SettingPublisher settingPublisher) {
-        this(uuid, name, tag, null, namePublisher, lastactivePublisher, settingPublisher);
+                        SettingPublisher settingPublisher,
+                        GroupStatePublisher groupStatePublisher) {
+        this(uuid, name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher);
     }
 
     @AssistedInject
@@ -80,16 +86,20 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
-                        SettingPublisher settingPublisher) {
-        this(uuidProvider.get(), name, tag, null, namePublisher, lastactivePublisher, settingPublisher);
+                        SettingPublisher settingPublisher,
+                        GroupStatePublisher groupStatePublisher) {
+        this(uuidProvider
+                .get(), name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher);
     }
 
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
                         LastActivePublisher lastactivePublisher,
-                        SettingPublisher settingPublisher) {
-        this(uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher, settingPublisher);
+                        SettingPublisher settingPublisher,
+                        GroupStatePublisher groupStatePublisher) {
+        this(uuidProvider
+                .get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher);
     }
 
     @Override
@@ -105,6 +115,20 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Override
     public String getTag() {
         return tag;
+    }
+
+    @Override
+    public short getState() {
+        return state;
+    }
+
+    @Override
+    public void setState(short state) {
+        if (this.state != state) {
+            groupStatePublisher.publish(this, state);
+        }
+
+        this.state = state;
     }
 
     @Override

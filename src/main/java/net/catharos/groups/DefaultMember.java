@@ -3,6 +3,7 @@ package net.catharos.groups;
 import com.google.common.base.Objects;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.MemberGroupPublisher;
+import net.catharos.groups.publisher.MemberStatePublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
@@ -19,17 +20,21 @@ public abstract class DefaultMember implements Member {
 
     private final UUID uuid;
 
+    private short state;
     @Nullable
     private Group group;
     private THashSet<Rank> ranks = new THashSet<Rank>();
     private Request activeRequest;
 
     private final MemberGroupPublisher groupPublisher;
+    private final MemberStatePublisher memberStatePublisher;
 
     public DefaultMember(UUID uuid,
-                         MemberGroupPublisher groupPublisher) {
+                         MemberGroupPublisher groupPublisher,
+                         MemberStatePublisher memberStatePublisher) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
+        this.memberStatePublisher = memberStatePublisher;
     }
 
     @Override
@@ -133,5 +138,19 @@ public abstract class DefaultMember implements Member {
     @Override
     public int getColumns() {
         return 1;
+    }
+
+    @Override
+    public short getState() {
+        return state;
+    }
+
+    @Override
+    public void setState(short state) {
+        if (this.state != state) {
+            memberStatePublisher.publish(this, state);
+        }
+
+        this.state = state;
     }
 }

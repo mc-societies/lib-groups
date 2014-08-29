@@ -41,6 +41,10 @@ public interface Group extends Subject, RowForwarder, Involved {
 
     String getTag();
 
+    short getState();
+
+    void setState(short state);
+
     /**
      * Sets the new name
      *
