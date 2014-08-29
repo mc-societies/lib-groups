@@ -49,7 +49,7 @@ public abstract class DefaultMember implements Member {
 
     @Override
     public <V> V get(Setting<V> setting) {
-        return get(setting, Target.NO_TARGET);
+        return null; //fixme
     }
 
     @Override

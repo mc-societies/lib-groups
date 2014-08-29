@@ -8,10 +8,12 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.LastActivePublisher;
 import net.catharos.groups.publisher.NamePublisher;
+import net.catharos.groups.publisher.SettingPublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
-import net.catharos.groups.setting.subject.AbstractSubject;
+import net.catharos.groups.setting.subject.AbstractPublishingSubject;
+import net.catharos.groups.setting.target.SimpleTarget;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -24,13 +26,14 @@ import java.util.UUID;
 /**
  * Default implementation for a Group
  */
-public class DefaultGroup extends AbstractSubject implements Group {
+public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
 
     private final UUID uuid;
     private String name, tag;
     private final NamePublisher namePublisher;
     private final LastActivePublisher lastactivePublisher;
+
     private DateTime lastActive;
     @Nullable
     private Group parent;
@@ -48,7 +51,9 @@ public class DefaultGroup extends AbstractSubject implements Group {
                         @Assisted("tag") String tag,
                         @Assisted @Nullable Group parent,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher) {
+                        LastActivePublisher lastactivePublisher,
+                        SettingPublisher settingPublisher) {
+        super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
         this.tag = tag;
@@ -64,8 +69,9 @@ public class DefaultGroup extends AbstractSubject implements Group {
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher) {
-        this(uuid, name, tag, null, namePublisher, lastactivePublisher);
+                        LastActivePublisher lastactivePublisher,
+                        SettingPublisher settingPublisher) {
+        this(uuid, name, tag, null, namePublisher, lastactivePublisher, settingPublisher);
     }
 
     @AssistedInject
@@ -73,15 +79,17 @@ public class DefaultGroup extends AbstractSubject implements Group {
                         @Assisted("tag") String tag,
                         Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher) {
-        this(uuidProvider.get(), name, tag, null, namePublisher, lastactivePublisher);
+                        LastActivePublisher lastactivePublisher,
+                        SettingPublisher settingPublisher) {
+        this(uuidProvider.get(), name, tag, null, namePublisher, lastactivePublisher, settingPublisher);
     }
 
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher) {
-        this(uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher);
+                        LastActivePublisher lastactivePublisher,
+                        SettingPublisher settingPublisher) {
+        this(uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher, settingPublisher);
     }
 
     @Override
@@ -311,6 +319,14 @@ public class DefaultGroup extends AbstractSubject implements Group {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
+        // Find DefaultGroups and SimpleTargets if they are hashed in a map
+        if (o instanceof SimpleTarget) {
+            if (((SimpleTarget) o).getUUID().equals(uuid)) {
+                return true;
+            }
+        }
+
         if (o == null || getClass() != o.getClass()) return false;
 
         DefaultGroup that = (DefaultGroup) o;

@@ -21,9 +21,12 @@ public abstract class AbstractSubject implements Subject {
 
     @Override
     public <V> V get(Setting<V> setting, Target target) {
-        return CastSafe.toGeneric(permissions.get(setting, target));
+        Object obj = permissions.get(setting, target);
+        if (obj == null) {
+            return null;
+        }
+        return CastSafe.toGeneric(obj);
     }
-
 
     @Override
     public <V> void remove(Setting<V> setting, Target target) {
@@ -32,16 +35,16 @@ public abstract class AbstractSubject implements Subject {
 
     @Override
     public <V> void remove(Setting<V> setting) {
-        remove(setting, Target.NO_TARGET);
+        remove(setting, this);
     }
 
     @Override
     public <V> void set(Setting<V> setting, V value) {
-        set(setting, Target.NO_TARGET, value);
+        set(setting, this, value);
     }
 
     @Override
     public <V> V get(Setting<V> setting) {
-        return get(setting, Target.NO_TARGET);
+        return get(setting, this);
     }
 }

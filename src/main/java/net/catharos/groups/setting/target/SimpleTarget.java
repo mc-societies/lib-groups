@@ -19,11 +19,14 @@ public class SimpleTarget implements Target {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        SimpleTarget that = (SimpleTarget) o;
+        if (!(o instanceof Target)) {
+            return false;
+        }
 
-        return uuid.equals(that.uuid);
+        Target that = (Target) o;
+
+        return uuid.equals(that.getUUID());
     }
 
     @Override
