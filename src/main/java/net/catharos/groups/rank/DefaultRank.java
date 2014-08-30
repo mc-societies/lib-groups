@@ -3,7 +3,8 @@ package net.catharos.groups.rank;
 import com.google.common.primitives.Ints;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import net.catharos.groups.setting.subject.AbstractSubject;
+import net.catharos.groups.publisher.SettingPublisher;
+import net.catharos.groups.setting.subject.AbstractPublishingSubject;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Provider;
@@ -12,19 +13,30 @@ import java.util.UUID;
 /**
  * Represents a DefaultRank
  */
-public class DefaultRank extends AbstractSubject implements Rank {
+public class DefaultRank extends AbstractPublishingSubject implements Rank {
+
+    public static final int PREPARE = 0xFBEFABE;
 
     private final UUID uuid;
     private final String name;
     private final int priority;
 
+    private boolean prepared = false;
+
     @AssistedInject
-    public DefaultRank(Provider<UUID> uuid, @Assisted String name, @Assisted int priority) {
-        this(uuid.get(), name, priority);
+    public DefaultRank(Provider<UUID> uuid,
+                       @Assisted String name,
+                       @Assisted int priority,
+                       SettingPublisher settingPublisher) {
+        this(uuid.get(), name, priority, settingPublisher);
     }
 
     @AssistedInject
-    public DefaultRank(@Assisted UUID uuid, @Assisted String name, @Assisted int priority) {
+    public DefaultRank(@Assisted UUID uuid,
+                       @Assisted String name,
+                       @Assisted int priority,
+                       SettingPublisher settingPublisher) {
+        super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
         this.priority = priority;
@@ -46,6 +58,22 @@ public class DefaultRank extends AbstractSubject implements Rank {
     }
 
     @Override
+    public int getState() {
+        return prepared ? 0 : PREPARE;
+    }
+
+    @Override
+    public void setState(int state) {
+        switch (state) {
+            case PREPARE:
+                prepared = false;
+                break;
+            case 0:
+                prepared = true;
+        }
+    }
+
+    @Override
     public boolean isSlave(Rank rank) {
         return getPriority() < rank.getPriority();
     }
@@ -53,5 +81,10 @@ public class DefaultRank extends AbstractSubject implements Rank {
     @Override
     public int compareTo(@NotNull Rank anotherRank) {
         return Ints.compare(getPriority(), anotherRank.getPriority());
+    }
+
+    @Override
+    protected boolean isPrepared() {
+        return prepared;
     }
 }

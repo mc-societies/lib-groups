@@ -18,6 +18,8 @@ import java.util.UUID;
  */
 public abstract class DefaultMember implements Member {
 
+    public static final int PREPARE = 0xFBEFABE;
+
     private final UUID uuid;
 
     private short state;
@@ -52,7 +54,9 @@ public abstract class DefaultMember implements Member {
 
     @Override
     public void addRank(Rank rank) {
-        if (this.ranks.add(rank)) {
+        boolean result = this.ranks.add(rank);
+
+        if (result && isPrepared()) {
             memberRankPublisher.publish(this, rank);
         }
     }
@@ -84,11 +88,17 @@ public abstract class DefaultMember implements Member {
 
         this.group = group;
 
-        groupPublisher.publish(this, group);
+        if (isPrepared()) {
+            groupPublisher.publish(this, group);
+        }
 
         if (group != null && !group.isMember(this)) {
             group.addMember(this);
         }
+    }
+
+    private boolean isPrepared() {
+        return getState() != PREPARE;
     }
 
     @Override
@@ -154,11 +164,12 @@ public abstract class DefaultMember implements Member {
 
     @Override
     public void setState(int state) {
-        short sstate = (short) state;
-        if (this.state != state) {
-            memberStatePublisher.publish(this, sstate);
+        short newState = (short) state;
+
+        if (this.state != state && isPrepared()) {
+            memberStatePublisher.publish(this, newState);
         }
 
-        this.state = sstate;
+        this.state = newState;
     }
 }

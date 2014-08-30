@@ -11,11 +11,16 @@ public interface Rank extends Comparable<Rank>, Subject {
 
     int DEFAULT_PRIORITY = 0;
 
+    @Override
     UUID getUUID();
 
     String getName();
 
     int getPriority();
+
+    int getState();
+
+    void setState(int state);
 
     boolean isSlave(Rank rank);
 

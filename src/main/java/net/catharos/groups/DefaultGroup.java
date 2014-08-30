@@ -26,6 +26,7 @@ import java.util.UUID;
  */
 public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
+    public static final int PREPARE = 0xFBEFABE;
 
     private final UUID uuid;
     private String name, tag;
@@ -133,20 +134,27 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public void setState(int state) {
-        short sstate = (short) state;
+        short newState = (short) state;
 
-        if (this.state != sstate) {
-            groupStatePublisher.publish(this, sstate);
+        if (this.state != newState && isPrepared()) {
+            groupStatePublisher.publish(this, newState);
         }
 
-        this.state = sstate;
+        this.state = newState;
     }
 
     @Override
     public void setName(String name) {
         this.name = name;
 
-        namePublisher.publish(this, name);
+        if (isPrepared()) {
+            namePublisher.publish(this, name);
+        }
+    }
+
+    @Override
+    protected boolean isPrepared() {
+        return getState() != PREPARE;
     }
 
     @Override
@@ -157,7 +165,9 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public void active() {
         this.lastActive = DateTime.now();
 
-        lastactivePublisher.publish(this, lastActive);
+        if (isPrepared()) {
+            lastactivePublisher.publish(this, lastActive);
+        }
     }
 
     @Override
@@ -216,14 +226,18 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public void addRank(Rank rank) {
-        if (!rank.equals(this.ranks.put(rank.getUUID(), rank))) {
+        Rank result = this.ranks.put(rank.getUUID(), rank);
+
+        if (!rank.equals(result) && isPrepared()) {
             groupRankPublisher.publish(this, rank);
         }
     }
 
     @Override
     public void removeRank(Rank rank) {
-        if (this.ranks.remove(rank.getUUID()) != null) {
+        boolean result = this.ranks.remove(rank.getUUID()) != null;
+
+        if (result && isPrepared()) {
             rankDropPublisher.drop(rank);
         }
     }
