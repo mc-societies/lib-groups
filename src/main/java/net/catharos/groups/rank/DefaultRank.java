@@ -3,6 +3,7 @@ package net.catharos.groups.rank;
 import com.google.common.primitives.Ints;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import net.catharos.groups.DefaultGroup;
 import net.catharos.groups.publisher.SettingPublisher;
 import net.catharos.groups.setting.subject.AbstractPublishingSubject;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +15,6 @@ import java.util.UUID;
  * Represents a DefaultRank
  */
 public class DefaultRank extends AbstractPublishingSubject implements Rank {
-
-    public static final int PREPARE = 0xFBEFABE;
 
     private final UUID uuid;
     private final String name;
@@ -59,13 +58,13 @@ public class DefaultRank extends AbstractPublishingSubject implements Rank {
 
     @Override
     public int getState() {
-        return prepared ? 0 : PREPARE;
+        return prepared ? 0 : DefaultGroup.PREPARE;
     }
 
     @Override
     public void setState(int state) {
         switch (state) {
-            case PREPARE:
+            case DefaultGroup.PREPARE:
                 prepared = false;
                 break;
             case 0:

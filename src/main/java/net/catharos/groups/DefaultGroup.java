@@ -26,11 +26,11 @@ import java.util.UUID;
  */
 public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
-    public static final int PREPARE = 0xFBEFABE;
+    public static final short PREPARE = 0xFBE;
 
     private final UUID uuid;
     private String name, tag;
-    private short state;
+    private short state = PREPARE;
     private final NamePublisher namePublisher;
     private final LastActivePublisher lastactivePublisher;
     private final GroupStatePublisher groupStatePublisher;

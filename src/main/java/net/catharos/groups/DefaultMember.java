@@ -18,8 +18,6 @@ import java.util.UUID;
  */
 public abstract class DefaultMember implements Member {
 
-    public static final int PREPARE = 0xFBEFABE;
-
     private final UUID uuid;
 
     private short state;
@@ -98,7 +96,7 @@ public abstract class DefaultMember implements Member {
     }
 
     private boolean isPrepared() {
-        return getState() != PREPARE;
+        return getState() != DefaultGroup.PREPARE;
     }
 
     @Override
