@@ -46,4 +46,21 @@ public class DefaultRelation implements Relation {
     public static DefaultRelation unknownRelation(Group group) {
         return new DefaultRelation(group);
     }
+
+    @Override
+    public int getColumns() {
+        return 2;
+    }
+
+    @Override
+    public String getColumn(int column) {
+        switch (column) {
+            case 0:
+                return source.getName();
+            case 1:
+                return target.getName();
+            default:
+                throw new AssertionError();
+        }
+    }
 }

@@ -1,12 +1,13 @@
 package net.catharos.groups;
 
+import net.catharos.lib.core.command.format.table.RowForwarder;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * A {@link net.catharos.groups.Relation} describes a relation between two groups. A source and a target.
  * Usually the source is the group which initiated this relation.
  */
-public interface Relation {
+public interface Relation extends RowForwarder {
 
     /**
      * @return The source

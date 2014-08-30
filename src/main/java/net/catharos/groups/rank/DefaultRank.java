@@ -86,4 +86,14 @@ public class DefaultRank extends AbstractPublishingSubject implements Rank {
     protected boolean isPrepared() {
         return prepared;
     }
+
+    @Override
+    public int getColumns() {
+        return 1;
+    }
+
+    @Override
+    public String getColumn(int column) {
+        return name;
+    }
 }
