@@ -29,14 +29,14 @@ public class GroupParser implements ArgumentParser<Group> {
             Set<Group> groups = provider.getGroup(input).get();
 
             if (groups.isEmpty()) {
-                throw new ParsingException("target.society.not.found", ctx);
+                throw new ParsingException("target-society.not-found", ctx);
             }
 
             return Iterables.getOnlyElement(groups);
         } catch (InterruptedException e) {
-            throw new ParsingException("target.society.not.found", ctx);
+            throw new ParsingException("target-society.not-found", ctx);
         } catch (ExecutionException e) {
-            throw new ParsingException(e, "target.society.not.found", ctx);
+            throw new ParsingException(e, "target-society.not-found", ctx);
         }
     }
 }
