@@ -164,7 +164,7 @@ public abstract class DefaultMember implements Member {
     public void setState(int state) {
         short newState = (short) state;
 
-        if (this.state != state && isPrepared()) {
+        if (this.state != state && isPrepared() && newState != DefaultGroup.PREPARE) {
             memberStatePublisher.publish(this, newState);
         }
 
