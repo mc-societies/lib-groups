@@ -19,7 +19,7 @@ public class GroupTest {
     @Mock
     private NamePublisher namePublisher;
     @Mock
-    private LastActivePublisher lastActivePublisher;
+    private GroupLastActivePublisher lastActivePublisher;
     @Mock
     private SettingPublisher settingPublisher;
     @Mock

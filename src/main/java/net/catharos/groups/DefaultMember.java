@@ -3,12 +3,14 @@ package net.catharos.groups;
 import com.google.common.base.Objects;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.MemberGroupPublisher;
+import net.catharos.groups.publisher.MemberLastActivePublisher;
 import net.catharos.groups.publisher.MemberRankPublisher;
 import net.catharos.groups.publisher.MemberStatePublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
 import org.jetbrains.annotations.Nullable;
+import org.joda.time.DateTime;
 
 import java.util.Set;
 import java.util.UUID;
@@ -25,19 +27,22 @@ public abstract class DefaultMember implements Member {
     private Group group;
     private THashSet<Rank> ranks = new THashSet<Rank>();
     private Request activeRequest;
+    private DateTime lastActive;
 
     private final MemberGroupPublisher groupPublisher;
     private final MemberStatePublisher memberStatePublisher;
     private final MemberRankPublisher memberRankPublisher;
+    private final MemberLastActivePublisher lastActivePublisher;
 
     public DefaultMember(UUID uuid,
                          MemberGroupPublisher groupPublisher,
                          MemberStatePublisher memberStatePublisher,
-                         MemberRankPublisher memberRankPublisher) {
+                         MemberRankPublisher memberRankPublisher, MemberLastActivePublisher lastActivePublisher) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
         this.memberStatePublisher = memberStatePublisher;
         this.memberRankPublisher = memberRankPublisher;
+        this.lastActivePublisher = lastActivePublisher;
     }
 
     @Override
@@ -70,6 +75,20 @@ public abstract class DefaultMember implements Member {
         }
 
         return null;
+    }
+
+    @Override
+    public DateTime getLastActive() {
+        return lastActive;
+    }
+
+    @Override
+    public void activate() {
+        this.lastActive = DateTime.now();
+
+        if (isPrepared()) {
+            lastActivePublisher.publish(this, lastActive);
+        }
     }
 
     @Override

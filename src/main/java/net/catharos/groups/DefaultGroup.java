@@ -32,7 +32,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private String name, tag;
     private short state = PREPARE;
     private final NamePublisher namePublisher;
-    private final LastActivePublisher lastactivePublisher;
+    private final GroupLastActivePublisher lastactivePublisher;
     private final GroupStatePublisher groupStatePublisher;
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
@@ -54,7 +54,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("tag") String tag,
                         @Assisted @Nullable Group parent,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher,
+                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -78,7 +78,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher,
+                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -91,7 +91,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("tag") String tag,
                         Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher,
+                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -103,7 +103,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
-                        LastActivePublisher lastactivePublisher,
+                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -162,7 +162,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         return lastActive;
     }
 
-    public void active() {
+    @Override
+    public void activate() {
         this.lastActive = DateTime.now();
 
         if (isPrepared()) {

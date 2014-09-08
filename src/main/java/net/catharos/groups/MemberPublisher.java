@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * Used to publish new members to a data source and drop existing ones
  */
+@Deprecated
 public interface MemberPublisher<M extends Member> {
 
     /**

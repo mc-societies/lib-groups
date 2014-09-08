@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 /**
  * Represents a LastActivePublisher
  */
-public interface LastActivePublisher {
+public interface GroupLastActivePublisher {
 
     void publish(Group group, DateTime date);
 }
