@@ -19,8 +19,6 @@ public class GroupTest {
     @Mock
     private NamePublisher namePublisher;
     @Mock
-    private GroupLastActivePublisher lastActivePublisher;
-    @Mock
     private SettingPublisher settingPublisher;
     @Mock
     private GroupStatePublisher groupStatePublisher;
@@ -33,9 +31,9 @@ public class GroupTest {
     public void setup() throws Exception {
 
         a = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, lastActivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
         b = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, lastActivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @Test

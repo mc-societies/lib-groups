@@ -57,8 +57,6 @@ public interface Group extends Subject, RowForwarder, Involved {
      */
     DateTime getLastActive();
 
-    void activate();
-
     /**
      * @return The parent group of this group or null if there is no parent
      */

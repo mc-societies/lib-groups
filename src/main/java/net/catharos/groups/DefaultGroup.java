@@ -32,12 +32,10 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private String name, tag;
     private short state = PREPARE;
     private final NamePublisher namePublisher;
-    private final GroupLastActivePublisher lastactivePublisher;
     private final GroupStatePublisher groupStatePublisher;
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
 
-    private DateTime lastActive;
     @Nullable
     private Group parent;
 
@@ -54,7 +52,6 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("tag") String tag,
                         @Assisted @Nullable Group parent,
                         NamePublisher namePublisher,
-                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -64,13 +61,10 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.name = name;
         this.tag = tag;
         this.namePublisher = namePublisher;
-        this.lastactivePublisher = lastactivePublisher;
         this.groupStatePublisher = groupStatePublisher;
         this.groupRankPublisher = groupRankPublisher;
         this.rankDropPublisher = rankDropPublisher;
         setParent(parent);
-
-        lastActive = DateTime.now();
     }
 
     @AssistedInject
@@ -78,12 +72,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
                         NamePublisher namePublisher,
-                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher) {
-        this(uuid, name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+        this(uuid, name, tag, null, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @AssistedInject
@@ -91,25 +84,23 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("tag") String tag,
                         Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
-                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher) {
         this(uuidProvider
-                .get(), name, tag, null, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .get(), name, tag, null, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider,
                         NamePublisher namePublisher,
-                        GroupLastActivePublisher lastactivePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher) {
         this(uuidProvider
-                .get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, lastactivePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
     }
 
     @Override
@@ -159,16 +150,16 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public DateTime getLastActive() {
-        return lastActive;
-    }
+        DateTime lastActive = null;
 
-    @Override
-    public void activate() {
-        this.lastActive = DateTime.now();
-
-        if (isPrepared()) {
-            lastactivePublisher.publish(this, lastActive);
+        for (Member member : getMembers()) {
+            DateTime memberLastActive = member.getLastActive();
+            if (lastActive == null || memberLastActive.isAfter(lastActive)) {
+                lastActive = memberLastActive;
+            }
         }
+
+        return lastActive;
     }
 
     @Override

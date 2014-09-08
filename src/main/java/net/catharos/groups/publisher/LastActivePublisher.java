@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 /**
  * Represents a LastActivePublisher
  */
-public interface MemberLastActivePublisher {
+public interface LastActivePublisher {
 
     void publish(Member member, DateTime date);
 }
