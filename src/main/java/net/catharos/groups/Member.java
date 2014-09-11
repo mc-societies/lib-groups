@@ -39,5 +39,7 @@ public interface Member extends Participant, Sender, RowForwarder {
 
     void setGroup(@Nullable Group group);
 
+    boolean isAvailable();
+
     boolean isGroup(Group group);
 }
