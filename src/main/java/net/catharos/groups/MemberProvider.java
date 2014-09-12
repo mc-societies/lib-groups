@@ -1,6 +1,7 @@
 package net.catharos.groups;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
 
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public interface MemberProvider<M extends Member> {
      */
     ListenableFuture<M> getMember(UUID uuid);
 
-    ListenableFuture<M> getMember(UUID uuid, Group predefined);
+    ListenableFuture<M> getMember(UUID uuid, Group predefined, ListeningExecutorService service);
 
     /**
      * @param name The name to look up
