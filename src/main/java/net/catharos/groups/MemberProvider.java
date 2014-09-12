@@ -16,6 +16,8 @@ public interface MemberProvider<M extends Member> {
      */
     ListenableFuture<M> getMember(UUID uuid);
 
+    ListenableFuture<M> getMember(UUID uuid, Group predefined);
+
     /**
      * @param name The name to look up
      * @return A future of the member

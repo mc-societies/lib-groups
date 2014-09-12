@@ -17,6 +17,8 @@ public interface GroupProvider {
      */
     ListenableFuture<Group> getGroup(UUID uuid);
 
+    ListenableFuture<Group> getGroup(UUID uuid, Member predefined);
+
     /**
      * @param name The name to look up
      * @return A future of the group
