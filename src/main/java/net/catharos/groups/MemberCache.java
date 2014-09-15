@@ -1,5 +1,7 @@
 package net.catharos.groups;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
 
 /**
@@ -7,12 +9,14 @@ import java.util.UUID;
  */
 public interface MemberCache<M extends Member> {
 
+    @Nullable
     M getMember(UUID uuid);
 
-
+    @Nullable
     M getMember(String name);
 
-    void cache(M member);
+    boolean cache(M member);
 
-    void clear(M member);
+    @Nullable
+    M clear(M member);
 }
