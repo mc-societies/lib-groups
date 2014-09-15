@@ -15,4 +15,6 @@ public interface GroupCache {
     Set<Group> getGroups();
 
     void cache(Group group);
+
+    void clear(Group group);
 }

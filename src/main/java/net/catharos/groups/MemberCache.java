@@ -13,4 +13,6 @@ public interface MemberCache<M extends Member> {
     M getMember(String name);
 
     void cache(M member);
+
+    void clear(M member);
 }
