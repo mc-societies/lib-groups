@@ -92,22 +92,16 @@ public interface Group extends Subject, RowForwarder, Involved {
     /**
      * Sets the relation to an other group
      *
+     * @param target
      * @param relation The relation
      */
-    void setRelation(Relation relation);
-
-    /**
-     * @param relation The relation
-     * @param override Whether we want to override a previous relation
-     * @see #setRelation(Relation)
-     */
-    void setRelation(Relation relation, boolean override);
+    void setRelation(Group target, Relation relation);
 
     /**
      * @param target   The target of the relation, this overrides the target specified in the relation object
      * @param relation The relation
      * @param override Whether we want to override a previous relation
-     * @see #setRelation(Relation)
+     * @see #setRelation(Group, Relation)
      */
     void setRelation(Group target, Relation relation, boolean override);
 

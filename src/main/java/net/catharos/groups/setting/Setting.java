@@ -1,5 +1,7 @@
 package net.catharos.groups.setting;
 
+import net.catharos.groups.setting.subject.Subject;
+import net.catharos.groups.setting.target.Target;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -17,9 +19,9 @@ public abstract class Setting<V> {
         return id;
     }
 
-    public abstract V convert(byte[] value);
+    public abstract V convert(Subject subject, Target target, byte[] value);
 
-    public abstract byte[] convert(@Nullable V value);
+    public abstract byte[] convert(Subject subject, Target target, @Nullable V value);
 
 //    public static class Boolean extends Setting<DefaultSettingValue> {
 //

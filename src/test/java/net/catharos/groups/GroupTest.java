@@ -1,6 +1,7 @@
 package net.catharos.groups;
 
 import net.catharos.groups.publisher.*;
+import net.catharos.groups.setting.Setting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,25 +27,28 @@ public class GroupTest {
     private GroupRankPublisher groupRankPublisher;
     @Mock
     private RankDropPublisher rankDropPublisher;
+    @Mock
+    private Setting<Relation> relationSetting;
+
 
     @Before
     public void setup() throws Exception {
 
         a = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, relationSetting);
         b = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, relationSetting);
     }
 
     @Test
     public void testSetRelation() throws Exception {
-        a.setRelation(new DefaultRelation(a, b));
+        a.setRelation(a, new DefaultRelation(a, b));
 
         assertAToBRelation();
     }
 
     public void assertAToBRelation() {
-        Assert.assertEquals(b, a.getRelation(b).getOpposite(a));
+        Assert.assertEquals(b.getUUID(), a.getRelation(b).getOpposite(a.getUUID()));
     }
 
     @Test(expected = AssertionError.class)

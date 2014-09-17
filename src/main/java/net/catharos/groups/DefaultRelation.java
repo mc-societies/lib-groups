@@ -5,47 +5,64 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 /**
  * Default implementation for a Relation
  */
 public class DefaultRelation implements Relation {
 
-    private final Group source;
-    private final Group target;
+    private final UUID source;
+    private final UUID target;
 
-    public DefaultRelation(Group source) {this(source, null);}
+    public DefaultRelation(UUID source) {this(source, null);}
 
     @AssistedInject
-    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") Group target) {
+    public DefaultRelation(@Assisted("source") UUID source, @Assisted("target") UUID target) {
         this.source = source;
         this.target = target;
     }
 
+    @AssistedInject
+    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") Group target) {
+        this(source.getUUID(), target.getUUID());
+    }
+
     @Nullable
     @Override
-    public Group getTarget() {
+    public UUID getTarget() {
         return target;
     }
 
     @Override
-    public Group getSource() {
+    public UUID getSource() {
         return source;
     }
 
     @Override
     @Nullable
-    public Group getOpposite(Group group) {
+    public UUID getOpposite(UUID group) {
         return group == getTarget() ? getSource() : group == getSource() ? getTarget() : null;
     }
 
     @Override
-    public boolean contains(Group group) {
+    public boolean contains(UUID group) {
         return Objects.equal(group, source) || Objects.equal(group, target);
     }
 
-    public static DefaultRelation unknownRelation(Group group) {
+    @Override
+    public boolean contains(Group group) {
+        return contains(group.getUUID());
+    }
+
+    public static DefaultRelation unknownRelation(UUID group) {
         return new DefaultRelation(group);
     }
+
+    public static DefaultRelation unknownRelation(Group group) {
+        return unknownRelation(group.getUUID());
+    }
+
 
     @Override
     public int getColumns() {
@@ -56,9 +73,9 @@ public class DefaultRelation implements Relation {
     public String getColumn(int column) {
         switch (column) {
             case 0:
-                return source.getName();
+                return source.toString();
             case 1:
-                return target.getName();
+                return target.toString();
             default:
                 throw new AssertionError();
         }

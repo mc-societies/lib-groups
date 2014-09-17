@@ -35,11 +35,12 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final GroupStatePublisher groupStatePublisher;
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
+    private final Setting<Relation> relationSetting;
 
     @Nullable
     private Group parent;
 
-    private final THashMap<Group, Relation> relations = new THashMap<Group, Relation>();
+    //    private final THashMap<Group, Relation> relations = new THashMap<Group, Relation>();
     private final THashMap<UUID, Rank> ranks = new THashMap<UUID, Rank>();
 
     private final THashSet<Member> members = new THashSet<Member>();
@@ -55,7 +56,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher) {
+                        RankDropPublisher rankDropPublisher,
+                        Setting<Relation> relationSetting) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
@@ -64,6 +66,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.groupStatePublisher = groupStatePublisher;
         this.groupRankPublisher = groupRankPublisher;
         this.rankDropPublisher = rankDropPublisher;
+        this.relationSetting = relationSetting;
         setParent(parent);
     }
 
@@ -75,8 +78,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher) {
-        this(uuid, name, tag, null, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                        RankDropPublisher rankDropPublisher, Setting<Relation> relationSetting) {
+        this(uuid, name, tag, null, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, relationSetting);
     }
 
     @AssistedInject
@@ -87,9 +90,9 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher) {
+                        RankDropPublisher rankDropPublisher, Setting<Relation> relationSetting) {
         this(uuidProvider
-                .get(), name, tag, null, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .get(), name, tag, null, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, relationSetting);
     }
 
     @Inject
@@ -98,9 +101,9 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher) {
+                        RankDropPublisher rankDropPublisher, Setting<Relation> relationSetting) {
         this(uuidProvider
-                .get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher);
+                .get(), NEW_GROUP_NAME, NEW_GROUP_TAG, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, relationSetting);
     }
 
     @Override
@@ -164,23 +167,18 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Relation getRelation(Group anotherGroup) {
-        Relation relation = relations.get(anotherGroup);
+        Relation relation = get(relationSetting, anotherGroup);
         return relation == null ? DefaultRelation.unknownRelation(this) : relation;
     }
 
     @Override
     public Collection<Relation> getRelations() {
-        return relations.values();
+        return Collections.emptyList();//fixme
     }
 
     @Override
-    public void setRelation(Relation relation) {
-        setRelation(relation, true);
-    }
-
-    @Override
-    public void setRelation(Relation relation, boolean override) {
-        setRelation(relation.getTarget(), relation, override);
+    public void setRelation(Group target, Relation relation) {
+        setRelation(target, relation, true);
     }
 
     @Override
@@ -189,11 +187,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
             throw new IllegalArgumentException("Relation must contain a target or source identical to \"this\"!");
         }
 
-        if (!override && !Objects.equal(relation, relations.get(target))) {
+        if (!override && !Objects.equal(relation, getRelation(target))) {
             throw new IllegalStateException("Relation already exists!");
         }
 
-        relations.put(target, relation);
+        set(relationSetting, target, relation);
 
         if (!target.hasRelation(this)) {
             target.setRelation(this, relation, override);
@@ -203,7 +201,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Override
     public void removeRelation(Group anotherGroup) {
         if (hasRelation(anotherGroup)) {
-            relations.remove(anotherGroup);
+            remove(relationSetting, anotherGroup);
         }
 
         if (anotherGroup.hasRelation(this)) {
@@ -213,7 +211,16 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean hasRelation(Group anotherGroup) {
-        return relations.containsKey(anotherGroup);
+        Relation value = get(relationSetting, anotherGroup);
+
+        if (value == null) {
+            return false;
+        }
+
+        UUID opposite = value.getOpposite(this.getUUID());
+
+        return opposite != null && opposite.equals(anotherGroup.getUUID());
+
     }
 
     @Override
@@ -367,11 +374,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Override
     public String toString() {
         return "DefaultGroup{" +
-                "uuid=" + uuid +
-                ", parent=" + parent +
-                ", relations=" + relations +
-                ", ranks=" + ranks +
-                ", members=" + members +
+                "uuid=" + getUUID() +
+                ", parent=" + getParent() +
+                ", relations=" + getRelations() +
+                ", ranks=" + getRanks() +
+                ", members=" + getMembers() +
                 '}';
     }
 
