@@ -42,7 +42,7 @@ public class GroupTest {
 
     @Test
     public void testSetRelation() throws Exception {
-        a.setRelation(a, new DefaultRelation(a, b));
+        a.setRelation(b, new DefaultRelation(a, b));
 
         assertAToBRelation();
     }

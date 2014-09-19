@@ -187,11 +187,22 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
             throw new IllegalArgumentException("Relation must contain a target or source identical to \"this\"!");
         }
 
+        if (!relation.contains(target)) {
+            throw new IllegalArgumentException("Relation contains wrong target!");
+        }
+
         if (!override && !Objects.equal(relation, getRelation(target))) {
             throw new IllegalStateException("Relation already exists!");
         }
 
+        if (target == this) {
+            throw new IllegalStateException("Target and source mustn't be equal!");
+        }
+
+
         set(relationSetting, target, relation);
+
+
 
         if (!target.hasRelation(this)) {
             target.setRelation(this, relation, override);
