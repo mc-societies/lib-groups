@@ -12,6 +12,7 @@ import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.subject.AbstractPublishingSubject;
 import net.catharos.groups.setting.target.SimpleTarget;
+import net.catharos.lib.core.util.CastSafe;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -40,7 +41,6 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Nullable
     private Group parent;
 
-    //    private final THashMap<Group, Relation> relations = new THashMap<Group, Relation>();
     private final THashMap<UUID, Rank> ranks = new THashMap<UUID, Rank>();
 
     private final THashSet<Member> members = new THashSet<Member>();
@@ -173,7 +173,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Collection<Relation> getRelations() {
-        return Collections.emptyList();//fixme
+        return CastSafe.toGeneric(super.permissions.row(relationSetting).values());
     }
 
     @Override

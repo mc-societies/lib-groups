@@ -12,7 +12,7 @@ import net.catharos.lib.core.util.CastSafe;
  */
 public abstract class AbstractSubject implements Subject {
 
-    private final Table<Setting, Target, Object> permissions = HashBasedTable.create();
+    protected final Table<Setting, Target, Object> permissions = HashBasedTable.create();
 
     @Override
     public <V> void set(Setting<V> setting, Target target, V value) {
