@@ -30,14 +30,17 @@ public class GroupTest {
     @Mock
     private Setting<Relation> relationSetting;
 
+    @Mock
+    private CreatedPublisher createdPublisher;
+
 
     @Before
     public void setup() throws Exception {
 
         a = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, relationSetting);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher, relationSetting);
         b = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, relationSetting);
+                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher, relationSetting);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package net.catharos.groups;
 
 import com.google.inject.assistedinject.Assisted;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -34,5 +35,5 @@ public interface GroupFactory {
      * @param parent The parent
      * @return A brand new group
      */
-    Group create(UUID uuid, @Assisted("name") String name, @Assisted("tag") String tag, Group parent);
+    Group create(UUID uuid, @Assisted("name") String name, @Assisted("tag") String tag, @Nullable Group parent);
 }
