@@ -1,5 +1,6 @@
 package net.catharos.groups.setting.subject;
 
+import com.google.common.collect.Table;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
 
@@ -25,4 +26,6 @@ public interface Subject extends Target {
     <V> V get(Setting<V> setting, Target target);
 
     <V> V get(Setting<V> setting);
+
+    Table<Setting, Target, Object> getSettings();
 }

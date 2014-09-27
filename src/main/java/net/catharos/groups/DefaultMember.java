@@ -2,10 +2,7 @@ package net.catharos.groups;
 
 import com.google.common.base.Objects;
 import gnu.trove.set.hash.THashSet;
-import net.catharos.groups.publisher.MemberGroupPublisher;
-import net.catharos.groups.publisher.LastActivePublisher;
-import net.catharos.groups.publisher.MemberRankPublisher;
-import net.catharos.groups.publisher.MemberStatePublisher;
+import net.catharos.groups.publisher.*;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
@@ -28,21 +25,24 @@ public abstract class DefaultMember implements Member {
     private THashSet<Rank> ranks = new THashSet<Rank>();
     private Request activeRequest;
     private DateTime lastActive;
+    private DateTime created;
 
     private final MemberGroupPublisher groupPublisher;
     private final MemberStatePublisher memberStatePublisher;
     private final MemberRankPublisher memberRankPublisher;
     private final LastActivePublisher lastActivePublisher;
+    private final MemberCreatedPublisher createdPublisher;
 
     public DefaultMember(UUID uuid,
                          MemberGroupPublisher groupPublisher,
                          MemberStatePublisher memberStatePublisher,
-                         MemberRankPublisher memberRankPublisher, LastActivePublisher lastActivePublisher) {
+                         MemberRankPublisher memberRankPublisher, LastActivePublisher lastActivePublisher, MemberCreatedPublisher createdPublisher) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
         this.memberStatePublisher = memberStatePublisher;
         this.memberRankPublisher = memberRankPublisher;
         this.lastActivePublisher = lastActivePublisher;
+        this.createdPublisher = createdPublisher;
     }
 
     @Override
@@ -84,10 +84,29 @@ public abstract class DefaultMember implements Member {
 
     @Override
     public void activate() {
-        this.lastActive = DateTime.now();
+        setLastActive(DateTime.now());
+    }
+
+    @Override
+    public void setLastActive(DateTime lastActive) {
+        this.lastActive = lastActive;
 
         if (isPrepared()) {
             lastActivePublisher.publish(this, lastActive);
+        }
+    }
+
+    @Override
+    public DateTime getCreated() {
+        return created;
+    }
+
+    @Override
+    public void setCreated(DateTime created) {
+        this.created = created;
+
+        if (isPrepared()) {
+            createdPublisher.publish(this, created);
         }
     }
 

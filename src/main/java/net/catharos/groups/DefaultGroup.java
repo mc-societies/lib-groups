@@ -38,7 +38,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
     private final Setting<Relation> relationSetting;
-    private final CreatedPublisher createdPublisher;
+    private final GroupCreatedPublisher createdPublisher;
 
     @Nullable
     private Group parent;
@@ -53,17 +53,19 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public DefaultGroup(@Assisted UUID uuid,
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
+                        @Assisted DateTime created,
                         @Assisted @Nullable Group parent,
                         NamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
-                        CreatedPublisher createdPublisher, Setting<Relation> relationSetting) {
+                        GroupCreatedPublisher createdPublisher, Setting<Relation> relationSetting) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
         this.tag = tag;
+        this.created = created;
         this.namePublisher = namePublisher;
         this.groupStatePublisher = groupStatePublisher;
         this.groupRankPublisher = groupRankPublisher;
@@ -77,18 +79,38 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public DefaultGroup(@Assisted UUID uuid,
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
+                        @Assisted DateTime created,
                         NamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
-                        CreatedPublisher createdPublisher,
+                        GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting) {
         this(
                 uuid, name, tag,
-                null,
-                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher,
-                createdPublisher, relationSetting
+                created, null,
+                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
+                relationSetting
+        );
+    }
+
+    @AssistedInject
+    public DefaultGroup(@Assisted UUID uuid,
+                        @Assisted("name") String name,
+                        @Assisted("tag") String tag,
+                        NamePublisher namePublisher,
+                        SettingPublisher settingPublisher,
+                        GroupStatePublisher groupStatePublisher,
+                        GroupRankPublisher groupRankPublisher,
+                        RankDropPublisher rankDropPublisher,
+                        GroupCreatedPublisher createdPublisher,
+                        Setting<Relation> relationSetting) {
+        this(
+                uuid, name, tag,
+                DateTime.now(), null,
+                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
+                relationSetting
         );
     }
 
@@ -101,13 +123,33 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
-                        CreatedPublisher createdPublisher,
+                        GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting) {
         this(
                 uuidProvider.get(), name, tag,
-                null,
-                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher,
-                createdPublisher, relationSetting
+                DateTime.now(), null,
+                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
+                relationSetting
+        );
+    }
+
+    @AssistedInject
+    public DefaultGroup(@Assisted("name") String name,
+                        @Assisted("tag") String tag,
+                        @Assisted DateTime created,
+                        Provider<UUID> uuidProvider,
+                        NamePublisher namePublisher,
+                        SettingPublisher settingPublisher,
+                        GroupStatePublisher groupStatePublisher,
+                        GroupRankPublisher groupRankPublisher,
+                        RankDropPublisher rankDropPublisher,
+                        GroupCreatedPublisher createdPublisher,
+                        Setting<Relation> relationSetting) {
+        this(
+                uuidProvider.get(), name, tag,
+                created, null,
+                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
+                relationSetting
         );
     }
 
@@ -118,10 +160,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
-                        CreatedPublisher createdPublisher,
+                        GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting) {
         this(
                 uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG,
+                DateTime.now(),
                 namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
                 relationSetting
         );
@@ -208,7 +251,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Collection<Relation> getRelations() {
-        return CastSafe.toGeneric(super.permissions.row(relationSetting).values());
+        return CastSafe.toGeneric(super.settings.row(relationSetting).values());
     }
 
     @Override

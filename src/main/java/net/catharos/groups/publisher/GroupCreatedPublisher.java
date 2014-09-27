@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 /**
  * Represents a CreatedPublisher
  */
-public interface CreatedPublisher {
+public interface GroupCreatedPublisher {
 
     void publish(Group group, DateTime created);
 }

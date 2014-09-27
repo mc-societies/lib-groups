@@ -1,7 +1,11 @@
 package net.catharos.groups;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.google.inject.Inject;
 import net.catharos.groups.rank.Rank;
+import net.catharos.groups.setting.Setting;
+import net.catharos.groups.setting.target.Target;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
@@ -9,7 +13,7 @@ import java.util.UUID;
 /**
  * Represents a GroupBuilder
  */
-public class GroupBuilder {
+public class GroupBuilder  {
 
     private final GroupFactory groupFactory;
     private UUID uuid;
@@ -19,6 +23,7 @@ public class GroupBuilder {
     private DateTime created;
     private short state;
     private Iterable<Rank> ranks;
+    private final Table<Setting, Target, byte[]> settings = HashBasedTable.create();
 
     @Inject
     public GroupBuilder(GroupFactory groupFactory) {
@@ -64,10 +69,10 @@ public class GroupBuilder {
     public Group build() {
         Group group;
         if (parent == null) {
-            group = groupFactory.create(uuid, name, tag);
+            group = groupFactory.create(uuid, name, tag, created);
 
         } else {
-            group = groupFactory.create(uuid, name, tag, parent);
+            group = groupFactory.create(uuid, name, tag, created, parent);
         }
 
         group.setCreated(created);
@@ -77,7 +82,16 @@ public class GroupBuilder {
             group.addRank(rank);
         }
 
+        for (Table.Cell<Setting, Target, byte[]> cell : settings.cellSet()) {
+            Setting setting = cell.getRowKey();
+            Target target = cell.getColumnKey();
+            group.set(setting, target, setting.convert(group, target, cell.getValue()));
+        }
         return group;
+    }
+
+    public void put(Setting rowKey, Target columnKey, byte[] value) {
+        settings.put(rowKey, columnKey, value);
     }
 
     public DateTime getCreated() {

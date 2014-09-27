@@ -1,47 +1,31 @@
 package net.catharos.groups;
 
-import net.catharos.groups.publisher.*;
-import net.catharos.groups.setting.Setting;
+import com.google.inject.Inject;
+import net.catharos.lib.core.uuid.TimeUUIDProvider;
+import org.jukito.JukitoModule;
+import org.jukito.JukitoRunner;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.UUID;
 
 import static org.junit.Assert.assertTrue;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(JukitoRunner.class)
 public class GroupTest {
 
-    private Group a, b;
-    @Mock
-    private NamePublisher namePublisher;
-    @Mock
-    private SettingPublisher settingPublisher;
-    @Mock
-    private GroupStatePublisher groupStatePublisher;
-    @Mock
-    private GroupRankPublisher groupRankPublisher;
-    @Mock
-    private RankDropPublisher rankDropPublisher;
-    @Mock
-    private Setting<Relation> relationSetting;
 
-    @Mock
-    private CreatedPublisher createdPublisher;
-
-
-    @Before
-    public void setup() throws Exception {
-
-        a = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher, relationSetting);
-        b = new DefaultGroup(UUID
-                .randomUUID(), Group.NEW_GROUP_NAME, Group.NEW_GROUP_NAME, namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher, relationSetting);
+    public static class Module extends JukitoModule {
+        @Override
+        protected void configureTest() {
+            bind(UUID.class).toProvider(TimeUUIDProvider.class);
+            bind(Group.class).to(DefaultGroup.class);
+        }
     }
+
+    @Inject
+    private Group a, b;
 
     @Test
     public void testSetRelation() throws Exception {

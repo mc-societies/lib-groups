@@ -32,6 +32,12 @@ public interface Member extends Participant, Sender, RowForwarder {
 
     void activate();
 
+    void setLastActive(DateTime lastActive);
+
+    DateTime getCreated();
+
+    void setCreated(DateTime created);
+
     <V> V getSingle(Setting<V> setting);
 
     @Nullable
