@@ -1,5 +1,6 @@
 package net.catharos.groups.publisher;
 
+import net.catharos.groups.Group;
 import net.catharos.groups.rank.Rank;
 
 /**
@@ -7,5 +8,5 @@ import net.catharos.groups.rank.Rank;
  */
 public interface RankPublisher {
 
-    void publish(Rank rank);
+    void publishRank(Group group, Rank rank);
 }

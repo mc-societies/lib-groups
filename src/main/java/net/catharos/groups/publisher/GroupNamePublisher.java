@@ -5,7 +5,7 @@ import net.catharos.groups.Group;
 /**
  * Represents a NamePublisher
  */
-public interface NamePublisher {
+public interface GroupNamePublisher {
 
     void publish(Group group, String name);
 }

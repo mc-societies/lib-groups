@@ -33,7 +33,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private String name, tag;
     private DateTime created;
     private short state = PREPARE;
-    private final NamePublisher namePublisher;
+    private final GroupNamePublisher namePublisher;
     private final GroupStatePublisher groupStatePublisher;
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
@@ -55,7 +55,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("tag") String tag,
                         @Assisted DateTime created,
                         @Assisted @Nullable Group parent,
-                        NamePublisher namePublisher,
+                        GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -80,7 +80,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
                         @Assisted DateTime created,
-                        NamePublisher namePublisher,
+                        GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -99,7 +99,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public DefaultGroup(@Assisted UUID uuid,
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
-                        NamePublisher namePublisher,
+                        GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -118,7 +118,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public DefaultGroup(@Assisted("name") String name,
                         @Assisted("tag") String tag,
                         Provider<UUID> uuidProvider,
-                        NamePublisher namePublisher,
+                        GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -138,7 +138,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted("tag") String tag,
                         @Assisted DateTime created,
                         Provider<UUID> uuidProvider,
-                        NamePublisher namePublisher,
+                        GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -155,7 +155,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Inject
     public DefaultGroup(Provider<UUID> uuidProvider,
-                        NamePublisher namePublisher,
+                        GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
@@ -325,7 +325,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         boolean result = this.ranks.remove(rank.getUUID()) != null;
 
         if (result && isPrepared()) {
-            rankDropPublisher.drop(rank);
+            rankDropPublisher.drop(this, rank);
         }
     }
 

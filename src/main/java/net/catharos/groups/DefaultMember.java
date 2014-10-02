@@ -30,13 +30,13 @@ public abstract class DefaultMember implements Member {
     private final MemberGroupPublisher groupPublisher;
     private final MemberStatePublisher memberStatePublisher;
     private final MemberRankPublisher memberRankPublisher;
-    private final LastActivePublisher lastActivePublisher;
+    private final MemberLastActivePublisher lastActivePublisher;
     private final MemberCreatedPublisher createdPublisher;
 
     public DefaultMember(UUID uuid,
                          MemberGroupPublisher groupPublisher,
                          MemberStatePublisher memberStatePublisher,
-                         MemberRankPublisher memberRankPublisher, LastActivePublisher lastActivePublisher, MemberCreatedPublisher createdPublisher) {
+                         MemberRankPublisher memberRankPublisher, MemberLastActivePublisher lastActivePublisher, MemberCreatedPublisher createdPublisher) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
         this.memberStatePublisher = memberStatePublisher;
