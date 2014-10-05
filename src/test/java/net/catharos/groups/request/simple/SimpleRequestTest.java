@@ -1,6 +1,10 @@
-package net.catharos.groups.request;
+package net.catharos.groups.request.simple;
 
 import com.google.common.collect.Sets;
+import net.catharos.groups.request.Involved;
+import net.catharos.groups.request.Participant;
+import net.catharos.groups.request.RequestFailedException;
+import net.catharos.groups.request.SimpleParticipant;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

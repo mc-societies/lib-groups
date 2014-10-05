@@ -1,4 +1,6 @@
-package net.catharos.groups.request;
+package net.catharos.groups.request.simple;
+
+import net.catharos.groups.request.Choice;
 
 /**
 * Represents a Choices

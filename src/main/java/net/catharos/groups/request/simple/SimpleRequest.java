@@ -1,9 +1,10 @@
-package net.catharos.groups.request;
+package net.catharos.groups.request.simple;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.procedure.TObjectProcedure;
+import net.catharos.groups.request.*;
 import net.catharos.lib.core.util.CastSafe;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +28,7 @@ public class SimpleRequest implements Request<Choices> {
     private final Participant supplier;
     private final RequestMessenger<Choices> messenger;
     private final Involved receivers;
-    private final SettableFuture<SimpleRequestResult<Choices>> future = SettableFuture.create();
+    private final SettableFuture<DefaultRequestResult<Choices>> future = SettableFuture.create();
 
     private final THashMap<Participant, Choices> results = new THashMap<Participant, Choices>();
 
@@ -99,7 +100,7 @@ public class SimpleRequest implements Request<Choices> {
             throw new RuntimeException("Request already done.");
         }
 
-        future.set(new SimpleRequestResult<Choices>(Choices.CANCELLED, this));
+        future.set(new DefaultRequestResult<Choices>(Choices.CANCELLED, this));
         messenger.cancelled(this);
     }
 
@@ -159,7 +160,7 @@ public class SimpleRequest implements Request<Choices> {
         }
 
         Choices choice = getLast(sorted).getKey();
-        future.set(new SimpleRequestResult<Choices>(choice, this));
+        future.set(new DefaultRequestResult<Choices>(choice, this));
         messenger.end(this);
     }
 
@@ -174,7 +175,7 @@ public class SimpleRequest implements Request<Choices> {
     }
 
     @Override
-    public ListenableFuture<SimpleRequestResult<Choices>> result() {
+    public ListenableFuture<DefaultRequestResult<Choices>> result() {
 
         if (!started) {
             throw new RuntimeException("Request not started yet!");

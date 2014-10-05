@@ -1,4 +1,9 @@
-package net.catharos.groups.request;
+package net.catharos.groups.request.simple;
+
+import net.catharos.groups.request.Choice;
+import net.catharos.groups.request.Participant;
+import net.catharos.groups.request.Request;
+import net.catharos.groups.request.RequestMessenger;
 
 /**
  * Represents a SimpleRequestMessenger

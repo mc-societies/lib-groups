@@ -20,5 +20,5 @@ public interface Request<C extends Choice> extends Involved {
 
     DateTime getDateCreated();
 
-    ListenableFuture<SimpleRequestResult<C>> result();
+    ListenableFuture<DefaultRequestResult<C>> result();
 }

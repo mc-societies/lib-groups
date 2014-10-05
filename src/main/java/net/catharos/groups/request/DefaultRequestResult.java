@@ -5,12 +5,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Represents a RequestResult
  */
-public class SimpleRequestResult<C extends Choice> implements RequestResult {
+public class DefaultRequestResult<C extends Choice> implements RequestResult {
 
     private final C choice;
     private final Request request;
 
-    public SimpleRequestResult(C choice, Request request) {
+    public DefaultRequestResult(C choice, Request request) {
         this.choice = choice;
         this.request = request;
     }
