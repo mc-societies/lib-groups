@@ -8,9 +8,13 @@ import org.joda.time.DateTime;
  */
 public interface Request<C extends Choice> extends Involved {
 
+    String getName();
+
     void start();
 
     void vote(Participant participant, C choice);
+
+    void cancel();
 
     boolean isPending();
 

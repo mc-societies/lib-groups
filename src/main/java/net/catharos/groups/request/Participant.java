@@ -1,18 +1,26 @@
 package net.catharos.groups.request;
 
+import net.catharos.lib.core.command.sender.Sender;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a Participant
  */
-public interface Participant {
+public interface Participant extends Sender {
+
+    String getName();
 
     @Nullable
-    Request getActiveRequest();
+    Request getReceivedRequest();
 
-    void setActiveRequest(Request activeRequest);
+    void setReceivedRequest(Request activeRequest);
 
-    void send(String msg);
+    void clearReceivedRequest();
 
-    boolean clearRequest();
+    @Nullable
+    Request getSuppliedRequest();
+
+    void setSuppliedRequest(@Nullable Request suppliedRequest);
+
+    void clearSuppliedRequest();
 }

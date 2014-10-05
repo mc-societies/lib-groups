@@ -23,7 +23,6 @@ public abstract class DefaultMember implements Member {
     @Nullable
     private Group group;
     private THashSet<Rank> ranks = new THashSet<Rank>();
-    private Request activeRequest;
     private DateTime lastActive;
     private DateTime created;
 
@@ -32,6 +31,9 @@ public abstract class DefaultMember implements Member {
     private final MemberRankPublisher memberRankPublisher;
     private final MemberLastActivePublisher lastActivePublisher;
     private final MemberCreatedPublisher createdPublisher;
+
+    @Nullable
+    private Request receivedRequest, suppliedRequest;
 
     public DefaultMember(UUID uuid,
                          MemberGroupPublisher groupPublisher,
@@ -167,20 +169,34 @@ public abstract class DefaultMember implements Member {
 
     @Nullable
     @Override
-    public Request getActiveRequest() {
-        return activeRequest;
+    public Request getReceivedRequest() {
+        return receivedRequest;
     }
 
     @Override
-    public void setActiveRequest(Request activeRequest) {
-        this.activeRequest = activeRequest;
+    public void setReceivedRequest(@Nullable Request receivedRequest) {
+        this.receivedRequest = receivedRequest;
     }
 
     @Override
-    public boolean clearRequest() {
-        boolean value = activeRequest != null;
-        activeRequest = null;
-        return value;
+    @Nullable
+    public Request getSuppliedRequest() {
+        return suppliedRequest;
+    }
+
+    @Override
+    public void setSuppliedRequest(@Nullable Request suppliedRequest) {
+        this.suppliedRequest = suppliedRequest;
+    }
+
+    @Override
+    public void clearReceivedRequest() {
+        setReceivedRequest(null);
+    }
+
+    @Override
+    public void clearSuppliedRequest() {
+        setSuppliedRequest(null);
     }
 
     @Override

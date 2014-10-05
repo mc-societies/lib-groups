@@ -22,24 +22,24 @@ public class SimpleRequestTest {
         Involved involved = new Involved() {
             @Override
             public boolean isInvolved(Participant participant) {
-                return getInvolved().contains(participant);
+                return getReceivers().contains(participant);
             }
 
             @Override
-            public Set<Participant> getInvolved() {
+            public Set<Participant> getReceivers() {
                 return participants;
             }
         };
 
 
-        SimpleRequest request = new SimpleRequest(new SimpleRequestMessenger(), involved);
+        SimpleRequest request = new SimpleRequest("", new SimpleParticipant(), new SimpleRequestMessenger<Choices>(), involved);
 
         request.start();
 
-        request.vote(elements[0], SimpleRequest.Choices.ACCEPT);
-        request.vote(elements[1], SimpleRequest.Choices.ACCEPT);
-        request.vote(elements[2], SimpleRequest.Choices.ACCEPT);
-        request.vote(elements[3], SimpleRequest.Choices.DENY);
+        request.vote(elements[0], Choices.ACCEPT);
+        request.vote(elements[1], Choices.ACCEPT);
+        request.vote(elements[2], Choices.ACCEPT);
+        request.vote(elements[3], Choices.DENY);
 
         Assert.assertTrue(!request.isPending());
 

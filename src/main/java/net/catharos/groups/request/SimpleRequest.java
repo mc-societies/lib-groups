@@ -21,32 +21,36 @@ import static java.util.Collections.sort;
 /**
  * Represents a SimpleRequest
  */
-public class SimpleRequest implements Request<SimpleRequest.Choices> {
+public class SimpleRequest implements Request<Choices> {
 
-    private final RequestMessenger messenger;
-    private final Involved involved;
-    private final SettableFuture<SimpleRequestResult<SimpleRequest.Choices>> future = SettableFuture.create();
+    private final String name;
+    private final Participant supplier;
+    private final RequestMessenger<Choices> messenger;
+    private final Involved receivers;
+    private final SettableFuture<SimpleRequestResult<Choices>> future = SettableFuture.create();
 
-    private final THashMap<Participant, SimpleRequest.Choices> results = new THashMap<Participant, SimpleRequest.Choices>();
+    private final THashMap<Participant, Choices> results = new THashMap<Participant, Choices>();
 
     private final DateTime created;
 
     private boolean started = false;
 
-    public SimpleRequest(RequestMessenger messenger, Involved delegate) {
+    public SimpleRequest(String name, Participant supplier, RequestMessenger<Choices> messenger, Involved delegate) {
+        this.name = name;
+        this.supplier = supplier;
         this.messenger = messenger;
-        this.involved = delegate;
+        this.receivers = delegate;
         this.created = DateTime.now();
     }
 
     @Override
     public boolean isInvolved(Participant participant) {
-        return involved.isInvolved(participant);
+        return receivers.isInvolved(participant);
     }
 
     @Override
-    public Collection<? extends Participant> getInvolved() {
-        return involved.getInvolved();
+    public Collection<? extends Participant> getReceivers() {
+        return receivers.getReceivers();
     }
 
     @Nullable
@@ -60,9 +64,16 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void start() {
-        for (Participant participant : involved.getInvolved()) {
-            participant.setActiveRequest(this);
+        supplier.setSuppliedRequest(this);
+
+        for (Participant participant : receivers.getReceivers()) {
+            participant.setReceivedRequest(this);
             messenger.start(this, participant);
         }
 
@@ -70,24 +81,46 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
     }
 
     @Override
-    public void vote(Participant participant, SimpleRequest.Choices choice) {
+    public void vote(Participant participant, Choices choice) {
+        if (future.isDone()) {
+            throw new RuntimeException("Request already done.");
+        }
+
         if (isInvolved(participant)) {
             results.put(participant, choice);
             check();
-            messenger.voted(this, participant);
+            messenger.voted(this, choice, participant);
         }
     }
 
-    public Map<SimpleRequest.Choices, Number> stats() {
+    @Override
+    public void cancel() {
+        if (future.isDone()) {
+            throw new RuntimeException("Request already done.");
+        }
+
+        future.set(new SimpleRequestResult<Choices>(Choices.CANCELLED, this));
+        messenger.cancelled(this);
+    }
+
+    private void done() {
+        supplier.setSuppliedRequest(null);
+
+        for (Participant participant : getReceivers()) {
+            participant.setReceivedRequest(null);
+        }
+    }
+
+    public Map<Choices, Number> stats() {
         return CastSafe.toGeneric(internalStats());
     }
 
-    private Map<SimpleRequest.Choices, MutableInt> internalStats() {
-        final THashMap<SimpleRequest.Choices, MutableInt> stats = new THashMap<SimpleRequest.Choices, MutableInt>();
+    private Map<Choices, MutableInt> internalStats() {
+        final THashMap<Choices, MutableInt> stats = new THashMap<Choices, MutableInt>();
 
-        results.forEachValue(new TObjectProcedure<SimpleRequest.Choices>() {
+        results.forEachValue(new TObjectProcedure<Choices>() {
             @Override
-            public boolean execute(SimpleRequest.Choices object) {
+            public boolean execute(Choices object) {
                 MutableInt count = stats.get(object);
 
                 if (count == null) {
@@ -107,12 +140,12 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
             return;
         }
 
-        ArrayList<Map.Entry<SimpleRequest.Choices, MutableInt>> sorted = newArrayList(internalStats().entrySet());
-        sort(sorted, new EntryValueComparator<SimpleRequest.Choices, MutableInt>());
+        ArrayList<Map.Entry<Choices, MutableInt>> sorted = newArrayList(internalStats().entrySet());
+        sort(sorted, new EntryValueComparator<Choices, MutableInt>());
 
         //Check for duplicates
         MutableInt last = null;
-        for (Map.Entry<SimpleRequest.Choices, MutableInt> entry : sorted) {
+        for (Map.Entry<Choices, MutableInt> entry : sorted) {
             if (entry.getValue().equals(last)) {
                 future.setException(new RequestFailedException());
                 return;
@@ -125,14 +158,14 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
             return;
         }
 
-        SimpleRequest.Choices choice = getLast(sorted).getKey();
-        future.set(new SimpleRequestResult<SimpleRequest.Choices>(choice, this));
+        Choices choice = getLast(sorted).getKey();
+        future.set(new SimpleRequestResult<Choices>(choice, this));
         messenger.end(this);
     }
 
     @Override
     public boolean isPending() {
-        return results.size() < involved.getInvolved().size();
+        return results.size() < receivers.getReceivers().size();
     }
 
     @Override
@@ -141,21 +174,13 @@ public class SimpleRequest implements Request<SimpleRequest.Choices> {
     }
 
     @Override
-    public ListenableFuture<SimpleRequestResult<SimpleRequest.Choices>> result() {
+    public ListenableFuture<SimpleRequestResult<Choices>> result() {
 
         if (!started) {
             throw new RuntimeException("Request not started yet!");
         }
 
         return future;
-    }
-
-    public static enum Choices implements Choice {
-
-        ACCEPT,
-        DENY,
-        ABSTAIN
-
     }
 
     private static class EntryValueComparator<K, V extends Comparable<V>> implements Comparator<Map.Entry<K, V>> {

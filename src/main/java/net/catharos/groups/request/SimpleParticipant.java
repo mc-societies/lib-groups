@@ -1,37 +1,53 @@
 package net.catharos.groups.request;
 
+import net.catharos.lib.core.command.SystemSender;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents a SimpleParticipant
  */
-public class SimpleParticipant implements Participant {
+public class SimpleParticipant extends SystemSender implements Participant {
 
-    private Request request;
+    @Nullable
+    private Request receivedRequest, suppliedRequest;
 
     public SimpleParticipant() {
     }
 
-    public SimpleParticipant(Request request) {this.request = request;}
-
     @Override
-    public Request getActiveRequest() {
-        return request;
+    public String getName() {
+        return "simple";
     }
 
-
+    @Nullable
     @Override
-    public boolean clearRequest() {
-        boolean value = request != null;
-        request = null;
-        return value;
+    public Request getReceivedRequest() {
+        return receivedRequest;
     }
 
     @Override
-    public void setActiveRequest(Request request) {
-        this.request = request;
+    public void setReceivedRequest(@Nullable Request receivedRequest) {
+        this.receivedRequest = receivedRequest;
     }
 
     @Override
-    public void send(String msg) {
-        System.out.println(msg);
+    @Nullable
+    public Request getSuppliedRequest() {
+        return suppliedRequest;
+    }
+
+    @Override
+    public void setSuppliedRequest(@Nullable Request suppliedRequest) {
+        this.suppliedRequest = suppliedRequest;
+    }
+
+    @Override
+    public void clearReceivedRequest() {
+        setReceivedRequest(null);
+    }
+
+    @Override
+    public void clearSuppliedRequest() {
+        setSuppliedRequest(null);
     }
 }

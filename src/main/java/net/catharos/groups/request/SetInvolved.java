@@ -18,7 +18,7 @@ public class SetInvolved implements Involved {
     }
 
     @Override
-    public Collection<? extends Participant> getInvolved() {
+    public Collection<? extends Participant> getReceivers() {
         return participants;
     }
 }

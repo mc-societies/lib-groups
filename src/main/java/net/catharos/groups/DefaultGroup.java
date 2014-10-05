@@ -509,7 +509,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     }
 
     @Override
-    public Collection<? extends Participant> getInvolved() {
+    public Collection<? extends Participant> getReceivers() {
         return members;
     }
 }

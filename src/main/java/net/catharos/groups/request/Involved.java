@@ -9,5 +9,5 @@ public interface Involved {
 
     boolean isInvolved(Participant participant);
 
-    Collection<? extends Participant> getInvolved();
+    Collection<? extends Participant> getReceivers();
 }
