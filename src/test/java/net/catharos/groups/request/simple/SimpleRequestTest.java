@@ -26,17 +26,17 @@ public class SimpleRequestTest {
         Involved involved = new Involved() {
             @Override
             public boolean isInvolved(Participant participant) {
-                return getReceivers().contains(participant);
+                return getRecipients().contains(participant);
             }
 
             @Override
-            public Set<Participant> getReceivers() {
+            public Set<Participant> getRecipients() {
                 return participants;
             }
         };
 
 
-        SimpleRequest request = new SimpleRequest("", new SimpleParticipant(), new SimpleRequestMessenger<Choices>(), involved);
+        SimpleRequest request = new SimpleRequest(new SimpleParticipant(), "", involved, new SimpleRequestMessenger<Choices>());
 
         request.start();
 

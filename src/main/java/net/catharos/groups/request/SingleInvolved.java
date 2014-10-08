@@ -17,7 +17,7 @@ public class SingleInvolved implements Involved {
     }
 
     @Override
-    public Collection<? extends Participant> getReceivers() {
+    public Collection<? extends Participant> getRecipients() {
         return Collections.singleton(participant);
     }
 }

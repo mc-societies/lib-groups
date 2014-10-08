@@ -2,6 +2,8 @@ package net.catharos.groups.request.simple;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.procedure.TObjectProcedure;
 import net.catharos.groups.request.*;
@@ -27,7 +29,7 @@ public class SimpleRequest implements Request<Choices> {
     private final String name;
     private final Participant supplier;
     private final RequestMessenger<Choices> messenger;
-    private final Involved receivers;
+    private final Involved recipients;
     private final SettableFuture<DefaultRequestResult<Choices>> future = SettableFuture.create();
 
     private final THashMap<Participant, Choices> results = new THashMap<Participant, Choices>();
@@ -36,22 +38,26 @@ public class SimpleRequest implements Request<Choices> {
 
     private boolean started = false;
 
-    public SimpleRequest(String name, Participant supplier, RequestMessenger<Choices> messenger, Involved delegate) {
+    @Inject
+    public SimpleRequest(@Assisted Participant supplier,
+                         @Assisted String name,
+                         @Assisted Involved recipients,
+                         RequestMessenger<Choices> messenger) {
         this.name = name;
         this.supplier = supplier;
         this.messenger = messenger;
-        this.receivers = delegate;
+        this.recipients = recipients;
         this.created = DateTime.now();
     }
 
     @Override
     public boolean isInvolved(Participant participant) {
-        return receivers.isInvolved(participant);
+        return recipients.isInvolved(participant);
     }
 
     @Override
-    public Collection<? extends Participant> getReceivers() {
-        return receivers.getReceivers();
+    public Collection<? extends Participant> getRecipients() {
+        return recipients.getRecipients();
     }
 
     @Nullable
@@ -73,7 +79,7 @@ public class SimpleRequest implements Request<Choices> {
     public void start() {
         supplier.setSuppliedRequest(this);
 
-        for (Participant participant : receivers.getReceivers()) {
+        for (Participant participant : recipients.getRecipients()) {
             participant.setReceivedRequest(this);
             messenger.start(this, participant);
         }
@@ -88,9 +94,16 @@ public class SimpleRequest implements Request<Choices> {
         }
 
         if (isInvolved(participant)) {
+            for (Participant otherParticipant : getRecipients()) {
+                if (otherParticipant.equals(participant)) {
+                    continue;
+                }
+
+                messenger.voted(this, choice, participant);
+            }
+
             results.put(participant, choice);
             check();
-            messenger.voted(this, choice, participant);
         }
     }
 
@@ -107,7 +120,7 @@ public class SimpleRequest implements Request<Choices> {
     private void done() {
         supplier.setSuppliedRequest(null);
 
-        for (Participant participant : getReceivers()) {
+        for (Participant participant : getRecipients()) {
             participant.setReceivedRequest(null);
         }
     }
@@ -166,7 +179,7 @@ public class SimpleRequest implements Request<Choices> {
 
     @Override
     public boolean isPending() {
-        return results.size() < receivers.getReceivers().size();
+        return results.size() < recipients.getRecipients().size();
     }
 
     @Override

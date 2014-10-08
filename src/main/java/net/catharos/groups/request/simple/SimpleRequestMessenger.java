@@ -22,14 +22,14 @@ public class SimpleRequestMessenger<C extends Choice> implements RequestMessenge
 
     @Override
     public void end(Request<C> request) {
-        for (Participant participant : request.getReceivers()) {
+        for (Participant participant : request.getRecipients()) {
             participant.send("Requests " + request + " finished!");
         }
     }
 
     @Override
     public void cancelled(Request<C> request) {
-        for (Participant participant : request.getReceivers()) {
+        for (Participant participant : request.getRecipients()) {
             participant.send("Requests " + request + " cancelled!");
         }
     }

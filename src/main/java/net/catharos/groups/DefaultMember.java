@@ -45,6 +45,8 @@ public abstract class DefaultMember implements Member {
         this.memberRankPublisher = memberRankPublisher;
         this.lastActivePublisher = lastActivePublisher;
         this.createdPublisher = createdPublisher;
+
+        this.created = this.lastActive = DateTime.now();
     }
 
     @Override
