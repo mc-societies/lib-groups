@@ -427,6 +427,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     }
 
     @Override
+    public int size() {
+        return members.size();
+    }
+
+    @Override
     public Set<Member> getMembers(Setting<Boolean> setting) {
         THashSet<Member> out = new THashSet<Member>();
 
