@@ -1,5 +1,7 @@
 package net.catharos.groups.request;
 
+import gnu.trove.set.hash.THashSet;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -10,7 +12,7 @@ public class SetInvolved implements Involved {
 
     private final Set<? extends Participant> participants;
 
-    public SetInvolved(Set<? extends Participant> participants) {this.participants = participants;}
+    public SetInvolved(Set<? extends Participant> participants) {this.participants = new THashSet<Participant>(participants);}
 
     @Override
     public boolean isInvolved(Participant participant) {
