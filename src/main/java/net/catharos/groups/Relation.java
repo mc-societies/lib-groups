@@ -1,5 +1,6 @@
 package net.catharos.groups;
 
+import gnu.trove.map.hash.TByteObjectHashMap;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +22,8 @@ public interface Relation extends RowForwarder {
      */
     UUID getTarget();
 
+    Type getType();
+
     /**
      * @return The opposite group in this relation. If the source is specified the target will be returned. If the target
      * is specified the source will be returned.
@@ -36,4 +39,37 @@ public interface Relation extends RowForwarder {
 
     boolean contains(Group group);
 
+    public static enum Type {
+        ALLIED(1, "allies"),
+        RIVALED(2, "rivals"),
+        UNKNOWN(0, "unkown");
+
+        private static final TByteObjectHashMap<Type> ids = new TByteObjectHashMap<Type>();
+
+        static {
+            for (Type type : Type.values()) {
+                ids.put(type.getID(), type);
+            }
+        }
+
+        private final byte id;
+        private final String name;
+
+        Type(int id, String name) {
+            this.name = name;
+            this.id = (byte) id;
+        }
+
+        public byte getID() {
+            return id;
+        }
+
+        public static Type getType(byte id) {
+            return ids.get(id);
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
 }

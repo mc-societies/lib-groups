@@ -14,24 +14,33 @@ public class DefaultRelation implements Relation {
 
     private final UUID source;
     private final UUID target;
+    private final Type type;
 
-    public DefaultRelation(UUID source) {this(source, null);}
-
-    @AssistedInject
-    public DefaultRelation(@Assisted("source") UUID source, @Assisted("target") UUID target) {
-        this.source = source;
-        this.target = target;
+    public DefaultRelation(UUID source, Type type) {
+        this(source, null, type);
     }
 
     @AssistedInject
-    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") Group target) {
-        this(source.getUUID(), target.getUUID());
+    public DefaultRelation(@Assisted("source") UUID source, @Assisted("target") UUID target, @Assisted Type type) {
+        this.source = source;
+        this.target = target;
+        this.type = type;
+    }
+
+    @AssistedInject
+    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") Group target, @Assisted Type type) {
+        this(source.getUUID(), target.getUUID(), type);
     }
 
     @Nullable
     @Override
     public UUID getTarget() {
         return target;
+    }
+
+    @Override
+    public Type getType() {
+        return null;
     }
 
     @Override
@@ -56,13 +65,12 @@ public class DefaultRelation implements Relation {
     }
 
     public static DefaultRelation unknownRelation(UUID group) {
-        return new DefaultRelation(group);
+        return new DefaultRelation(group, Type.UNKNOWN);
     }
 
     public static DefaultRelation unknownRelation(Group group) {
         return unknownRelation(group.getUUID());
     }
-
 
     @Override
     public int getColumns() {

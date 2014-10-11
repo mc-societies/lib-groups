@@ -29,7 +29,7 @@ public class GroupTest {
 
     @Test
     public void testSetRelation() throws Exception {
-        a.setRelation(b, new DefaultRelation(a, b));
+        a.setRelation(b, new DefaultRelation(a, b, Relation.Type.ALLIED));
 
         assertAToBRelation();
     }

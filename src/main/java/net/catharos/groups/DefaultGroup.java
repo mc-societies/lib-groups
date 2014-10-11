@@ -481,7 +481,9 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
             }
         }
 
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof DefaultGroup)) {
+            return false;
+        }
 
         DefaultGroup that = (DefaultGroup) o;
 

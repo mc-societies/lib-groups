@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public interface RelationFactory {
 
-    Relation create(@Assisted("source") UUID source, @Assisted("target") UUID target);
+    Relation create(@Assisted("source") UUID source, @Assisted("target") UUID target, Relation.Type type);
 
-    Relation create(@Assisted("source") Group source, @Assisted("target") Group target);
+    Relation create(@Assisted("source") Group source, @Assisted("target") Group target, Relation.Type type);
 }
