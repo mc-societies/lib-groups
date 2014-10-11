@@ -32,7 +32,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final UUID uuid;
     private String name, tag;
     private DateTime created;
-    private short state = PREPARE;
+    private short state;
     private final GroupNamePublisher namePublisher;
     private final GroupStatePublisher groupStatePublisher;
     private final GroupRankPublisher groupRankPublisher;
