@@ -74,6 +74,8 @@ public class GroupBuilder  {
         } else {
             group = groupFactory.create(uuid, name, tag, created, parent);
         }
+        int previousState = group.getState();
+        group.setState(DefaultGroup.PREPARE);
 
         group.setCreated(created);
         group.setState(state);
@@ -87,6 +89,8 @@ public class GroupBuilder  {
             Target target = cell.getColumnKey();
             group.set(setting, target, setting.convert(group, target, cell.getValue()));
         }
+
+        group.setState(previousState);
         return group;
     }
 
