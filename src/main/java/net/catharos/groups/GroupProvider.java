@@ -18,10 +18,10 @@ public interface GroupProvider {
     ListenableFuture<Group> getGroup(UUID uuid);
 
     /**
-     * @param name The name to look up
+     * @param tag The tag to look up
      * @return A future of the group
      */
-    ListenableFuture<Set<Group>> getGroup(String name);
+    ListenableFuture<Set<Group>> getGroup(String tag);
 
     /**
      * @return All existing groups

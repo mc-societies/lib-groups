@@ -18,6 +18,7 @@ public interface Member extends Participant, Sender, RowForwarder {
 
     UUID getUUID();
 
+    @Override
     String getName();
 
     int getState();

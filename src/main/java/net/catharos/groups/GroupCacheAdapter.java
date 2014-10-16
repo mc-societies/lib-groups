@@ -22,8 +22,8 @@ public class GroupCacheAdapter implements GroupProvider {
     }
 
     @Override
-    public ListenableFuture<Set<Group>> getGroup(String name) {
-        return immediateFuture(groupCache.getGroup(name));
+    public ListenableFuture<Set<Group>> getGroup(String tag) {
+        return immediateFuture(groupCache.getGroup(tag));
     }
 
     @Override
