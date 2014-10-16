@@ -2,6 +2,7 @@ package net.catharos.groups;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -18,6 +19,11 @@ public class NaughtyMemberCache<M extends Member> implements MemberCache<M> {
     @Nullable
     @Override
     public M getMember(String name) {
+        return null;
+    }
+
+    @Override
+    public Set<M> getMembers() {
         return null;
     }
 

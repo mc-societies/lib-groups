@@ -2,6 +2,7 @@ package net.catharos.groups;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -21,4 +22,6 @@ public interface MemberProvider<M extends Member> {
      * @return A future of the member
      */
     ListenableFuture<M> getMember(String name);
+
+    ListenableFuture<Set<M>> getMembers();
 }

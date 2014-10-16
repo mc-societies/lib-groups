@@ -2,6 +2,7 @@ package net.catharos.groups;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.Set;
 import java.util.UUID;
 
 import static com.google.common.util.concurrent.Futures.immediateFuture;
@@ -23,5 +24,10 @@ public class MemberCacheAdapter<M extends Member> implements MemberProvider<M> {
     @Override
     public ListenableFuture<M> getMember(String name) {
         return immediateFuture(memberCache.getMember(name));
+    }
+
+    @Override
+    public ListenableFuture<Set<M>> getMembers() {
+        return immediateFuture(memberCache.getMembers());
     }
 }
