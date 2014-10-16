@@ -39,7 +39,7 @@ public interface Member extends Participant, Sender, RowForwarder {
 
     void setCreated(DateTime created);
 
-    <V> V getSingle(Setting<V> setting);
+    <V> V get(Setting<V> setting);
 
     @Nullable
     Group getGroup();

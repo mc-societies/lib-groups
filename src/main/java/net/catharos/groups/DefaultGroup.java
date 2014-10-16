@@ -436,7 +436,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         THashSet<Member> out = new THashSet<Member>();
 
         for (Member member : members) {
-            if (member.<Boolean>getSingle(setting)) {
+            if (member.<Boolean>get(setting)) {
                 out.add(member);
             }
         }

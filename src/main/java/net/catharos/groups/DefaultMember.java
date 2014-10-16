@@ -69,7 +69,7 @@ public abstract class DefaultMember implements Member {
     }
 
     @Override
-    public <V> V getSingle(Setting<V> setting) {
+    public <V> V get(Setting<V> setting) {
         for (Rank rank : ranks) {
             V value = rank.get(setting);
 
