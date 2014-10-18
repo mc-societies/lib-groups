@@ -3,10 +3,8 @@ package net.catharos.groups;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.inject.Inject;
-import net.catharos.groups.rank.Rank;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
-import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
@@ -23,8 +21,6 @@ public class GroupBuilder  {
 
     private DateTime created;
     private short state;
-    @Nullable
-    private Iterable<Rank> ranks;
     private final Table<Setting, Target, byte[]> settings = HashBasedTable.create();
 
     @Inject
@@ -76,17 +72,11 @@ public class GroupBuilder  {
         } else {
             group = groupFactory.create(uuid, name, tag, created, parent);
         }
-        int previousState = group.getState();
+
         group.setState(DefaultGroup.PREPARE);
 
         group.setCreated(created);
         group.setState(state);
-
-        if (ranks != null) {
-            for (Rank rank : ranks) {
-                group.addRank(rank);
-            }
-        }
 
         for (Table.Cell<Setting, Target, byte[]> cell : settings.cellSet()) {
             Setting setting = cell.getRowKey();
@@ -94,7 +84,7 @@ public class GroupBuilder  {
             group.set(setting, target, setting.convert(group, target, cell.getValue()));
         }
 
-        group.setState(previousState);
+        group.setState(0);
         return group;
     }
 
@@ -118,12 +108,7 @@ public class GroupBuilder  {
         this.state = state;
     }
 
-    @Nullable
-    public Iterable<Rank> getRanks() {
-        return ranks;
-    }
-
-    public void setRanks(@Nullable Iterable<Rank> ranks) {
-        this.ranks = ranks;
+    public Table<Setting, Target, byte[]> getSettings() {
+        return settings;
     }
 }

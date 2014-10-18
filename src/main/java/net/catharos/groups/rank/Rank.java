@@ -1,5 +1,6 @@
 package net.catharos.groups.rank;
 
+import net.catharos.groups.Group;
 import net.catharos.groups.setting.subject.Subject;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 
@@ -22,6 +23,10 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder {
     int getState();
 
     void setState(int state);
+
+    Group getGroup();
+
+    void setGroup(Group group);
 
     boolean isSlave(Rank rank);
 

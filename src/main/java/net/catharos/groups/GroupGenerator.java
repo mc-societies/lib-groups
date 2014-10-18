@@ -23,7 +23,7 @@ public class GroupGenerator {
     public Group generate() {
         Group group = groupFactory.create(randomAlphabetic(6), randomAlphabetic(3), DateTime.now());
 
-        group.addRank(rankFactory.create(randomAlphabetic(6), 0));
+        group.addRank(rankFactory.create(randomAlphabetic(6), 0, group));
 
         return group;
     }
