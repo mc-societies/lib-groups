@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Represents a GroupBuilder
  */
-public class GroupBuilder  {
+public class GroupBuilder {
 
     private final GroupFactory groupFactory;
     private UUID uuid;
