@@ -26,8 +26,6 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder {
 
     Group getGroup();
 
-    void setGroup(Group group);
-
     boolean isSlave(Rank rank);
 
 }
