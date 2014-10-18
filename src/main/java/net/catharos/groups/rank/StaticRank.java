@@ -2,6 +2,7 @@ package net.catharos.groups.rank;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import net.catharos.groups.Group;
 import net.catharos.groups.setting.Setting;
@@ -16,6 +17,7 @@ import java.util.UUID;
  */
 public class StaticRank extends AbstractRank {
 
+    @Inject
     public StaticRank(@Assisted UUID uuid, @Assisted String name, @Assisted int priority, Map<String, Setting<Boolean>> rules) {
         super(uuid, name, priority, rules);
     }
