@@ -44,6 +44,8 @@ public interface Member extends Participant, Sender, RowForwarder {
     @Nullable
     Group getGroup();
 
+    boolean hasRule(String rule);
+
     void setGroup(@Nullable Group group);
 
     boolean isAvailable();

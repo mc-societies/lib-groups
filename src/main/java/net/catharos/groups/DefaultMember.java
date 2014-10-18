@@ -82,6 +82,17 @@ public abstract class DefaultMember implements Member {
     }
 
     @Override
+    public boolean hasRule(String rule) {
+        for (Rank rank : ranks) {
+            if (rank.hasRule(rule)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public DateTime getLastActive() {
         return lastActive;
     }

@@ -35,6 +35,8 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder {
 
     void addRule(String rule);
 
+    boolean hasRule(String rule);
+
     boolean isSlave(Rank rank);
 
 }
