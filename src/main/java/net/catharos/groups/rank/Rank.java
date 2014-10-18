@@ -3,6 +3,7 @@ package net.catharos.groups.rank;
 import net.catharos.groups.Group;
 import net.catharos.groups.setting.subject.Subject;
 import net.catharos.lib.core.command.format.table.RowForwarder;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -24,7 +25,15 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder {
 
     void setState(int state);
 
+    /**
+     *
+     * @return null if this belongs to no specific group
+     */
+    @Nullable
     Group getGroup();
+
+
+    void addRule(String rule);
 
     boolean isSlave(Rank rank);
 

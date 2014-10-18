@@ -1,12 +1,11 @@
 package net.catharos.groups.rank;
 
 import com.google.common.primitives.Ints;
-import com.google.inject.assistedinject.Assisted;
-import net.catharos.groups.Group;
+import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.subject.AbstractSubject;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,13 +15,13 @@ public abstract class AbstractRank extends AbstractSubject implements Rank {
     protected final UUID uuid;
     protected final String name;
     protected final int priority;
-    protected Group group;
+    private final Map<String, Setting<Boolean>> rules;
 
-    public AbstractRank(@Assisted UUID uuid, @Assisted String name, @Assisted int priority, @Assisted @Nullable Group group) {
+    public AbstractRank(UUID uuid, String name, int priority, Map<String, Setting<Boolean>> rules) {
         this.uuid = uuid;
-        this.group = group;
         this.name = name;
         this.priority = priority;
+        this.rules = rules;
     }
 
     @Override
@@ -41,11 +40,6 @@ public abstract class AbstractRank extends AbstractSubject implements Rank {
     }
 
     @Override
-    public Group getGroup() {
-        return group;
-    }
-
-    @Override
     public boolean isSlave(Rank rank) {
         return getPriority() < rank.getPriority();
     }
@@ -58,6 +52,16 @@ public abstract class AbstractRank extends AbstractSubject implements Rank {
     @Override
     public int getColumns() {
         return 1;
+    }
+
+    @Override
+    public void addRule(String rule) {
+        Setting<Boolean> setting = rules.get(rule);
+        if (setting == null) {
+            return;
+        }
+
+        set(setting, true);
     }
 
     @Override

@@ -2,11 +2,13 @@ package net.catharos.groups.rank;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.google.inject.assistedinject.Assisted;
 import net.catharos.groups.Group;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -14,8 +16,8 @@ import java.util.UUID;
  */
 public class StaticRank extends AbstractRank {
 
-    public StaticRank(UUID uuid, String name, int priority, @Nullable Group group) {
-        super(uuid, name, priority, group);
+    public StaticRank(@Assisted UUID uuid, @Assisted String name, @Assisted int priority, Map<String, Setting<Boolean>> rules) {
+        super(uuid, name, priority, rules);
     }
 
     @Override
@@ -26,6 +28,12 @@ public class StaticRank extends AbstractRank {
     @Override
     public void setState(int state) {
 
+    }
+
+    @Nullable
+    @Override
+    public Group getGroup() {
+        return null;
     }
 
     @Override

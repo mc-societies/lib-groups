@@ -10,12 +10,15 @@ import net.catharos.groups.setting.target.Target;
 import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Provider;
+import java.util.Map;
 import java.util.UUID;
 
 /**
  * Represents a DefaultRank
  */
 public class DefaultRank extends AbstractRank {
+
+    private final Group group;
 
     private final SettingPublisher settingPublisher;
 
@@ -26,8 +29,9 @@ public class DefaultRank extends AbstractRank {
                        @Assisted String name,
                        @Assisted int priority,
                        @Assisted @Nullable Group group,
-                       SettingPublisher settingPublisher) {
-        this(uuid.get(), name, priority, group, settingPublisher);
+                       SettingPublisher settingPublisher,
+                       Map<String,  Setting<Boolean>> rules) {
+        this(uuid.get(), name, priority, group, settingPublisher, rules);
     }
 
     @AssistedInject
@@ -35,8 +39,10 @@ public class DefaultRank extends AbstractRank {
                        @Assisted String name,
                        @Assisted int priority,
                        @Assisted @Nullable Group group,
-                       SettingPublisher settingPublisher) {
-        super(uuid, name, priority, group);
+                       SettingPublisher settingPublisher,
+                       Map<String,  Setting<Boolean>> rules) {
+        super(uuid, name, priority, rules);
+        this.group = group;
         this.settingPublisher = settingPublisher;
     }
 
@@ -56,6 +62,11 @@ public class DefaultRank extends AbstractRank {
         }
     }
 
+    @Nullable
+    @Override
+    public Group getGroup() {
+        return group;
+    }
 
     protected boolean isPrepared() {
         return prepared;
