@@ -64,7 +64,7 @@ public abstract class DefaultMember implements Member {
         boolean result = this.ranks.add(rank);
 
         if (result && isPrepared()) {
-            memberRankPublisher.publish(this, rank);
+            memberRankPublisher.publishRank(this, rank);
         }
     }
 
@@ -107,7 +107,7 @@ public abstract class DefaultMember implements Member {
         this.lastActive = lastActive;
 
         if (isPrepared()) {
-            lastActivePublisher.publish(this, lastActive);
+            lastActivePublisher.publishLastActive(this, lastActive);
         }
     }
 
@@ -121,7 +121,7 @@ public abstract class DefaultMember implements Member {
         this.created = created;
 
         if (isPrepared()) {
-            createdPublisher.publish(this, created);
+            createdPublisher.publishCreated(this, created);
         }
     }
 
@@ -140,7 +140,7 @@ public abstract class DefaultMember implements Member {
         this.group = group;
 
         if (isPrepared()) {
-            groupPublisher.publish(this, group);
+            groupPublisher.publishGroup(this, group);
         }
 
         if (group != null && !group.isMember(this)) {
@@ -232,7 +232,7 @@ public abstract class DefaultMember implements Member {
         short newState = (short) state;
 
         if (this.state != state && isPrepared() && newState != DefaultGroup.PREPARE) {
-            memberStatePublisher.publish(this, newState);
+            memberStatePublisher.publishState(this, newState);
         }
 
         this.state = newState;

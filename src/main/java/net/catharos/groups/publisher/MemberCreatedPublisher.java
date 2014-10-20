@@ -1,5 +1,6 @@
 package net.catharos.groups.publisher;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import net.catharos.groups.Member;
 import org.joda.time.DateTime;
 
@@ -8,5 +9,5 @@ import org.joda.time.DateTime;
  */
 public interface MemberCreatedPublisher {
 
-    void publish(Member member, DateTime created);
+    <M extends Member> ListenableFuture<M> publishCreated(M member, DateTime created);
 }

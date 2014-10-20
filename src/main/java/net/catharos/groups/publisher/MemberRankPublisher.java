@@ -1,5 +1,6 @@
 package net.catharos.groups.publisher;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import net.catharos.groups.Member;
 import net.catharos.groups.rank.Rank;
 
@@ -8,5 +9,5 @@ import net.catharos.groups.rank.Rank;
  */
 public interface MemberRankPublisher {
 
-    void publish(Member member, Rank rank);
+    <M extends Member> ListenableFuture<M> publishRank(M member, Rank rank);
 }

@@ -1,5 +1,6 @@
 package net.catharos.groups.publisher;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import net.catharos.groups.Group;
 
 /**
@@ -7,5 +8,5 @@ import net.catharos.groups.Group;
  */
 public interface GroupNamePublisher {
 
-    void publish(Group group, String name);
+    ListenableFuture<Group> publishName(Group group, String name);
 }

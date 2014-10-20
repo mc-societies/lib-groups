@@ -213,7 +213,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         short newState = (short) state;
 
         if (this.state != newState && isPrepared()) {
-            groupStatePublisher.publish(this, newState);
+            groupStatePublisher.publishState(this, newState);
         }
 
         this.state = newState;
@@ -224,7 +224,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.name = name;
 
         if (isPrepared()) {
-            namePublisher.publish(this, name);
+            namePublisher.publishName(this, name);
         }
     }
 
@@ -257,7 +257,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.created = created;
 
         if (isPrepared()) {
-            createdPublisher.publish(this, created);
+            createdPublisher.publishCreated(this, created);
         }
     }
 
@@ -334,7 +334,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         Rank result = this.ranks.put(rank.getUUID(), rank);
 
         if (!rank.equals(result) && isPrepared()) {
-            groupRankPublisher.publish(this, rank);
+            groupRankPublisher.publishRank(this, rank);
         }
     }
 
@@ -343,7 +343,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         boolean result = this.ranks.remove(rank.getUUID()) != null;
 
         if (result && isPrepared()) {
-            rankDropPublisher.drop(this, rank);
+            rankDropPublisher.drop(rank);
         }
     }
 

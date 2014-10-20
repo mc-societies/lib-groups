@@ -6,7 +6,7 @@ import net.catharos.groups.Member;
 /**
  * Used to publish new members to a data source and drop existing ones
  */
-public interface MemberPublisher<M extends Member> {
+public interface MemberPublisher {
 
     /**
      * Publishes a new member to a data source
@@ -14,5 +14,5 @@ public interface MemberPublisher<M extends Member> {
      * @param member The member
      * @return A future which will fire when the member was published
      */
-    ListenableFuture<M> publish(M member);
+    <M extends Member> ListenableFuture<M> publish(M member);
 }
