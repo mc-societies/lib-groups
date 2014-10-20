@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.google.inject.name.Named;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.*;
@@ -13,6 +14,7 @@ import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.subject.AbstractPublishingSubject;
 import net.catharos.groups.setting.target.SimpleTarget;
 import net.catharos.lib.core.util.CastSafe;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -40,6 +42,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final Setting<Relation> relationSetting;
     private final GroupCreatedPublisher createdPublisher;
 
+    private final Set<Rank> defaultRanks;
+
     @Nullable
     private Group parent;
 
@@ -60,7 +64,9 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
-                        GroupCreatedPublisher createdPublisher, Setting<Relation> relationSetting) {
+                        GroupCreatedPublisher createdPublisher,
+                        Setting<Relation> relationSetting,
+                        @Named("default-ranks") Set<Rank> defaultRanks) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
@@ -73,6 +79,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.createdPublisher = createdPublisher;
         this.relationSetting = relationSetting;
         setParent(parent);
+
+        this.defaultRanks = defaultRanks;
     }
 
     @AssistedInject
@@ -86,12 +94,14 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting) {
+                        Setting<Relation> relationSetting,
+                        @Named("default-ranks") Set<Rank> defaultRanks) {
         this(
                 uuid, name, tag,
                 created, null,
                 namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting
+                relationSetting,
+                defaultRanks
         );
     }
 
@@ -105,12 +115,14 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting) {
+                        Setting<Relation> relationSetting,
+                        @Named("default-ranks") Set<Rank> defaultRanks) {
         this(
                 uuid, name, tag,
                 DateTime.now(), null,
                 namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting
+                relationSetting,
+                defaultRanks
         );
     }
 
@@ -124,12 +136,14 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting) {
+                        Setting<Relation> relationSetting,
+                        @Named("default-ranks") Set<Rank> defaultRanks) {
         this(
                 uuidProvider.get(), name, tag,
                 DateTime.now(), null,
                 namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting
+                relationSetting,
+                defaultRanks
         );
     }
 
@@ -144,12 +158,14 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting) {
+                        Setting<Relation> relationSetting,
+                        @Named("default-ranks") Set<Rank> defaultRanks) {
         this(
                 uuidProvider.get(), name, tag,
                 created, null,
                 namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting
+                relationSetting,
+                defaultRanks
         );
     }
 
@@ -161,12 +177,14 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting) {
+                        Setting<Relation> relationSetting,
+                        @Named("default-ranks") Set<Rank> defaultRanks) {
         this(
                 uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG,
                 DateTime.now(),
                 namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting
+                relationSetting,
+                defaultRanks
         );
     }
 
@@ -346,12 +364,20 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Collection<Rank> getRanks() {
-        return Collections.unmodifiableCollection(ranks.values());
+        return CollectionUtils.union(defaultRanks, ranks.values());
     }
 
     @Override
-    public Collection<Rank> getRanks(String permission) {
-        return null;
+    public Collection<Rank> getRanks(String rule) {
+        THashSet<Rank> ranks = new THashSet<Rank>();
+
+        for (Rank rank : getRanks()) {
+            if (rank.hasRule(rule)) {
+                ranks.add(rank);
+            }
+        }
+
+        return ranks;
     }
 
     @Override

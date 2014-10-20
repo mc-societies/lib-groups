@@ -136,10 +136,10 @@ public interface Group extends Subject, RowForwarder, Involved {
     Collection<Rank> getRanks();
 
     /**
-     * @param permission The permission to look by
+     * @param rule The rule to look by
      * @return The ranks of this group
      */
-    Collection<Rank> getRanks(String permission);
+    Collection<Rank> getRanks(String rule);
 
     /**
      * @return All sub groups of this group
