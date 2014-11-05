@@ -26,7 +26,6 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder {
     void setState(int state);
 
     /**
-     *
      * @return null if this belongs to no specific group
      */
     @Nullable

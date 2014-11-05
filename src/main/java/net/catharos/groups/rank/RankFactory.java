@@ -14,5 +14,6 @@ public interface RankFactory {
 
     Rank create(String name, int priority, Group group);
 
-    @Named("static") Rank createStatic(UUID uuid, String name, int priority);
+    @Named("static")
+    Rank createStatic(UUID uuid, String name, int priority);
 }

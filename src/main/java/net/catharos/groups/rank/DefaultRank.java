@@ -30,7 +30,7 @@ public class DefaultRank extends AbstractRank {
                        @Assisted int priority,
                        @Assisted @Nullable Group group,
                        SettingPublisher settingPublisher,
-                       Map<String,  Setting<Boolean>> rules) {
+                       Map<String, Setting<Boolean>> rules) {
         this(uuid.get(), name, priority, group, settingPublisher, rules);
     }
 
@@ -40,7 +40,7 @@ public class DefaultRank extends AbstractRank {
                        @Assisted int priority,
                        @Assisted @Nullable Group group,
                        SettingPublisher settingPublisher,
-                       Map<String,  Setting<Boolean>> rules) {
+                       Map<String, Setting<Boolean>> rules) {
         super(uuid, name, priority, rules);
         this.group = group;
         this.settingPublisher = settingPublisher;
