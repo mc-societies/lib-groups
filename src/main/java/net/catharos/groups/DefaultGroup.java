@@ -1,9 +1,7 @@
 package net.catharos.groups;
 
 import com.google.common.base.Objects;
-import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
 import com.google.inject.name.Named;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
@@ -18,7 +16,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -36,11 +33,13 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private DateTime created;
     private boolean completed = false;
     private final GroupNamePublisher namePublisher;
-    private final GroupStatePublisher groupStatePublisher;
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
-    private final Setting<Relation> relationSetting;
+
     private final GroupCreatedPublisher createdPublisher;
+
+    private final Setting<Relation> relationSetting;
+    private final Setting<Boolean> verifySetting;
 
     private final Set<Rank> defaultRanks;
 
@@ -52,8 +51,6 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final THashSet<Member> members = new THashSet<Member>();
     private final THashSet<Group> subGroups = new THashSet<Group>();
 
-
-    @AssistedInject
     public DefaultGroup(@Assisted UUID uuid,
                         @Assisted("name") String name,
                         @Assisted("tag") String tag,
@@ -61,131 +58,26 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         @Assisted @Nullable Group parent,
                         GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher,
                         GroupRankPublisher groupRankPublisher,
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting,
-                        @Named("default-ranks") Set<Rank> defaultRanks) {
+                        Setting<Boolean> verifySetting, @Named("default-ranks") Set<Rank> defaultRanks) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
         this.tag = tag;
         this.created = created;
         this.namePublisher = namePublisher;
-        this.groupStatePublisher = groupStatePublisher;
         this.groupRankPublisher = groupRankPublisher;
         this.rankDropPublisher = rankDropPublisher;
         this.createdPublisher = createdPublisher;
         this.relationSetting = relationSetting;
+        this.verifySetting = verifySetting;
+
         setParent(parent);
 
         this.defaultRanks = defaultRanks;
-    }
-
-    @AssistedInject
-    public DefaultGroup(@Assisted UUID uuid,
-                        @Assisted("name") String name,
-                        @Assisted("tag") String tag,
-                        @Assisted DateTime created,
-                        GroupNamePublisher namePublisher,
-                        SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher,
-                        GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher,
-                        GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting,
-                        @Named("default-ranks") Set<Rank> defaultRanks) {
-        this(
-                uuid, name, tag,
-                created, null,
-                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting,
-                defaultRanks
-        );
-    }
-
-    @AssistedInject
-    public DefaultGroup(@Assisted UUID uuid,
-                        @Assisted("name") String name,
-                        @Assisted("tag") String tag,
-                        GroupNamePublisher namePublisher,
-                        SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher,
-                        GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher,
-                        GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting,
-                        @Named("default-ranks") Set<Rank> defaultRanks) {
-        this(
-                uuid, name, tag,
-                DateTime.now(), null,
-                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting,
-                defaultRanks
-        );
-    }
-
-    @AssistedInject
-    public DefaultGroup(@Assisted("name") String name,
-                        @Assisted("tag") String tag,
-                        Provider<UUID> uuidProvider,
-                        GroupNamePublisher namePublisher,
-                        SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher,
-                        GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher,
-                        GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting,
-                        @Named("default-ranks") Set<Rank> defaultRanks) {
-        this(
-                uuidProvider.get(), name, tag,
-                DateTime.now(), null,
-                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting,
-                defaultRanks
-        );
-    }
-
-    @AssistedInject
-    public DefaultGroup(@Assisted("name") String name,
-                        @Assisted("tag") String tag,
-                        @Assisted DateTime created,
-                        Provider<UUID> uuidProvider,
-                        GroupNamePublisher namePublisher,
-                        SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher,
-                        GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher,
-                        GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting,
-                        @Named("default-ranks") Set<Rank> defaultRanks) {
-        this(
-                uuidProvider.get(), name, tag,
-                created, null,
-                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting,
-                defaultRanks
-        );
-    }
-
-    @Inject
-    public DefaultGroup(Provider<UUID> uuidProvider,
-                        GroupNamePublisher namePublisher,
-                        SettingPublisher settingPublisher,
-                        GroupStatePublisher groupStatePublisher,
-                        GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher,
-                        GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting,
-                        @Named("default-ranks") Set<Rank> defaultRanks) {
-        this(
-                uuidProvider.get(), NEW_GROUP_NAME, NEW_GROUP_TAG,
-                DateTime.now(),
-                namePublisher, settingPublisher, groupStatePublisher, groupRankPublisher, rankDropPublisher, createdPublisher,
-                relationSetting,
-                defaultRanks
-        );
     }
 
     @Override
@@ -481,12 +373,12 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean isVerified() {
-        return false;
+        return get(verifySetting);
     }
 
     @Override
-    public boolean verify(boolean newState) {
-        return false;
+    public void verify(boolean newState) {
+        set(verifySetting, newState);
     }
 
     @Override
