@@ -1,7 +1,6 @@
 package net.catharos.groups;
 
 import com.google.common.base.Objects;
-import com.google.inject.name.Named;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.*;
@@ -61,8 +60,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting,
-                        Setting<Boolean> verifySetting,
-                        @Named("default-ranks") Set<Rank> defaultRanks) {
+                       Setting<Boolean> verifySetting,
+                        Set<Rank> defaultRanks) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
