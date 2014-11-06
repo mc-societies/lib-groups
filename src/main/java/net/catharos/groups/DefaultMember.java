@@ -19,7 +19,7 @@ public abstract class DefaultMember implements Member {
 
     private final UUID uuid;
 
-    private short state;
+    private boolean completed = false;
     @Nullable
     private Group group;
     private THashSet<Rank> ranks = new THashSet<Rank>();
@@ -27,7 +27,6 @@ public abstract class DefaultMember implements Member {
     private DateTime created;
 
     private final MemberGroupPublisher groupPublisher;
-    private final MemberStatePublisher memberStatePublisher;
     private final MemberRankPublisher memberRankPublisher;
     private final MemberLastActivePublisher lastActivePublisher;
     private final MemberCreatedPublisher createdPublisher;
@@ -37,11 +36,11 @@ public abstract class DefaultMember implements Member {
 
     public DefaultMember(UUID uuid,
                          MemberGroupPublisher groupPublisher,
-                         MemberStatePublisher memberStatePublisher,
-                         MemberRankPublisher memberRankPublisher, MemberLastActivePublisher lastActivePublisher, MemberCreatedPublisher createdPublisher) {
+                         MemberRankPublisher memberRankPublisher,
+                         MemberLastActivePublisher lastActivePublisher,
+                         MemberCreatedPublisher createdPublisher) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
-        this.memberStatePublisher = memberStatePublisher;
         this.memberRankPublisher = memberRankPublisher;
         this.lastActivePublisher = lastActivePublisher;
         this.createdPublisher = createdPublisher;
@@ -63,7 +62,7 @@ public abstract class DefaultMember implements Member {
     public void addRank(Rank rank) {
         boolean result = this.ranks.add(rank);
 
-        if (result && isPrepared()) {
+        if (result && isCompleted()) {
             memberRankPublisher.publishRank(this, rank);
         }
     }
@@ -106,7 +105,7 @@ public abstract class DefaultMember implements Member {
     public void setLastActive(DateTime lastActive) {
         this.lastActive = lastActive;
 
-        if (isPrepared()) {
+        if (isCompleted()) {
             lastActivePublisher.publishLastActive(this, lastActive);
         }
     }
@@ -120,7 +119,7 @@ public abstract class DefaultMember implements Member {
     public void setCreated(DateTime created) {
         this.created = created;
 
-        if (isPrepared()) {
+        if (isCompleted()) {
             createdPublisher.publishCreated(this, created);
         }
     }
@@ -139,7 +138,7 @@ public abstract class DefaultMember implements Member {
 
         this.group = group;
 
-        if (isPrepared()) {
+        if (isCompleted()) {
             groupPublisher.publishGroup(this, group);
         }
 
@@ -148,9 +147,6 @@ public abstract class DefaultMember implements Member {
         }
     }
 
-    private boolean isPrepared() {
-        return getState() != DefaultGroup.PREPARE;
-    }
 
     @Override
     public boolean isGroup(Group group) {
@@ -223,18 +219,12 @@ public abstract class DefaultMember implements Member {
     }
 
     @Override
-    public int getState() {
-        return state;
+    public boolean isCompleted() {
+        return completed;
     }
 
     @Override
-    public void setState(int state) {
-        short newState = (short) state;
-
-        if (this.state != state && isPrepared() && newState != DefaultGroup.PREPARE) {
-            memberStatePublisher.publishState(this, newState);
-        }
-
-        this.state = newState;
+    public void complete() {
+        completed = true;
     }
 }

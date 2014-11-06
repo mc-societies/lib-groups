@@ -19,7 +19,7 @@ import java.util.UUID;
  * <p>
  * {@link net.catharos.groups.Relation}s are bidirectional between groups. This means they are mirrored to each other.
  */
-public interface Group extends Subject, RowForwarder, Involved {
+public interface Group extends Subject, RowForwarder, Involved, Completable {
 
     /**
      * The default name for new groups
@@ -40,10 +40,6 @@ public interface Group extends Subject, RowForwarder, Involved {
     String getName();
 
     String getTag();
-
-    int getState();
-
-    void setState(int state);
 
     /**
      * Sets the new name
@@ -175,7 +171,7 @@ public interface Group extends Subject, RowForwarder, Involved {
 
     /**
      * @param setting The setting to look by
-     * @return The members which have this setting and {@link net.catharos.groups.setting.value.SettingValue#booleanValue()} returns true
+     * @return The members which have this setting
      */
     public Set<Member> getMembers(Setting<Boolean> setting);
 
@@ -198,4 +194,8 @@ public interface Group extends Subject, RowForwarder, Involved {
      * @param member The member
      */
     void removeMember(Member member);
+
+    boolean isVerified();
+
+    boolean verify(boolean newState);
 }

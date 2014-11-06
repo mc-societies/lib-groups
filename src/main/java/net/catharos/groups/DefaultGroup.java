@@ -34,7 +34,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final UUID uuid;
     private String name, tag;
     private DateTime created;
-    private short state;
+    private boolean completed = false;
     private final GroupNamePublisher namePublisher;
     private final GroupStatePublisher groupStatePublisher;
     private final GroupRankPublisher groupRankPublisher;
@@ -204,33 +204,22 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     }
 
     @Override
-    public int getState() {
-        return state;
+    public boolean isCompleted() {
+        return completed;
     }
 
     @Override
-    public void setState(int state) {
-        short newState = (short) state;
-
-        if (this.state != newState && isPrepared()) {
-            groupStatePublisher.publishState(this, newState);
-        }
-
-        this.state = newState;
+    public void complete() {
+        completed = true;
     }
 
     @Override
     public void setName(String name) {
         this.name = name;
 
-        if (isPrepared()) {
+        if (isCompleted()) {
             namePublisher.publishName(this, name);
         }
-    }
-
-    @Override
-    protected boolean isPrepared() {
-        return getState() != PREPARE;
     }
 
     @Override
@@ -256,7 +245,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public void setCreated(DateTime created) {
         this.created = created;
 
-        if (isPrepared()) {
+        if (isCompleted()) {
             createdPublisher.publishCreated(this, created);
         }
     }
@@ -333,7 +322,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public void addRank(Rank rank) {
         Rank result = this.ranks.put(rank.getUUID(), rank);
 
-        if (!rank.equals(result) && isPrepared()) {
+        if (!rank.equals(result) && isCompleted()) {
             groupRankPublisher.publishRank(this, rank);
         }
     }
@@ -342,7 +331,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public void removeRank(Rank rank) {
         boolean result = this.ranks.remove(rank.getUUID()) != null;
 
-        if (result && isPrepared()) {
+        if (result && isCompleted()) {
             rankDropPublisher.drop(rank);
         }
     }
@@ -488,6 +477,16 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
             this.members.remove(member);
             member.setGroup(null);
         }
+    }
+
+    @Override
+    public boolean isVerified() {
+        return false;
+    }
+
+    @Override
+    public boolean verify(boolean newState) {
+        return false;
     }
 
     @Override

@@ -73,10 +73,7 @@ public class GroupBuilder {
             group = groupFactory.create(uuid, name, tag, created, parent);
         }
 
-        group.setState(DefaultGroup.PREPARE);
-
         group.setCreated(created);
-        group.setState(state);
 
         for (Table.Cell<Setting, Target, byte[]> cell : settings.cellSet()) {
             Setting setting = cell.getRowKey();
@@ -84,7 +81,7 @@ public class GroupBuilder {
             group.set(setting, target, setting.convert(group, target, cell.getValue()));
         }
 
-        group.setState(0);
+        group.complete();
         return group;
     }
 

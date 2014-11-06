@@ -14,16 +14,12 @@ import java.util.UUID;
 /**
  *
  */
-public interface Member extends Participant, Sender, RowForwarder {
+public interface Member extends Participant, Sender, RowForwarder, Completable {
 
     UUID getUUID();
 
     @Override
     String getName();
-
-    int getState();
-
-    void setState(int state);
 
     Set<Rank> getRanks();
 

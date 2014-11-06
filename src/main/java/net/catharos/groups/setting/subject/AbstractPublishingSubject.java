@@ -1,5 +1,6 @@
 package net.catharos.groups.setting.subject;
 
+import net.catharos.groups.Completable;
 import net.catharos.groups.publisher.SettingPublisher;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.target.Target;
@@ -7,7 +8,7 @@ import net.catharos.groups.setting.target.Target;
 /**
  * Represents a AbstractPublishingSubject
  */
-public abstract class AbstractPublishingSubject extends AbstractSubject {
+public abstract class AbstractPublishingSubject extends AbstractSubject implements Completable {
 
     private final SettingPublisher settingPublisher;
 
@@ -17,7 +18,7 @@ public abstract class AbstractPublishingSubject extends AbstractSubject {
     public <V> void set(Setting<V> setting, Target target, V value) {
         super.set(setting, target, value);
 
-        if (isPrepared()) {
+        if (isCompleted()) {
             settingPublisher.publish(this, target, setting, value);
         }
     }
@@ -26,11 +27,9 @@ public abstract class AbstractPublishingSubject extends AbstractSubject {
     public <V> void remove(Setting<V> setting, Target target) {
         super.remove(setting, target);
 
-        if (isPrepared()) {
+        if (isCompleted()) {
             settingPublisher.publish(this, target, setting, null);
         }
     }
-
-    protected abstract boolean isPrepared();
 
 }
