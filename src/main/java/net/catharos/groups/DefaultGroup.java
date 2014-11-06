@@ -62,7 +62,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting,
-                        Setting<Boolean> verifySetting, @Named("default-ranks") Set<Rank> defaultRanks) {
+                        Setting<Boolean> verifySetting,
+                        @Named("default-ranks") Set<Rank> defaultRanks) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;

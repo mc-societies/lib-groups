@@ -1,6 +1,5 @@
 package net.catharos.groups;
 
-import com.google.inject.assistedinject.Assisted;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -11,7 +10,7 @@ import java.util.UUID;
  */
 public interface GroupFactory {
 
-    Group create(@Assisted("name") String name, @Assisted("tag") String tag);
+    Group create(String name, String tag);
 
     /**
      * Creates a group by name. The uuid will be generated.
@@ -19,7 +18,7 @@ public interface GroupFactory {
      * @param name The name
      * @return A brand new group
      */
-    Group create(@Assisted("name") String name, @Assisted("tag") String tag, DateTime created);
+    Group create(String name, String tag, DateTime created);
 
     /**
      * Creates a group by name and uuid.
@@ -28,9 +27,9 @@ public interface GroupFactory {
      * @param name The name
      * @return A brand new group
      */
-    Group create(UUID uuid, @Assisted("name") String name, @Assisted("tag") String tag);
+    Group create(UUID uuid, String name, String tag);
 
-    Group create(UUID uuid, @Assisted("name") String name, @Assisted("tag") String tag, DateTime created);
+    Group create(UUID uuid, String name, String tag, DateTime created);
 
     /**
      * Creates a group by name and uuid and specifies a parent.
@@ -40,5 +39,5 @@ public interface GroupFactory {
      * @param parent The parent
      * @return A brand new group
      */
-    Group create(UUID uuid, @Assisted("name") String name, @Assisted("tag") String tag, DateTime created, @Nullable Group parent);
+    Group create(UUID uuid, String name, String tag, DateTime created, @Nullable Group parent);
 }
