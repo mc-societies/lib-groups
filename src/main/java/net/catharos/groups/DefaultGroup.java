@@ -1,7 +1,6 @@
 package net.catharos.groups;
 
 import com.google.common.base.Objects;
-import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
@@ -51,11 +50,11 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final THashSet<Member> members = new THashSet<Member>();
     private final THashSet<Group> subGroups = new THashSet<Group>();
 
-    public DefaultGroup(@Assisted UUID uuid,
-                        @Assisted("name") String name,
-                        @Assisted("tag") String tag,
-                        @Assisted DateTime created,
-                        @Assisted @Nullable Group parent,
+    public DefaultGroup(UUID uuid,
+                        String name,
+                        String tag,
+                        DateTime created,
+                        @Nullable Group parent,
                         GroupNamePublisher namePublisher,
                         SettingPublisher settingPublisher,
                         GroupRankPublisher groupRankPublisher,
