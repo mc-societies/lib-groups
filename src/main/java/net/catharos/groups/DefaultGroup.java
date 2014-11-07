@@ -381,7 +381,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean isVerified() {
-        return get(verifySetting);
+        Boolean verified = get(verifySetting);
+        return verified != null && verified;
     }
 
     @Override
