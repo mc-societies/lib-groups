@@ -23,6 +23,22 @@ public abstract class Setting<V> {
 
     public abstract byte[] convert(Subject subject, Target target, @Nullable V value) throws SettingException;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+
+        Setting that = (Setting) o;
+
+        return getID() == that.getID();
+    }
+
+    @Override
+    public int hashCode() {
+        return getID();
+    }
+
 //    public static class Boolean extends Setting<DefaultSettingValue> {
 //
 //        public Boolean(int id) {

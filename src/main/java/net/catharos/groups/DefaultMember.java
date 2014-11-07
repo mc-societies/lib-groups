@@ -9,6 +9,7 @@ import net.catharos.groups.publisher.MemberRankPublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -70,6 +71,7 @@ public abstract class DefaultMember implements Member {
         }
     }
 
+    @NotNull
     @Override
     public <V> V get(Setting<V> setting) {
         for (Rank rank : ranks) {

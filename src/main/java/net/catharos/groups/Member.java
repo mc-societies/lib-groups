@@ -5,6 +5,7 @@ import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import net.catharos.lib.core.command.sender.Sender;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -35,6 +36,7 @@ public interface Member extends Participant, Sender, RowForwarder, Completable {
 
     void setCreated(DateTime created);
 
+    @NotNull
     <V> V get(Setting<V> setting);
 
     @Nullable
