@@ -2,7 +2,10 @@ package net.catharos.groups;
 
 import com.google.common.base.Objects;
 import gnu.trove.set.hash.THashSet;
-import net.catharos.groups.publisher.*;
+import net.catharos.groups.publisher.MemberCreatedPublisher;
+import net.catharos.groups.publisher.MemberGroupPublisher;
+import net.catharos.groups.publisher.MemberLastActivePublisher;
+import net.catharos.groups.publisher.MemberRankPublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;

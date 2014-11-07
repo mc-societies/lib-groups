@@ -60,7 +60,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         RankDropPublisher rankDropPublisher,
                         GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting,
-                       Setting<Boolean> verifySetting,
+                        Setting<Boolean> verifySetting,
                         Set<Rank> defaultRanks) {
         super(settingPublisher);
         this.uuid = uuid;
