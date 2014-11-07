@@ -20,7 +20,8 @@ public class GroupTest {
         @Override
         protected void configureTest() {
             bind(UUID.class).toProvider(TimeUUIDProvider.class);
-            bind(Group.class).to(DefaultGroup.class);
+            bind(GroupFactory.class).to(DefaultGroupFactory.class);
+            bind(Group.class).toProvider(SimpleGroupProvider.class);
         }
     }
 
