@@ -9,4 +9,6 @@ import net.catharos.groups.Group;
 public interface GroupNamePublisher {
 
     ListenableFuture<Group> publishName(Group group, String name);
+
+    ListenableFuture<Group> publishTag(Group group, String tag);
 }

@@ -95,6 +95,15 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     }
 
     @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+
+        if (isCompleted()) {
+            namePublisher.publishTag(this, name);
+        }
+    }
+
+    @Override
     public boolean isCompleted() {
         return completed;
     }

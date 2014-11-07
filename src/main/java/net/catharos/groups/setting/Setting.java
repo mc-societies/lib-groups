@@ -19,9 +19,9 @@ public abstract class Setting<V> {
         return id;
     }
 
-    public abstract V convert(Subject subject, Target target, byte[] value);
+    public abstract V convert(Subject subject, Target target, byte[] value) throws SettingException;
 
-    public abstract byte[] convert(Subject subject, Target target, @Nullable V value);
+    public abstract byte[] convert(Subject subject, Target target, @Nullable V value) throws SettingException;
 
 //    public static class Boolean extends Setting<DefaultSettingValue> {
 //

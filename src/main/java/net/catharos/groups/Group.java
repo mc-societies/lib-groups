@@ -41,6 +41,8 @@ public interface Group extends Subject, RowForwarder, Involved, Completable {
 
     String getTag();
 
+    void setTag(String tag);
+
     /**
      * Sets the new name
      *
