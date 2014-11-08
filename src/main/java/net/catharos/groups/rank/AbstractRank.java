@@ -67,17 +67,7 @@ public abstract class AbstractRank extends AbstractSubject implements Rank {
     @Override
     public boolean hasRule(String rule) {
         Setting<Boolean> setting = rules.get(rule);
-        if (setting == null) {
-            return false;
-        }
-
-        Boolean value = getBoolean(setting);
-
-        if (value == null) {
-            return false;
-        }
-
-        return value;
+        return setting != null && getBoolean(setting);
     }
 
     @Override
