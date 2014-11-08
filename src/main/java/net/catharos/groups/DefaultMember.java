@@ -13,6 +13,7 @@ import net.catharos.groups.setting.subject.AbstractSubject;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
@@ -59,7 +60,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
     @Override
     public Set<Rank> getRanks() {
-        return ranks;
+        return Collections.unmodifiableSet(ranks);
     }
 
     @Override
@@ -69,6 +70,11 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         if (result && isCompleted()) {
             memberRankPublisher.publishRank(this, rank);
         }
+    }
+
+    @Override
+    public boolean hasRank(Rank rank) {
+        return ranks.contains(rank);
     }
 
     @Override
