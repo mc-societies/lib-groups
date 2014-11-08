@@ -72,6 +72,17 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     }
 
     @Override
+    public boolean removeRank(Rank rank) {
+        boolean result = ranks.remove(rank);
+
+        if (result && isCompleted()) {
+            memberRankPublisher.publishRank(this, rank);
+        }
+
+        return result;
+    }
+
+    @Override
     public <V> V getRankValue(Setting<V> setting) {
         for (Rank rank : ranks) {
             V value = rank.get(setting);
@@ -231,6 +242,4 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     public void complete() {
         completed = true;
     }
-
-
 }

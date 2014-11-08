@@ -27,6 +27,8 @@ public interface Member extends Subject, Participant, Sender, RowForwarder, Comp
 
     void addRank(Rank rank);
 
+    boolean removeRank(Rank rank);
+
     DateTime getLastActive();
 
     void activate();

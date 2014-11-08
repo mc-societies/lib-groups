@@ -10,4 +10,6 @@ import net.catharos.groups.rank.Rank;
 public interface MemberRankPublisher {
 
     <M extends Member> ListenableFuture<M> publishRank(M member, Rank rank);
+
+    <M extends Member> ListenableFuture<M> dropRank(M member, Rank rank);
 }
