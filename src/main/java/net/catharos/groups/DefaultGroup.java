@@ -15,9 +15,11 @@ import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
+
+import static java.util.Collections.unmodifiableCollection;
+import static java.util.Collections.unmodifiableSet;
 
 /**
  * Default implementation for a Group
@@ -158,7 +160,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Collection<Relation> getRelations() {
-        return CastSafe.toGeneric(super.settings.row(relationSetting).values());
+        return unmodifiableCollection(CastSafe.<Collection<Relation>>toGeneric(super.settings.row(relationSetting).values()));
     }
 
     @Override
@@ -338,7 +340,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Set<Member> getMembers() {
-        return Collections.unmodifiableSet(members);
+        return unmodifiableSet(members);
     }
 
     @Override

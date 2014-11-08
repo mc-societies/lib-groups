@@ -89,6 +89,19 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     }
 
     @Override
+    public Rank getRank() {
+        Rank highest = null;
+
+        for (Rank rank : ranks) {
+            if (highest == null || rank.getPriority() > highest.getPriority()) {
+                highest = rank;
+            }
+        }
+
+        return highest;
+    }
+
+    @Override
     public <V> V getRankValue(Setting<V> setting) {
         for (Rank rank : ranks) {
             V value = rank.get(setting);
