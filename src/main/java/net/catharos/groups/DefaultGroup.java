@@ -152,7 +152,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Relation getRelation(Group anotherGroup) {
-        Relation relation = get(relationSetting, anotherGroup);
+        Relation relation = getBoolean(relationSetting, anotherGroup);
         return relation == null ? DefaultRelation.unknownRelation(this) : relation;
     }
 
@@ -206,7 +206,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean hasRelation(Group anotherGroup) {
-        Relation value = get(relationSetting, anotherGroup);
+        Relation value = getBoolean(relationSetting, anotherGroup);
 
         if (value == null) {
             return false;
@@ -381,7 +381,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean isVerified() {
-        return get(verifySetting);
+        return getBoolean(verifySetting);
     }
 
     @Override

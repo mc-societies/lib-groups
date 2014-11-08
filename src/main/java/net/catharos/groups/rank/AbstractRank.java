@@ -71,7 +71,7 @@ public abstract class AbstractRank extends AbstractSubject implements Rank {
             return false;
         }
 
-        Boolean value = get(setting);
+        Boolean value = getBoolean(setting);
 
         if (value == null) {
             return false;

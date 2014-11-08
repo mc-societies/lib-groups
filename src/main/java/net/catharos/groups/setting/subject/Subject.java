@@ -25,15 +25,15 @@ public interface Subject extends Target {
 
     <V> V get(Setting<V> setting, Target target);
 
-    boolean get(Setting<Boolean> setting, Target target);
+    boolean getBoolean(Setting<Boolean> setting, Target target);
 
-    int get(Setting<Integer> setting, Target target);
+    int getInteger(Setting<Integer> setting, Target target);
 
     <V> V get(Setting<V> setting);
 
-    boolean get(Setting<Boolean> setting);
+    boolean getBoolean(Setting<Boolean> setting);
 
-    int get(Setting<Integer> setting);
+    int getInteger(Setting<Integer> setting);
 
     Table<Setting, Target, Object> getSettings();
 }

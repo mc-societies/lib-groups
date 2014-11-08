@@ -74,7 +74,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     @Override
     public <V> V getRankValue(Setting<V> setting) {
         for (Rank rank : ranks) {
-            V value = rank.get(setting);
+            V value = rank.getBoolean(setting);
 
             if (value != null) {
                 return value;
