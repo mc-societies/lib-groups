@@ -45,7 +45,7 @@ public abstract class AbstractSubject implements Subject {
 
     @Override
     public <V> V get(Setting<V> setting) {
-        return getBoolean(setting, this);
+        return get(setting, this);
     }
 
     @Override
@@ -55,13 +55,13 @@ public abstract class AbstractSubject implements Subject {
 
     @Override
     public boolean getBoolean(Setting<Boolean> setting, Target target) {
-        Boolean value = this.<Boolean>getBoolean(setting, target);
+        Boolean value = this.<Boolean>get(setting, target);
         return value != null && value;
     }
 
     @Override
     public int getInteger(Setting<Integer> setting, Target target) {
-        Integer value = this.<Integer>getBoolean(setting, target);
+        Integer value = this.<Integer>get(setting, target);
 
         if (value == null) {
             return 0;
@@ -71,13 +71,13 @@ public abstract class AbstractSubject implements Subject {
 
     @Override
     public boolean getBoolean(Setting<Boolean> setting) {
-        Boolean value = this.<Boolean>getBoolean(setting);
+        Boolean value = this.<Boolean>get(setting);
         return value != null && value;
     }
 
     @Override
     public int getInteger(Setting<Integer> setting) {
-        Integer value = this.<Integer>getBoolean(setting);
+        Integer value = this.<Integer>get(setting);
 
         if (value == null) {
             return 0;
