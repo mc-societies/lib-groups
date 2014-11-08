@@ -3,9 +3,9 @@ package net.catharos.groups;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
 import net.catharos.groups.setting.Setting;
+import net.catharos.groups.setting.subject.Subject;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import net.catharos.lib.core.command.sender.Sender;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -15,8 +15,9 @@ import java.util.UUID;
 /**
  *
  */
-public interface Member extends Participant, Sender, RowForwarder, Completable {
+public interface Member extends Subject, Participant, Sender, RowForwarder, Completable {
 
+    @Override
     UUID getUUID();
 
     @Override
@@ -36,8 +37,7 @@ public interface Member extends Participant, Sender, RowForwarder, Completable {
 
     void setCreated(DateTime created);
 
-    @NotNull
-    <V> V get(Setting<V> setting);
+    <V> V getRankValue(Setting<V> setting);
 
     @Nullable
     Group getGroup();

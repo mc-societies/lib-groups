@@ -52,4 +52,36 @@ public abstract class AbstractSubject implements Subject {
     public Table<Setting, Target, Object> getSettings() {
         return settings;
     }
+
+    @Override
+    public boolean get(Setting<Boolean> setting, Target target) {
+        Boolean value = this.<Boolean>get(setting, target);
+        return value != null && value;
+    }
+
+    @Override
+    public int get(Setting<Integer> setting, Target target) {
+        Integer value = this.<Integer>get(setting, target);
+
+        if (value == null) {
+            return 0;
+        }
+        return value;
+    }
+
+    @Override
+    public boolean get(Setting<Boolean> setting) {
+        Boolean value = this.<Boolean>get(setting);
+        return value != null && value;
+    }
+
+    @Override
+    public int get(Setting<Integer> setting) {
+        Integer value = this.<Integer>get(setting);
+
+        if (value == null) {
+            return 0;
+        }
+        return value;
+    }
 }

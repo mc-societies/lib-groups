@@ -351,7 +351,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         THashSet<Member> out = new THashSet<Member>();
 
         for (Member member : members) {
-            if (member.<Boolean>get(setting)) {
+            if (member.<Boolean>getRankValue(setting)) {
                 out.add(member);
             }
         }
@@ -381,8 +381,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean isVerified() {
-        Boolean verified = get(verifySetting);
-        return verified != null && verified;
+        return get(verifySetting);
     }
 
     @Override

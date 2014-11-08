@@ -81,6 +81,7 @@ public class GroupBuilder {
 
         group.setCreated(created);
 
+        //beautify
         for (Table.Cell<Setting, Target, byte[]> cell : settings.cellSet()) {
             Setting setting = cell.getRowKey();
             Target target = cell.getColumnKey();

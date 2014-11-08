@@ -9,7 +9,7 @@ import net.catharos.groups.publisher.MemberRankPublisher;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Request;
 import net.catharos.groups.setting.Setting;
-import org.jetbrains.annotations.NotNull;
+import net.catharos.groups.setting.subject.AbstractSubject;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
@@ -19,7 +19,7 @@ import java.util.UUID;
 /**
  * Default implementation for a Member
  */
-public abstract class DefaultMember implements Member {
+public abstract class DefaultMember extends AbstractSubject implements Member {
 
     private final UUID uuid;
 
@@ -71,9 +71,8 @@ public abstract class DefaultMember implements Member {
         }
     }
 
-    @NotNull
     @Override
-    public <V> V get(Setting<V> setting) {
+    public <V> V getRankValue(Setting<V> setting) {
         for (Rank rank : ranks) {
             V value = rank.get(setting);
 
@@ -232,4 +231,6 @@ public abstract class DefaultMember implements Member {
     public void complete() {
         completed = true;
     }
+
+
 }
