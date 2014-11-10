@@ -176,6 +176,10 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
             groupPublisher.publishGroup(this, group);
         }
 
+        if (group == null) {
+            this.ranks.clear();
+        }
+
         if (group != null && !group.isMember(this)) {
             group.addMember(this);
         }
