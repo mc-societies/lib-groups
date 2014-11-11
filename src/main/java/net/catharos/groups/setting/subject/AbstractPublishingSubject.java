@@ -14,6 +14,7 @@ public abstract class AbstractPublishingSubject extends AbstractSubject implemen
 
     protected AbstractPublishingSubject(SettingPublisher settingPublisher) {this.settingPublisher = settingPublisher;}
 
+
     @Override
     public <V> void set(Setting<V> setting, Target target, V value) {
         super.set(setting, target, value);

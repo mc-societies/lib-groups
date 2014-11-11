@@ -31,7 +31,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final UUID uuid;
     private String name, tag;
     private DateTime created;
-    private boolean completed = false;
+    private boolean completed = true;
     private final GroupNamePublisher namePublisher;
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
@@ -111,8 +111,13 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     }
 
     @Override
+    public void complete(boolean value) {
+        this.completed = value;
+    }
+
+    @Override
     public void complete() {
-        completed = true;
+        complete(true);
     }
 
     @Override
@@ -240,7 +245,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Rank getRank(String name) {
-        for (Rank rank : ranks.values()) {
+        for (Rank rank : getRanks()) {
             if (rank.getName().equals(name)) {
                 return rank;
             }
@@ -250,6 +255,12 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Rank getRank(UUID uuid) {
+        //beautify
+        for (Rank defaultRank : defaultRanks) {
+            if (defaultRank.getUUID().equals(uuid)) {
+                return defaultRank;
+            }
+        }
         return this.ranks.get(uuid);
     }
 

@@ -26,7 +26,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
     private final UUID uuid;
 
-    private boolean completed = false;
+    private boolean completed = true;
     @Nullable
     private Group group;
     private THashSet<Rank> ranks = new THashSet<Rank>();
@@ -284,7 +284,12 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     }
 
     @Override
+    public void complete(boolean value) {
+        this.completed = value;
+    }
+
+    @Override
     public void complete() {
-        completed = true;
+        complete(true);
     }
 }

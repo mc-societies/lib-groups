@@ -68,6 +68,11 @@ public class DefaultRank extends AbstractRank {
         return group;
     }
 
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
     protected boolean isPrepared() {
         return prepared;
     }

@@ -7,5 +7,7 @@ public interface Completable {
 
     boolean isCompleted();
 
+    void complete(boolean value);
+
     void complete();
 }

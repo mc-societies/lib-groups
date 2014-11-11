@@ -79,6 +79,8 @@ public class GroupBuilder {
             group = groupFactory.create(uuid, name, tag, created, parent);
         }
 
+        group.complete(false);
+
         group.setCreated(created);
 
         //beautify

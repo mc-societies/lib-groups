@@ -31,6 +31,7 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder {
     @Nullable
     Group getGroup();
 
+    boolean isStatic();
 
     void addRule(String rule);
 
