@@ -1,6 +1,8 @@
 package net.catharos.groups;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
+import com.google.inject.name.Named;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.MemberCreatedPublisher;
 import net.catharos.groups.publisher.MemberGroupPublisher;
@@ -36,6 +38,8 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     private final MemberLastActivePublisher lastActivePublisher;
     private final MemberCreatedPublisher createdPublisher;
 
+    private final Rank defaultRank;
+
     @Nullable
     private Request receivedRequest, suppliedRequest;
 
@@ -43,12 +47,14 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
                          MemberGroupPublisher groupPublisher,
                          MemberRankPublisher memberRankPublisher,
                          MemberLastActivePublisher lastActivePublisher,
-                         MemberCreatedPublisher createdPublisher) {
+                         MemberCreatedPublisher createdPublisher,
+                         @Named("default-rank") Rank defaultRank) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
         this.memberRankPublisher = memberRankPublisher;
         this.lastActivePublisher = lastActivePublisher;
         this.createdPublisher = createdPublisher;
+        this.defaultRank = defaultRank;
 
         this.created = this.lastActive = DateTime.now();
     }
@@ -60,11 +66,19 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
     @Override
     public Set<Rank> getRanks() {
-        return Collections.unmodifiableSet(ranks);
+        if (getGroup() == null) {
+            return Collections.emptySet();
+        }
+
+        return Sets.union(ranks, Collections.singleton(defaultRank));
     }
 
     @Override
     public void addRank(Rank rank) {
+        if (getGroup() == null) {
+            return;
+        }
+
         boolean result = this.ranks.add(rank);
 
         if (result && isCompleted()) {
@@ -74,11 +88,15 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
     @Override
     public boolean hasRank(Rank rank) {
-        return ranks.contains(rank);
+        return getRanks().contains(rank);
     }
 
     @Override
     public boolean removeRank(Rank rank) {
+        if (getGroup() == null) {
+            return false;
+        }
+
         boolean result = ranks.remove(rank);
 
         if (result && isCompleted()) {
@@ -90,9 +108,13 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
     @Override
     public Rank getRank() {
+        if (getGroup() == null) {
+            return null;
+        }
+
         Rank highest = null;
 
-        for (Rank rank : ranks) {
+        for (Rank rank : getRanks()) {
             if (highest == null || rank.getPriority() > highest.getPriority()) {
                 highest = rank;
             }
@@ -103,7 +125,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
     @Override
     public <V> V getRankValue(Setting<V> setting) {
-        for (Rank rank : ranks) {
+        for (Rank rank : getRanks()) {
             V value = rank.get(setting);
 
             if (value != null) {
@@ -116,7 +138,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
     @Override
     public boolean hasRule(String rule) {
-        for (Rank rank : ranks) {
+        for (Rank rank : getRanks()) {
             if (rank.hasRule(rule)) {
                 return true;
             }
