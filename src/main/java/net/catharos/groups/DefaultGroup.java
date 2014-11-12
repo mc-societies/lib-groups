@@ -140,6 +140,10 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
             }
         }
 
+        if (lastActive == null) {
+            return new DateTime(0);
+        }
+
         return lastActive;
     }
 
