@@ -6,7 +6,6 @@ import net.catharos.groups.MemberProvider;
 import net.catharos.lib.core.command.CommandContext;
 import net.catharos.lib.core.command.ParsingException;
 import net.catharos.lib.core.command.parser.ArgumentParser;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutionException;
 
@@ -20,7 +19,6 @@ public class MemberParser<M extends Member> implements ArgumentParser<M> {
     @Inject
     public MemberParser(MemberProvider<M> provider) {this.provider = provider;}
 
-    @NotNull
     @Override
     public M parse(String input, CommandContext<?> ctx) throws ParsingException {
         try {

@@ -8,7 +8,6 @@ import net.catharos.lib.core.command.CommandContext;
 import net.catharos.lib.core.command.ParsingException;
 import net.catharos.lib.core.command.parser.ArgumentParser;
 import net.catharos.lib.core.i18n.Dictionary;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -27,7 +26,6 @@ public class GroupParser implements ArgumentParser<Group> {
         this.dictionary = dictionary;
     }
 
-    @NotNull
     @Override
     public Group parse(String input, CommandContext<?> ctx) throws ParsingException {
         try {
@@ -37,7 +35,7 @@ public class GroupParser implements ArgumentParser<Group> {
                 throw new ParsingException(dictionary.getTranslation("target-society.not-found", (Object) input), ctx);
             }
 
-            return Iterables.getOnlyElement(groups);
+            return Iterables.getFirst(groups, null);
         } catch (InterruptedException e) {
             throw new ParsingException(e, dictionary.getTranslation("target-society.not-found", (Object) input), ctx);
         } catch (ExecutionException e) {
