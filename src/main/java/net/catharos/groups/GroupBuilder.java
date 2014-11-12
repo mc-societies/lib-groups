@@ -24,7 +24,7 @@ public class GroupBuilder {
 
     private DateTime created;
     private short state;
-    private final Table<Setting, Target, byte[]> settings = HashBasedTable.create();
+    private final Table<Setting, Target, String> settings = HashBasedTable.create();
 
     @InjectLogger
     private Logger logger;
@@ -84,13 +84,13 @@ public class GroupBuilder {
         group.setCreated(created);
 
         //beautify
-        for (Table.Cell<Setting, Target, byte[]> cell : settings.cellSet()) {
+        for (Table.Cell<Setting, Target, String> cell : settings.cellSet()) {
             Setting setting = cell.getRowKey();
             Target target = cell.getColumnKey();
-            byte[] value = cell.getValue();
+            String value = cell.getValue();
 
             try {
-                group.set(setting, target, setting.convert(group, target, value));
+                group.set(setting, target, setting.convertFromString(group, target, value));
             } catch (SettingException e) {
                 logger.warn("Failed to convert setting %s! Subject: %s Target: %s Value: %s", setting, group, target, value);
             }
@@ -100,7 +100,7 @@ public class GroupBuilder {
         return group;
     }
 
-    public void put(Setting rowKey, Target columnKey, byte[] value) {
+    public void put(Setting rowKey, Target columnKey, String value) {
         settings.put(rowKey, columnKey, value);
     }
 
@@ -120,7 +120,7 @@ public class GroupBuilder {
         this.state = state;
     }
 
-    public Table<Setting, Target, byte[]> getSettings() {
+    public Table<Setting, Target, String> getSettings() {
         return settings;
     }
 }
