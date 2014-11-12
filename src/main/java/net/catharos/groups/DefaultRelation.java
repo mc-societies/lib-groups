@@ -40,7 +40,7 @@ public class DefaultRelation implements Relation {
 
     @Override
     public Type getType() {
-        return null;
+        return type;
     }
 
     @Override
