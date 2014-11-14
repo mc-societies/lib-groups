@@ -8,8 +8,6 @@ import org.joda.time.DateTime;
  */
 public interface Request<C extends Choice> extends Involved {
 
-    String getName();
-
     void start();
 
     void vote(Participant participant, C choice);
@@ -17,6 +15,8 @@ public interface Request<C extends Choice> extends Involved {
     void cancel();
 
     boolean isPending();
+
+    Participant getSupplier();
 
     DateTime getDateCreated();
 

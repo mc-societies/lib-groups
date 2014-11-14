@@ -36,7 +36,7 @@ public class SimpleRequestTest {
         };
 
 
-        SimpleRequest request = new SimpleRequest(new SimpleParticipant(), "", involved, new SimpleRequestMessenger<Choices>());
+        SimpleRequest request = new SimpleRequest(new SimpleParticipant(), involved, new SimpleRequestMessenger<Choices>());
 
         request.start();
 

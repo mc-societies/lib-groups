@@ -2,8 +2,8 @@ package net.catharos.groups.request.simple;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.procedure.TObjectProcedure;
 import net.catharos.groups.request.*;
@@ -26,7 +26,6 @@ import static java.util.Collections.sort;
  */
 public class SimpleRequest implements Request<Choices> {
 
-    private final String name;
     private final Participant supplier;
     private final RequestMessenger<Choices> messenger;
     private final Involved recipients;
@@ -38,12 +37,11 @@ public class SimpleRequest implements Request<Choices> {
 
     private boolean started = false;
 
-    @Inject
+
+    @AssistedInject
     public SimpleRequest(@Assisted Participant supplier,
-                         @Assisted String name,
                          @Assisted Involved recipients,
-                         RequestMessenger<Choices> messenger) {
-        this.name = name;
+                         @Assisted RequestMessenger<Choices> messenger) {
         this.supplier = supplier;
         this.messenger = messenger;
         this.recipients = recipients;
@@ -68,11 +66,6 @@ public class SimpleRequest implements Request<Choices> {
 
         Choice choice = results.get(participant);
         return choice == null ? Choices.ABSTAIN : choice;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -180,6 +173,11 @@ public class SimpleRequest implements Request<Choices> {
     @Override
     public boolean isPending() {
         return results.size() < recipients.getRecipients().size();
+    }
+
+    @Override
+    public Participant getSupplier() {
+        return supplier;
     }
 
     @Override
