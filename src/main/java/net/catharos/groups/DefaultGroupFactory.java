@@ -9,6 +9,7 @@ import net.catharos.groups.setting.Setting;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class DefaultGroupFactory implements GroupFactory {
     private final Setting<Relation> relationSetting;
     private final Setting<Boolean> verifySetting;
     private final Set<Rank> defaultRanks;
+    private final Map<String, Setting<Boolean>> rules;
 
     @Inject
     public DefaultGroupFactory(
@@ -37,7 +39,7 @@ public class DefaultGroupFactory implements GroupFactory {
             GroupCreatedPublisher createdPublisher,
             Setting<Relation> relationSetting,
             @Named("verify") Setting<Boolean> verifySetting,
-            @Named("predefined-ranks") Set<Rank> defaultRanks) {
+            @Named("predefined-ranks") Set<Rank> defaultRanks, Map<String, Setting<Boolean>> rules) {
 
         this.uuidProvider = uuidProvider;
 
@@ -49,6 +51,7 @@ public class DefaultGroupFactory implements GroupFactory {
         this.relationSetting = relationSetting;
         this.verifySetting = verifySetting;
         this.defaultRanks = defaultRanks;
+        this.rules = rules;
     }
 
     @Override
