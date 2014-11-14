@@ -461,6 +461,18 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public Collection<? extends Participant> getRecipients() {
         return members;
     }
+
+    @Override
+    public boolean isActive() {
+        //todo return false if getLastActive is old
+        for (Member member : getMembers()) {
+            if (member.isAvailable()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 

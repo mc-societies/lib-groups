@@ -136,6 +136,8 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         return null;
     }
 
+
+
     @Override
     public boolean hasRule(String rule) {
         for (Rank rank : getRanks()) {
@@ -184,6 +186,11 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     @Nullable
     public Group getGroup() {
         return group;
+    }
+
+    @Override
+    public boolean hasGroup() {
+        return getGroup() != null;
     }
 
     @Override

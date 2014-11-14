@@ -48,6 +48,8 @@ public interface Member extends Subject, Participant, Sender, RowForwarder, Comp
     @Nullable
     Group getGroup();
 
+    boolean hasGroup();
+
     boolean hasRule(String rule);
 
     void setGroup(@Nullable Group group);
