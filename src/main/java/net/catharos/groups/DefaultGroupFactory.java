@@ -82,7 +82,7 @@ public class DefaultGroupFactory implements GroupFactory {
                 createdPublisher,
                 relationSetting,
                 verifySetting,
-                defaultRanks
+                rules, defaultRanks
         );
     }
 }

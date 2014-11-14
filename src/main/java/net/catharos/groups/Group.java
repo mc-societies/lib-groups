@@ -175,7 +175,9 @@ public interface Group extends Subject, RowForwarder, Involved, Completable {
      * @param setting The setting to look by
      * @return The members which have this setting
      */
-    public Set<Member> getMembers(Setting<Boolean> setting);
+    Set<Member> getMembers(Setting<Boolean> setting);
+
+    Set<Member> getMembers(String rule);
 
     /**
      * @param member The member

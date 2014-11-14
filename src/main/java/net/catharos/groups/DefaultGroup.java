@@ -14,9 +14,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableSet;
@@ -41,6 +39,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final Setting<Relation> relationSetting;
     private final Setting<Boolean> verifySetting;
 
+    private final Map<String, Setting<Boolean>> rules;
+
     private final Set<Rank> defaultRanks;
 
     @Nullable
@@ -63,7 +63,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting,
                         Setting<Boolean> verifySetting,
-                        Set<Rank> defaultRanks) {
+                        Map<String, Setting<Boolean>> rules, Set<Rank> defaultRanks) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
@@ -75,6 +75,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.createdPublisher = createdPublisher;
         this.relationSetting = relationSetting;
         this.verifySetting = verifySetting;
+        this.rules = rules;
 
         setParent(parent);
 
@@ -374,6 +375,17 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         }
 
         return out;
+    }
+
+    @Override
+    public Set<Member> getMembers(String rule) {
+        Setting<Boolean> setting = rules.get(rule);
+
+        if (setting == null) {
+            return Collections.emptySet();
+        }
+
+        return getMembers(setting);
     }
 
     @Override
