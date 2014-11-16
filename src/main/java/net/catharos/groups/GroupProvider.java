@@ -27,4 +27,6 @@ public interface GroupProvider {
      * @return All existing groups
      */
     ListenableFuture<Set<Group>> getGroups();
+
+    ListenableFuture<Integer> size();
 }

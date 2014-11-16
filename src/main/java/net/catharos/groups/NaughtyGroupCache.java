@@ -29,6 +29,11 @@ public class NaughtyGroupCache implements GroupCache {
     }
 
     @Override
+    public int size() {
+        return -1;
+    }
+
+    @Override
     public boolean cache(Group group) {
         return false;
     }

@@ -19,6 +19,8 @@ public interface GroupCache {
     @Nullable
     Set<Group> getGroups();
 
+    int size();
+
     boolean cache(Group group);
 
     @Nullable

@@ -30,4 +30,9 @@ public class GroupCacheAdapter implements GroupProvider {
     public ListenableFuture<Set<Group>> getGroups() {
         return immediateFuture(groupCache.getGroups());
     }
+
+    @Override
+    public ListenableFuture<Integer> size() {
+        return immediateFuture(groupCache.size());
+    }
 }
