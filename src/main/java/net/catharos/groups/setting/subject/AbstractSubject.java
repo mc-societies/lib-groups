@@ -84,4 +84,24 @@ public abstract class AbstractSubject implements Subject {
         }
         return value;
     }
+
+    @Override
+    public double getDouble(Setting<Double> setting, Target target) {
+        Double value = this.<Double>get(setting, target);
+
+        if (value == null) {
+            return 0;
+        }
+        return value;
+    }
+
+    @Override
+    public double getDouble(Setting<Double> setting) {
+        Double value = this.<Double>get(setting);
+
+        if (value == null) {
+            return 0;
+        }
+        return value;
+    }
 }

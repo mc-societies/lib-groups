@@ -29,7 +29,11 @@ public interface Subject extends Target {
 
     int getInteger(Setting<Integer> setting, Target target);
 
+    double getDouble(Setting<Double> setting, Target target);
+
     <V> V get(Setting<V> setting);
+
+    double getDouble(Setting<Double> setting);
 
     boolean getBoolean(Setting<Boolean> setting);
 
