@@ -3,6 +3,7 @@ package net.catharos.groups;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.SettingException;
 import net.catharos.groups.setting.target.Target;
@@ -18,20 +19,21 @@ import java.util.UUID;
 public class GroupBuilder {
 
     private final GroupFactory groupFactory;
+    private final Provider<UUID> uuidProvider;
     private UUID uuid;
     private String name, tag;
     private Group parent;
 
     private DateTime created;
-    private short state;
     private final Table<Setting, Target, String> settings = HashBasedTable.create();
 
     @InjectLogger
     private Logger logger;
 
     @Inject
-    public GroupBuilder(GroupFactory groupFactory) {
+    public GroupBuilder(GroupFactory groupFactory, Provider<UUID> uuidProvider) {
         this.groupFactory = groupFactory;
+        this.uuidProvider = uuidProvider;
     }
 
     public GroupBuilder setUUID(UUID uuid) {
@@ -71,6 +73,10 @@ public class GroupBuilder {
     }
 
     public Group build() {
+        if (uuid == null) {
+            uuid = uuidProvider.get();
+        }
+
         Group group;
         if (parent == null) {
             group = groupFactory.create(uuid, name, tag, created);
@@ -110,14 +116,6 @@ public class GroupBuilder {
 
     public void setCreated(DateTime created) {
         this.created = created;
-    }
-
-    public short getState() {
-        return state;
-    }
-
-    public void setState(short state) {
-        this.state = state;
     }
 
     public Table<Setting, Target, String> getSettings() {
