@@ -11,8 +11,10 @@ import net.catharos.groups.request.RequestMessenger;
 public class SimpleRequestMessenger<C extends Choice> implements RequestMessenger<C> {
 
     @Override
-    public void start(Request<C> request, Participant participant) {
-        participant.send("Request " + request + " started!");
+    public void start(Request<C> request) {
+        for (Participant participant : request.getRecipients()) {
+            participant.send("Request " + request + " started!");
+        }
     }
 
     @Override
@@ -21,7 +23,7 @@ public class SimpleRequestMessenger<C extends Choice> implements RequestMessenge
     }
 
     @Override
-    public void end(Request<C> request) {
+    public void end(Request<C> request, C choice) {
         for (Participant participant : request.getRecipients()) {
             participant.send("Requests " + request + " finished!");
         }

@@ -10,6 +10,11 @@ public enum Choices implements Choice {
     ACCEPT,
     DENY,
     ABSTAIN,
-    CANCELLED
+    CANCELLED;
+
+
+    public boolean success() {
+        return this == ACCEPT;
+    }
 
 }

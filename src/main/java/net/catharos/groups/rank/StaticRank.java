@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Represents a StaticAbstractRank
  */
-//todo no need for dynamic settings
+//beautify no need for dynamic settings
 public class StaticRank extends AbstractRank {
 
     @Inject

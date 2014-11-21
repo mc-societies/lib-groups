@@ -74,10 +74,11 @@ public class SimpleRequest implements Request<Choices> {
 
         for (Participant participant : recipients.getRecipients()) {
             participant.setReceivedRequest(this);
-            messenger.start(this, participant);
         }
 
         started = true;
+
+        messenger.start(this);
     }
 
     @Override
@@ -167,7 +168,7 @@ public class SimpleRequest implements Request<Choices> {
 
         Choices choice = getLast(sorted).getKey();
         future.set(new DefaultRequestResult<Choices>(choice, this));
-        messenger.end(this);
+        messenger.end(this, choice);
     }
 
     @Override
