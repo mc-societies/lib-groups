@@ -6,7 +6,7 @@ import net.catharos.groups.Member;
 /**
  * Represents a MemberDropPublisher
  */
-public interface MemberDropPublisher {
+public interface MemberDropPublisher<M extends Member> {
 
-    <M extends Member> ListenableFuture<M> drop(M member);
+    ListenableFuture<M> drop(M member);
 }

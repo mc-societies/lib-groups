@@ -7,7 +7,7 @@ import net.catharos.groups.Member;
 /**
  * Represents a GroupPublisher
  */
-public interface MemberGroupPublisher {
+public interface MemberGroupPublisher<M extends Member> {
 
-    <M extends Member> ListenableFuture<M> publishGroup(M member, Group group);
+    ListenableFuture<M> publishGroup(M member, Group group);
 }

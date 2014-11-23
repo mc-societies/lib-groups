@@ -14,5 +14,5 @@ public interface MemberPublisher {
      * @param member The member
      * @return A future which will fire when the member was published
      */
-    <M extends Member> ListenableFuture<M> publish(M member);
+    ListenableFuture<Member> publish(Member member);
 }

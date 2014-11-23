@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 /**
  * Represents a CreatedPublisher
  */
-public interface MemberCreatedPublisher {
+public interface MemberCreatedPublisher<M extends Member> {
 
-    <M extends Member> ListenableFuture<M> publishCreated(M member, DateTime created);
+    ListenableFuture<M> publishCreated(M member, DateTime created);
 }
