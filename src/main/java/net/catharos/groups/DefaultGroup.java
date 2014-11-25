@@ -369,7 +369,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         THashSet<Member> out = new THashSet<Member>();
 
         for (Member member : members) {
-            if (member.<Boolean>getRankValue(setting)) {
+            if (member.getBooleanRankValue(setting)) {
                 out.add(member);
             }
         }

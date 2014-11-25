@@ -45,6 +45,8 @@ public interface Member extends Subject, Participant, Sender, RowForwarder, Comp
 
     <V> V getRankValue(Setting<V> setting);
 
+    boolean getBooleanRankValue(Setting<Boolean> setting);
+
     @Nullable
     Group getGroup();
 

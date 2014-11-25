@@ -2,7 +2,6 @@ package net.catharos.groups;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
-import com.google.inject.name.Named;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.groups.publisher.MemberCreatedPublisher;
 import net.catharos.groups.publisher.MemberGroupPublisher;
@@ -48,7 +47,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
                          MemberRankPublisher memberRankPublisher,
                          MemberLastActivePublisher lastActivePublisher,
                          MemberCreatedPublisher createdPublisher,
-                         @Named("default-rank") Rank defaultRank) {
+                         Rank defaultRank) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
         this.memberRankPublisher = memberRankPublisher;
@@ -100,7 +99,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         boolean result = ranks.remove(rank);
 
         if (result && isCompleted()) {
-            memberRankPublisher.publishRank(this, rank);
+            memberRankPublisher.dropRank(this, rank);
         }
 
         return result;
@@ -298,5 +297,16 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     @Override
     public void complete() {
         complete(true);
+    }
+
+    @Override
+    public boolean getBooleanRankValue(Setting<Boolean> setting) {
+        Boolean value = getRankValue(setting);
+
+        if (value == null) {
+            return false;
+        }
+
+        return value;
     }
 }
