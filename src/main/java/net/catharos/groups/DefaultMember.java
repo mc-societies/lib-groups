@@ -3,6 +3,9 @@ package net.catharos.groups;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.event.EventController;
+import net.catharos.groups.event.MemberJoinEvent;
+import net.catharos.groups.event.MemberLeaveEvent;
 import net.catharos.groups.publisher.MemberCreatedPublisher;
 import net.catharos.groups.publisher.MemberGroupPublisher;
 import net.catharos.groups.publisher.MemberLastActivePublisher;
@@ -32,28 +35,31 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     private DateTime lastActive;
     private DateTime created;
 
+    private final Rank defaultRank;
+
+    @Nullable
+    private Request receivedRequest, suppliedRequest;
+
     private final MemberGroupPublisher groupPublisher;
     private final MemberRankPublisher memberRankPublisher;
     private final MemberLastActivePublisher lastActivePublisher;
     private final MemberCreatedPublisher createdPublisher;
 
-    private final Rank defaultRank;
-
-    @Nullable
-    private Request receivedRequest, suppliedRequest;
+    private final EventController eventController;
 
     public DefaultMember(UUID uuid,
                          MemberGroupPublisher groupPublisher,
                          MemberRankPublisher memberRankPublisher,
                          MemberLastActivePublisher lastActivePublisher,
                          MemberCreatedPublisher createdPublisher,
-                         Rank defaultRank) {
+                         Rank defaultRank, EventController eventController) {
         this.uuid = uuid;
         this.groupPublisher = groupPublisher;
         this.memberRankPublisher = memberRankPublisher;
         this.lastActivePublisher = lastActivePublisher;
         this.createdPublisher = createdPublisher;
         this.defaultRank = defaultRank;
+        this.eventController = eventController;
 
         this.created = this.lastActive = DateTime.now();
     }
@@ -136,7 +142,6 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     }
 
 
-
     @Override
     public boolean hasRule(String rule) {
         for (Rank rank : getRanks()) {
@@ -198,6 +203,8 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
             return;
         }
 
+        Group previous = this.group;
+
         this.group = group;
 
         if (isCompleted()) {
@@ -206,6 +213,9 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
 
         if (group == null) {
             this.ranks.clear();
+            eventController.publish(new MemberLeaveEvent(this, previous));
+        } else {
+            eventController.publish(new MemberJoinEvent(this));
         }
 
         if (group != null && !group.isMember(this)) {

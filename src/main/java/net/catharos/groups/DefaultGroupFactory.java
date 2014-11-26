@@ -3,6 +3,7 @@ package net.catharos.groups;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import net.catharos.groups.event.EventController;
 import net.catharos.groups.publisher.*;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.setting.Setting;
@@ -28,6 +29,7 @@ public class DefaultGroupFactory implements GroupFactory {
     private final Setting<Boolean> verifySetting;
     private final Set<Rank> defaultRanks;
     private final Map<String, Setting<Boolean>> rules;
+    private final EventController eventController;
 
     @Inject
     public DefaultGroupFactory(
@@ -39,7 +41,7 @@ public class DefaultGroupFactory implements GroupFactory {
             GroupCreatedPublisher createdPublisher,
             Setting<Relation> relationSetting,
             @Named("verify") Setting<Boolean> verifySetting,
-            @Named("predefined-ranks") Set<Rank> defaultRanks, Map<String, Setting<Boolean>> rules) {
+            @Named("predefined-ranks") Set<Rank> defaultRanks, Map<String, Setting<Boolean>> rules, EventController eventController) {
 
         this.uuidProvider = uuidProvider;
 
@@ -52,6 +54,7 @@ public class DefaultGroupFactory implements GroupFactory {
         this.verifySetting = verifySetting;
         this.defaultRanks = defaultRanks;
         this.rules = rules;
+        this.eventController = eventController;
     }
 
     @Override
@@ -85,7 +88,7 @@ public class DefaultGroupFactory implements GroupFactory {
                 createdPublisher,
                 relationSetting,
                 verifySetting,
-                rules, defaultRanks
-        );
+                rules, defaultRanks,
+                eventController);
     }
 }

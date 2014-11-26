@@ -3,6 +3,8 @@ package net.catharos.groups;
 import com.google.common.base.Objects;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.event.EventController;
+import net.catharos.groups.event.GroupTagEvent;
 import net.catharos.groups.publisher.*;
 import net.catharos.groups.rank.Rank;
 import net.catharos.groups.request.Participant;
@@ -30,10 +32,18 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private String name, tag;
     private DateTime created;
     private boolean completed = true;
+
+    @Nullable
+    private Group parent;
+
+    private final THashMap<UUID, Rank> ranks = new THashMap<UUID, Rank>();
+
+    private final THashSet<Member> members = new THashSet<Member>();
+    private final THashSet<Group> subGroups = new THashSet<Group>();
+
     private final GroupNamePublisher namePublisher;
     private final GroupRankPublisher groupRankPublisher;
     private final RankDropPublisher rankDropPublisher;
-
     private final GroupCreatedPublisher createdPublisher;
 
     private final Setting<Relation> relationSetting;
@@ -43,13 +53,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     private final Set<Rank> defaultRanks;
 
-    @Nullable
-    private Group parent;
-
-    private final THashMap<UUID, Rank> ranks = new THashMap<UUID, Rank>();
-
-    private final THashSet<Member> members = new THashSet<Member>();
-    private final THashSet<Group> subGroups = new THashSet<Group>();
+    private final EventController eventController;
 
     public DefaultGroup(UUID uuid,
                         String name,
@@ -63,7 +67,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
                         GroupCreatedPublisher createdPublisher,
                         Setting<Relation> relationSetting,
                         Setting<Boolean> verifySetting,
-                        Map<String, Setting<Boolean>> rules, Set<Rank> defaultRanks) {
+                        Map<String, Setting<Boolean>> rules, Set<Rank> defaultRanks, EventController eventController) {
         super(settingPublisher);
         this.uuid = uuid;
         this.name = name;
@@ -76,6 +80,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.relationSetting = relationSetting;
         this.verifySetting = verifySetting;
         this.rules = rules;
+        this.eventController = eventController;
 
         setParent(parent);
 
@@ -100,6 +105,8 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Override
     public void setTag(String tag) {
         this.tag = tag;
+
+        eventController.publish(new GroupTagEvent(this));
 
         if (isCompleted()) {
             namePublisher.publishTag(this, name);
