@@ -10,8 +10,6 @@ import org.junit.runner.RunWith;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertTrue;
-
 @RunWith(JukitoRunner.class)
 public class GroupTest {
 
@@ -45,12 +43,5 @@ public class GroupTest {
 
         a.removeRelation(b);
         assertAToBRelation();
-    }
-
-    @Test
-    public void testAddSubGroup() throws Exception {
-        a.addSubGroup(b);
-
-        assertTrue(a.isParent(b));
     }
 }

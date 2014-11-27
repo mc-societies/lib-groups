@@ -20,9 +20,9 @@ public class GroupBuilder {
 
     private final GroupFactory groupFactory;
     private final Provider<UUID> uuidProvider;
+
     private UUID uuid;
     private String name, tag;
-    private Group parent;
 
     private DateTime created;
     private final Table<Setting, Target, String> settings = HashBasedTable.create();
@@ -51,11 +51,6 @@ public class GroupBuilder {
         return this;
     }
 
-    public GroupBuilder setParent(Group parent) {
-        this.parent = parent;
-        return this;
-    }
-
     public UUID getUUID() {
         return uuid;
     }
@@ -68,22 +63,12 @@ public class GroupBuilder {
         return tag;
     }
 
-    public Group getParent() {
-        return parent;
-    }
-
     public Group build() {
         if (uuid == null) {
             uuid = uuidProvider.get();
         }
 
-        Group group;
-        if (parent == null) {
-            group = groupFactory.create(uuid, name, tag, created);
-
-        } else {
-            group = groupFactory.create(uuid, name, tag, created, parent);
-        }
+        Group group = groupFactory.create(uuid, name, tag, created);
 
         group.complete(false);
 

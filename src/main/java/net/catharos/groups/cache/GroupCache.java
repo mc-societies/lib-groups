@@ -1,5 +1,6 @@
-package net.catharos.groups;
+package net.catharos.groups.cache;
 
+import net.catharos.groups.Group;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;

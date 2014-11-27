@@ -6,7 +6,7 @@ import net.catharos.groups.Member;
 /**
  * Represents a MemberLeaveEvent
  */
-public class MemberLeaveEvent extends MemberEvent{
+public class MemberLeaveEvent extends MemberEvent {
 
     private final Group group;
 

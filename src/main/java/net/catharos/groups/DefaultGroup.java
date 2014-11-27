@@ -1,8 +1,12 @@
 package net.catharos.groups;
 
 import com.google.common.base.Objects;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.event.Event;
 import net.catharos.groups.event.EventController;
 import net.catharos.groups.event.GroupTagEvent;
 import net.catharos.groups.publisher.*;
@@ -13,7 +17,6 @@ import net.catharos.groups.setting.subject.AbstractPublishingSubject;
 import net.catharos.groups.setting.target.SimpleTarget;
 import net.catharos.lib.core.util.CastSafe;
 import org.apache.commons.collections4.CollectionUtils;
-import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.*;
@@ -31,60 +34,26 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     private final UUID uuid;
     private String name, tag;
     private DateTime created;
-    private boolean completed = true;
 
-    @Nullable
-    private Group parent;
+    private boolean completed = true;
 
     private final THashMap<UUID, Rank> ranks = new THashMap<UUID, Rank>();
 
     private final THashSet<Member> members = new THashSet<Member>();
-    private final THashSet<Group> subGroups = new THashSet<Group>();
 
-    private final GroupNamePublisher namePublisher;
-    private final GroupRankPublisher groupRankPublisher;
-    private final RankDropPublisher rankDropPublisher;
-    private final GroupCreatedPublisher createdPublisher;
-
-    private final Setting<Relation> relationSetting;
-    private final Setting<Boolean> verifySetting;
-
-    private final Map<String, Setting<Boolean>> rules;
-
-    private final Set<Rank> defaultRanks;
-
-    private final EventController eventController;
+    private final Statics statics;
 
     public DefaultGroup(UUID uuid,
                         String name,
                         String tag,
                         DateTime created,
-                        @Nullable Group parent,
-                        GroupNamePublisher namePublisher,
-                        SettingPublisher settingPublisher,
-                        GroupRankPublisher groupRankPublisher,
-                        RankDropPublisher rankDropPublisher,
-                        GroupCreatedPublisher createdPublisher,
-                        Setting<Relation> relationSetting,
-                        Setting<Boolean> verifySetting,
-                        Map<String, Setting<Boolean>> rules, Set<Rank> defaultRanks, EventController eventController) {
-        super(settingPublisher);
+                        Statics statics) {
+        super(statics.getSettingPublisher());
         this.uuid = uuid;
         this.name = name;
         this.tag = tag;
         this.created = created;
-        this.namePublisher = namePublisher;
-        this.groupRankPublisher = groupRankPublisher;
-        this.rankDropPublisher = rankDropPublisher;
-        this.createdPublisher = createdPublisher;
-        this.relationSetting = relationSetting;
-        this.verifySetting = verifySetting;
-        this.rules = rules;
-        this.eventController = eventController;
-
-        setParent(parent);
-
-        this.defaultRanks = defaultRanks;
+        this.statics = statics;
     }
 
     @Override
@@ -106,10 +75,10 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     public void setTag(String tag) {
         this.tag = tag;
 
-        eventController.publish(new GroupTagEvent(this));
+        statics.publish(new GroupTagEvent(this));
 
         if (isCompleted()) {
-            namePublisher.publishTag(this, name);
+            statics.publishTag(this, name);
         }
     }
 
@@ -133,7 +102,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.name = name;
 
         if (isCompleted()) {
-            namePublisher.publishName(this, name);
+            statics.publishName(this, name);
         }
     }
 
@@ -165,19 +134,31 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         this.created = created;
 
         if (isCompleted()) {
-            createdPublisher.publishCreated(this, created);
+            statics.publishCreated(this, created);
         }
     }
 
     @Override
     public Relation getRelation(Group anotherGroup) {
-        Relation relation = get(relationSetting, anotherGroup);
+        Relation relation = get(statics.getRelationSetting(), anotherGroup);
         return relation == null ? DefaultRelation.unknownRelation(this) : relation;
     }
 
     @Override
     public Collection<Relation> getRelations() {
-        return unmodifiableCollection(CastSafe.<Collection<Relation>>toGeneric(super.settings.row(relationSetting).values()));
+        return unmodifiableCollection(CastSafe
+                .<Collection<Relation>>toGeneric(super.settings.row(statics.getRelationSetting()).values()));
+    }
+
+    @Override
+    public Collection<Relation> getRelations(Relation.Type type) {
+        THashSet<Relation> relations = new THashSet<Relation>();
+        for (Object obj : super.settings.row(statics.getRelationSetting()).values()) {
+            Relation relation = (Relation) obj;
+            relations.add(relation);
+
+        }
+        return relations;
     }
 
     @Override
@@ -204,7 +185,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         }
 
 
-        set(relationSetting, target, relation);
+        set(statics.getRelationSetting(), target, relation);
 
 
         if (!target.hasRelation(this)) {
@@ -215,7 +196,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Override
     public void removeRelation(Group anotherGroup) {
         if (hasRelation(anotherGroup)) {
-            remove(relationSetting, anotherGroup);
+            remove(statics.getRelationSetting(), anotherGroup);
         }
 
         if (anotherGroup.hasRelation(this)) {
@@ -225,7 +206,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean hasRelation(Group anotherGroup) {
-        Relation value = get(relationSetting, anotherGroup);
+        Relation value = get(statics.getRelationSetting(), anotherGroup);
 
         if (value == null) {
             return false;
@@ -242,7 +223,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         Rank result = this.ranks.put(rank.getUUID(), rank);
 
         if (!rank.equals(result) && isCompleted()) {
-            groupRankPublisher.publishRank(this, rank);
+            statics.publishRank(this, rank);
         }
     }
 
@@ -251,7 +232,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         boolean result = this.ranks.remove(rank.getUUID()) != null;
 
         if (result && isCompleted()) {
-            rankDropPublisher.drop(rank);
+            statics.drop(rank);
         }
     }
 
@@ -268,7 +249,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
     @Override
     public Rank getRank(UUID uuid) {
         //beautify
-        for (Rank defaultRank : defaultRanks) {
+        for (Rank defaultRank : statics.getDefaultRanks()) {
             if (defaultRank.getUUID().equals(uuid)) {
                 return defaultRank;
             }
@@ -278,7 +259,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Collection<Rank> getRanks() {
-        return CollectionUtils.union(defaultRanks, ranks.values());
+        return CollectionUtils.union(statics.getDefaultRanks(), ranks.values());
     }
 
     @Override
@@ -292,73 +273,6 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         }
 
         return ranks;
-    }
-
-    @Override
-    @Nullable
-    public Group getParent() {
-        return parent;
-    }
-
-    @Override
-    public void setParent(@Nullable Group group) {
-        if (group == null) {
-            Group parent = getParent();
-
-            if (parent != null) {
-                parent.removeSubGroup(this);
-            }
-
-        } else {
-
-            if (!group.hasSubGroup(this)) {
-                group.addSubGroup(this);
-            }
-        }
-
-        this.parent = group;
-    }
-
-    @Override
-    public boolean hasParent() {
-        return parent != null;
-    }
-
-    @Override
-    public Collection<Group> getSubGroups() {
-        return subGroups;
-    }
-
-    @Override
-    public void addSubGroup(Group group) {
-        if (group.getParent() != null) {
-            throw new IllegalArgumentException("Group already has a parent!");
-        }
-
-        if (!subGroups.add(group)) {
-            throw new IllegalArgumentException("Group is already sub group of \"this\" group!");
-        }
-
-        group.setParent(this);
-    }
-
-    @Override
-    public void removeSubGroup(Group group) {
-        subGroups.remove(group);
-
-        if (group.isParent(this)) {
-            group.setParent(null);
-        }
-    }
-
-    @Override
-    public boolean hasSubGroup(Group group) {
-        return subGroups.contains(group);
-    }
-
-    @Override
-    public boolean isParent(Group group) {
-        return equals(group.getParent());
     }
 
     @Override
@@ -386,7 +300,7 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public Set<Member> getMembers(String rule) {
-        Setting<Boolean> setting = rules.get(rule);
+        Setting<Boolean> setting = statics.getRules().get(rule);
 
         if (setting == null) {
             return Collections.emptySet();
@@ -417,19 +331,18 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
 
     @Override
     public boolean isVerified() {
-        return getBoolean(verifySetting);
+        return getBoolean(statics.getVerifySetting());
     }
 
     @Override
     public void verify(boolean newState) {
-        set(verifySetting, newState);
+        set(statics.getVerifySetting(), newState);
     }
 
     @Override
     public String toString() {
         return "DefaultGroup{" +
                 "uuid=" + getUUID() +
-                ", parent=" + getParent() +
                 ", relations=" + getRelations() +
                 ", ranks=" + getRanks() +
                 ", members=" + getMembers() +
@@ -491,6 +404,89 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         }
 
         return false;
+    }
+
+    public final static class Statics {
+        private final SettingPublisher settingPublisher;
+        private final GroupNamePublisher namePublisher;
+        private final GroupRankPublisher groupRankPublisher;
+        private final RankDropPublisher rankDropPublisher;
+        private final GroupCreatedPublisher createdPublisher;
+
+        private final Setting<Relation> relationSetting;
+        private final Setting<Boolean> verifySetting;
+
+        private final Map<String, Setting<Boolean>> rules;
+
+        private final Set<Rank> defaultRanks;
+
+        private final EventController eventController;
+
+        @Inject
+        public Statics(SettingPublisher settingPublisher, GroupNamePublisher namePublisher,
+                       GroupRankPublisher groupRankPublisher,
+                       RankDropPublisher rankDropPublisher,
+                       GroupCreatedPublisher createdPublisher,
+                       Setting<Relation> relationSetting,
+                       @Named("verify") Setting<Boolean> verifySetting,
+                       Map<String, Setting<Boolean>> rules,
+                       @Named("predefined-ranks") Set<Rank> defaultRanks,
+                       EventController eventController) {
+            this.settingPublisher = settingPublisher;
+            this.namePublisher = namePublisher;
+            this.groupRankPublisher = groupRankPublisher;
+            this.rankDropPublisher = rankDropPublisher;
+            this.createdPublisher = createdPublisher;
+            this.relationSetting = relationSetting;
+            this.verifySetting = verifySetting;
+            this.rules = rules;
+            this.defaultRanks = defaultRanks;
+            this.eventController = eventController;
+        }
+
+        public Map<String, Setting<Boolean>> getRules() {
+            return rules;
+        }
+
+        public Setting<Boolean> getVerifySetting() {
+            return verifySetting;
+        }
+
+        public Setting<Relation> getRelationSetting() {
+            return relationSetting;
+        }
+
+        public Set<Rank> getDefaultRanks() {
+            return defaultRanks;
+        }
+
+        public void publish(Event event) {
+            eventController.publish(event);
+        }
+
+        public ListenableFuture<Rank> drop(Rank rank) {
+            return rankDropPublisher.drop(rank);
+        }
+
+        public ListenableFuture<Group> publishRank(Group group, Rank rank) {
+            return groupRankPublisher.publishRank(group, rank);
+        }
+
+        public ListenableFuture<Group> publishName(Group group, String name) {
+            return namePublisher.publishName(group, name);
+        }
+
+        public ListenableFuture<Group> publishTag(Group group, String tag) {
+            return namePublisher.publishTag(group, tag);
+        }
+
+        public ListenableFuture<Group> publishCreated(Group group, DateTime created) {
+            return createdPublisher.publishCreated(group, created);
+        }
+
+        public SettingPublisher getSettingPublisher() {
+            return settingPublisher;
+        }
     }
 }
 

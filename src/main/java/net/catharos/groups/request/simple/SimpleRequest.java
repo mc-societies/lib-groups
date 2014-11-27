@@ -69,7 +69,15 @@ public class SimpleRequest implements Request<Choices> {
     }
 
     @Override
-    public void start() {
+    public boolean start() {
+        if (supplier.getSuppliedRequest() != null) {
+            return false;
+        }
+
+        if (!participantsReady()) {
+            return false;
+        }
+
         supplier.setSuppliedRequest(this);
 
         for (Participant participant : recipients.getRecipients()) {
@@ -79,6 +87,17 @@ public class SimpleRequest implements Request<Choices> {
         started = true;
 
         messenger.start(this);
+        return true;
+    }
+
+    private boolean participantsReady() {
+        for (Participant participant : recipients.getRecipients()) {
+            if (participant.getReceivedRequest() != null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override

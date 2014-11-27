@@ -2,7 +2,10 @@ package net.catharos.groups;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.inject.name.Named;
 import gnu.trove.set.hash.THashSet;
+import net.catharos.groups.event.Event;
 import net.catharos.groups.event.EventController;
 import net.catharos.groups.event.MemberJoinEvent;
 import net.catharos.groups.event.MemberLeaveEvent;
@@ -27,6 +30,7 @@ import java.util.UUID;
 public abstract class DefaultMember extends AbstractSubject implements Member {
 
     private final UUID uuid;
+    private final Statics statics;
 
     private boolean completed = true;
     @Nullable
@@ -35,32 +39,13 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
     private DateTime lastActive;
     private DateTime created;
 
-    private final Rank defaultRank;
-
     @Nullable
     private Request receivedRequest, suppliedRequest;
 
-    private final MemberGroupPublisher groupPublisher;
-    private final MemberRankPublisher memberRankPublisher;
-    private final MemberLastActivePublisher lastActivePublisher;
-    private final MemberCreatedPublisher createdPublisher;
 
-    private final EventController eventController;
-
-    public DefaultMember(UUID uuid,
-                         MemberGroupPublisher groupPublisher,
-                         MemberRankPublisher memberRankPublisher,
-                         MemberLastActivePublisher lastActivePublisher,
-                         MemberCreatedPublisher createdPublisher,
-                         Rank defaultRank, EventController eventController) {
+    public DefaultMember(UUID uuid, Statics statics) {
         this.uuid = uuid;
-        this.groupPublisher = groupPublisher;
-        this.memberRankPublisher = memberRankPublisher;
-        this.lastActivePublisher = lastActivePublisher;
-        this.createdPublisher = createdPublisher;
-        this.defaultRank = defaultRank;
-        this.eventController = eventController;
-
+        this.statics = statics;
         this.created = this.lastActive = DateTime.now();
     }
 
@@ -75,7 +60,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
             return Collections.emptySet();
         }
 
-        return Sets.union(ranks, Collections.singleton(defaultRank));
+        return Sets.union(ranks, Collections.singleton(statics.getDefaultRank()));
     }
 
     @Override
@@ -87,7 +72,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         boolean result = this.ranks.add(rank);
 
         if (result && isCompleted()) {
-            memberRankPublisher.publishRank(this, rank);
+            statics.publishRank(this, rank);
         }
     }
 
@@ -105,7 +90,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         boolean result = ranks.remove(rank);
 
         if (result && isCompleted()) {
-            memberRankPublisher.dropRank(this, rank);
+            statics.dropRank(this, rank);
         }
 
         return result;
@@ -168,7 +153,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         this.lastActive = lastActive;
 
         if (isCompleted()) {
-            lastActivePublisher.publishLastActive(this, lastActive);
+            statics.publishLastActive(this, lastActive);
         }
     }
 
@@ -182,7 +167,7 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         this.created = created;
 
         if (isCompleted()) {
-            createdPublisher.publishCreated(this, created);
+            statics.publishCreated(this, created);
         }
     }
 
@@ -208,14 +193,14 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         this.group = group;
 
         if (isCompleted()) {
-            groupPublisher.publishGroup(this, group);
+            statics.publishGroup(this, group);
         }
 
         if (group == null) {
             this.ranks.clear();
-            eventController.publish(new MemberLeaveEvent(this, previous));
+            statics.publish(new MemberLeaveEvent(this, previous));
         } else {
-            eventController.publish(new MemberJoinEvent(this));
+            statics.publish(new MemberJoinEvent(this));
         }
 
         if (group != null && !group.isMember(this)) {
@@ -318,5 +303,52 @@ public abstract class DefaultMember extends AbstractSubject implements Member {
         }
 
         return value;
+    }
+
+    public static final class Statics {
+        private final MemberGroupPublisher groupPublisher;
+        private final MemberRankPublisher memberRankPublisher;
+        private final MemberLastActivePublisher lastActivePublisher;
+        private final MemberCreatedPublisher createdPublisher;
+
+        private final EventController eventController;
+        private final Rank defaultRank;
+
+        public Statics(MemberGroupPublisher groupPublisher, MemberRankPublisher memberRankPublisher, MemberLastActivePublisher lastActivePublisher, MemberCreatedPublisher createdPublisher, EventController eventController, @Named("default-rank") Rank defaultRank) {
+            this.groupPublisher = groupPublisher;
+            this.memberRankPublisher = memberRankPublisher;
+            this.lastActivePublisher = lastActivePublisher;
+            this.createdPublisher = createdPublisher;
+            this.eventController = eventController;
+            this.defaultRank = defaultRank;
+        }
+
+        public ListenableFuture publishGroup(Member member, Group group) {
+            return groupPublisher.publishGroup(member, group);
+        }
+
+        public ListenableFuture publishCreated(Member member, DateTime created) {
+            return createdPublisher.publishCreated(member, created);
+        }
+
+        public ListenableFuture publishRank(Member member, Rank rank) {
+            return memberRankPublisher.publishRank(member, rank);
+        }
+
+        public ListenableFuture dropRank(Member member, Rank rank) {
+            return memberRankPublisher.dropRank(member, rank);
+        }
+
+        public ListenableFuture publishLastActive(Member member, DateTime date) {
+            return lastActivePublisher.publishLastActive(member, date);
+        }
+
+        public Rank getDefaultRank() {
+            return defaultRank;
+        }
+
+        public void publish(Event event) {
+            eventController.publish(event);
+        }
     }
 }

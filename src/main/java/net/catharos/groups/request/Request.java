@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
  */
 public interface Request<C extends Choice> extends Involved {
 
-    void start();
+    boolean start();
 
     void vote(Participant participant, C choice);
 

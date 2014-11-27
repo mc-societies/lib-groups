@@ -1,6 +1,5 @@
 package net.catharos.groups;
 
-import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
@@ -30,14 +29,4 @@ public interface GroupFactory {
     Group create(UUID uuid, String name, String tag);
 
     Group create(UUID uuid, String name, String tag, DateTime created);
-
-    /**
-     * Creates a group by name and uuid and specifies a parent.
-     *
-     * @param uuid   The uuid
-     * @param name   The name
-     * @param parent The parent
-     * @return A brand new group
-     */
-    Group create(UUID uuid, String name, String tag, DateTime created, @Nullable Group parent);
 }

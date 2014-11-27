@@ -2,16 +2,8 @@ package net.catharos.groups;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.name.Named;
-import net.catharos.groups.event.EventController;
-import net.catharos.groups.publisher.*;
-import net.catharos.groups.rank.Rank;
-import net.catharos.groups.setting.Setting;
-import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -20,41 +12,14 @@ import java.util.UUID;
 public class DefaultGroupFactory implements GroupFactory {
 
     private final Provider<UUID> uuidProvider;
-    private final GroupNamePublisher namePublisher;
-    private final SettingPublisher settingPublisher;
-    private final GroupRankPublisher groupRankPublisher;
-    private final RankDropPublisher rankDropPublisher;
-    private final GroupCreatedPublisher createdPublisher;
-    private final Setting<Relation> relationSetting;
-    private final Setting<Boolean> verifySetting;
-    private final Set<Rank> defaultRanks;
-    private final Map<String, Setting<Boolean>> rules;
-    private final EventController eventController;
+    private final DefaultGroup.Statics statics;
 
     @Inject
     public DefaultGroupFactory(
             Provider<UUID> uuidProvider,
-            GroupNamePublisher namePublisher,
-            SettingPublisher settingPublisher,
-            GroupRankPublisher groupRankPublisher,
-            RankDropPublisher rankDropPublisher,
-            GroupCreatedPublisher createdPublisher,
-            Setting<Relation> relationSetting,
-            @Named("verify") Setting<Boolean> verifySetting,
-            @Named("predefined-ranks") Set<Rank> defaultRanks, Map<String, Setting<Boolean>> rules, EventController eventController) {
-
+            DefaultGroup.Statics statics) {
         this.uuidProvider = uuidProvider;
-
-        this.namePublisher = namePublisher;
-        this.settingPublisher = settingPublisher;
-        this.groupRankPublisher = groupRankPublisher;
-        this.rankDropPublisher = rankDropPublisher;
-        this.createdPublisher = createdPublisher;
-        this.relationSetting = relationSetting;
-        this.verifySetting = verifySetting;
-        this.defaultRanks = defaultRanks;
-        this.rules = rules;
-        this.eventController = eventController;
+        this.statics = statics;
     }
 
     @Override
@@ -69,26 +34,13 @@ public class DefaultGroupFactory implements GroupFactory {
 
     @Override
     public Group create(UUID uuid, String name, String tag) {
-        return create(uuid, name, tag, DateTime.now(), null);
+        return create(uuid, name, tag, DateTime.now());
     }
 
     @Override
     public Group create(UUID uuid, String name, String tag, DateTime created) {
-        return create(uuid, name, tag, created, null);
-    }
-
-    @Override
-    public Group create(UUID uuid, String name, String tag, DateTime created, @Nullable Group parent) {
         return new DefaultGroup(
-                uuid, name, tag, created, parent,
-                namePublisher,
-                settingPublisher,
-                groupRankPublisher,
-                rankDropPublisher,
-                createdPublisher,
-                relationSetting,
-                verifySetting,
-                rules, defaultRanks,
-                eventController);
+                uuid, name, tag, created,
+                statics);
     }
 }

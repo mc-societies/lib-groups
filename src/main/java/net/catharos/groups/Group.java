@@ -5,7 +5,6 @@ import net.catharos.groups.request.Involved;
 import net.catharos.groups.setting.Setting;
 import net.catharos.groups.setting.subject.Subject;
 import net.catharos.lib.core.command.format.table.RowForwarder;
-import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
@@ -14,9 +13,9 @@ import java.util.UUID;
 
 /**
  * This represents a generic group. A group can be a party, where {@link net.catharos.groups.Member}s participate, a town with citizens or a guild.
- * <p>
+ * <p/>
  * A group can have a parent and child groups.
- * <p>
+ * <p/>
  * {@link net.catharos.groups.Relation}s are bidirectional between groups. This means they are mirrored to each other.
  */
 public interface Group extends Subject, RowForwarder, Involved, Completable {
@@ -60,36 +59,14 @@ public interface Group extends Subject, RowForwarder, Involved, Completable {
     void setCreated(DateTime created);
 
     /**
-     * @return The parent group of this group or null if there is no parent
-     */
-    @Nullable
-    Group getParent();
-
-    /**
-     * Sets the parent group of this group
-     *
-     * @param group The group
-     */
-    void setParent(@Nullable Group group);
-
-    /**
-     * @return {@link #getParent()} != null
-     */
-    boolean hasParent();
-
-    /**
-     * @param group The group
-     * @return Whether the group is the parent of this group
-     */
-    boolean isParent(Group group);
-
-    /**
      * @param anotherGroup An other group
      * @return The relation to the other group
      */
     Relation getRelation(Group anotherGroup);
 
     Collection<Relation> getRelations();
+
+    Collection<Relation> getRelations(Relation.Type type);
 
     /**
      * Sets the relation to an other group
@@ -138,31 +115,6 @@ public interface Group extends Subject, RowForwarder, Involved, Completable {
      * @return The ranks of this group
      */
     Collection<Rank> getRanks(String rule);
-
-    /**
-     * @return All sub groups of this group
-     */
-    Collection<Group> getSubGroups();
-
-    /**
-     * Adds a sub group
-     *
-     * @param group The sub group
-     */
-    void addSubGroup(Group group);
-
-    /**
-     * Removes a sub group
-     *
-     * @param group The sub group
-     */
-    void removeSubGroup(Group group);
-
-    /**
-     * @param group The group
-     * @return Whether the group is a sub group of this group
-     */
-    boolean hasSubGroup(Group group);
 
     /**
      * @return All members of this group
