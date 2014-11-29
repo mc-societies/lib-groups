@@ -28,7 +28,7 @@ import java.util.UUID;
 /**
  * Represents a MemoryMember
  */
-public class DefaultMember implements Member, Extensible<Member> {
+public class DefaultMember implements Member, Extensible {
 
     private final UUID uuid;
 
@@ -49,32 +49,33 @@ public class DefaultMember implements Member, Extensible<Member> {
     }
 
     @Override
-    public <E> E addExtension(E extension) {
+    public <E> E add(E extension) {
         return (E) extensions.put(extension.getClass(), extension);
     }
 
     @Override
-    public <E> E getExtension(Class<? extends E> extensionClass) {
+    //fixme
+    public <E> E get(Class<? extends E> extensionClass) {
         return (E) extensions.get(extensionClass);
     }
 
     @Override
-    public <E> boolean hasExtension(Class<? extends E> extensionClass) {
+    public <E> boolean has(Class<? extends E> extensionClass) {
         return extensions.containsKey(extensionClass);
     }
 
     @Override
-    public <E> boolean hasExtension(E extension) {
-        return hasExtension(extension.getClass());
+    public <E> boolean has(E extension) {
+        return has(extension.getClass());
     }
 
     @Override
-    public <E> E removeExtension(Class<? extends E> extensionClass) {
+    public <E> E remove(Class<? extends E> extensionClass) {
         return (E) extensions.remove(extensionClass);
     }
 
     @Override
-    public <E> E removeExtension(E extension) {
+    public <E> E remove(E extension) {
         return (E) extensions.remove(extension.getClass());
     }
 

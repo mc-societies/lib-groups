@@ -1,9 +1,11 @@
 package net.catharos.groups;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a Extensible
  */
-public interface Extensible<A extends Extensible> {
+public interface Extensible {
 
     /**
      * Adds a extension to a object
@@ -11,7 +13,7 @@ public interface Extensible<A extends Extensible> {
      * @param extension the extension instance
      * @return The new extension which was assigned
      */
-    <E> E addExtension(E extension);
+    <E> E add(E extension);
 
     /**
      * Gets a extension of a specific type
@@ -20,7 +22,8 @@ public interface Extensible<A extends Extensible> {
      * @param <E>            The extension type
      * @return The extension of the specific type
      */
-    <E> E getExtension(Class<? extends E> extensionClass);
+    @NotNull
+    <E> E get(Class<? extends E> extensionClass);
 
     /**
      * Checks whether this instance has a extension of the specified type
@@ -29,7 +32,7 @@ public interface Extensible<A extends Extensible> {
      * @param <E>            The type of the extension
      * @return Whether this instance contains a extension of the specific type
      */
-    <E> boolean hasExtension(Class<? extends E> extensionClass);
+    <E> boolean has(Class<? extends E> extensionClass);
 
     /**
      * Checks whether this instance has a extension of the specified type
@@ -38,7 +41,7 @@ public interface Extensible<A extends Extensible> {
      * @param <E>       The type of the extension
      * @return Whether this instance contains a extension of the specific type
      */
-    <E> boolean hasExtension(E extension);
+    <E> boolean has(E extension);
 
     /**
      * Removes a extension of the specified type
@@ -47,7 +50,7 @@ public interface Extensible<A extends Extensible> {
      * @param <E>            The type of the extension
      * @return Removes a extension of the specified type
      */
-    <E> E removeExtension(Class<? extends E> extensionClass);
+    <E> E remove(Class<? extends E> extensionClass);
 
     /**
      * Removes a extension of the specified type
@@ -56,5 +59,5 @@ public interface Extensible<A extends Extensible> {
      * @param <E>       The type of the extension
      * @return Removes a extension of the specified type
      */
-    <E> E removeExtension(E extension);
+    <E> E remove(E extension);
 }
