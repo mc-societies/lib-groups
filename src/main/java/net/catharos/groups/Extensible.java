@@ -1,7 +1,5 @@
 package net.catharos.groups;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Represents a Extensible
  */
@@ -16,13 +14,20 @@ public interface Extensible {
     <E> E add(E extension);
 
     /**
+     * Adds a extension to a object
+     *
+     * @param extension the extension instance
+     * @return The new extension which was assigned
+     */
+    <E> E add(Class<? extends E> clazz, E extension);
+
+    /**
      * Gets a extension of a specific type
      *
      * @param extensionClass The class which represents the extension
      * @param <E>            The extension type
      * @return The extension of the specific type
      */
-    @NotNull
     <E> E get(Class<? extends E> extensionClass);
 
     /**

@@ -54,7 +54,11 @@ public class DefaultMember implements Member, Extensible {
     }
 
     @Override
-    //fixme
+    public <E> E add(Class<? extends E> clazz, E extension) {
+        return (E) extensions.put(clazz, extension);
+    }
+
+    @Override
     public <E> E get(Class<? extends E> extensionClass) {
         return (E) extensions.get(extensionClass);
     }
