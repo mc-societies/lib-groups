@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  *
  */
-public interface Member extends Extensible, Subject, Participant, Sender, RowForwarder, Completable, MemberHeart {
+public interface Member extends MemberHeart, Subject, Participant, Sender, Extensible, RowForwarder, Completable {
 
     @Override
     UUID getUUID();
