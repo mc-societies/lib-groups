@@ -9,33 +9,33 @@ import java.util.UUID;
 /**
  * Represents a NaughtyMemberCache
  */
-public class NaughtyMemberCache<M extends Member> implements MemberCache<M> {
+public class NaughtyMemberCache implements MemberCache {
 
     @Nullable
     @Override
-    public M getMember(UUID uuid) {
+    public Member getMember(UUID uuid) {
         return null;
     }
 
     @Nullable
     @Override
-    public M getMember(String name) {
+    public Member getMember(String name) {
         return null;
     }
 
     @Override
-    public Set<M> getMembers() {
+    public Set<Member> getMembers() {
         return null;
     }
 
     @Override
-    public boolean cache(M member) {
+    public boolean cache(Member member) {
         return false;
     }
 
     @Nullable
     @Override
-    public M clear(M member) {
+    public Member clear(Member member) {
         return null;
     }
 }

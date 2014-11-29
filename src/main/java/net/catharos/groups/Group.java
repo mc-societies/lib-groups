@@ -154,6 +154,4 @@ public interface Group extends Subject, RowForwarder, Involved, Completable {
     boolean isVerified();
 
     void verify(boolean newState);
-
-    boolean isActive();
 }

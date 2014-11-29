@@ -12,17 +12,17 @@ import java.util.concurrent.ExecutionException;
 /**
  * Represents a MemberParser
  */
-public class MemberParser<M extends Member> implements ArgumentParser<M> {
+public class MemberParser implements ArgumentParser<Member> {
 
-    private final MemberProvider<M> provider;
+    private final MemberProvider provider;
 
     @Inject
-    public MemberParser(MemberProvider<M> provider) {this.provider = provider;}
+    public MemberParser(MemberProvider provider) {this.provider = provider;}
 
     @Override
-    public M parse(String input, CommandContext<?> ctx) throws ParsingException {
+    public Member parse(String input, CommandContext<?> ctx) throws ParsingException {
         try {
-            M member = provider.getMember(input).get();
+            Member member = provider.getMember(input).get();
 
             if (member == null) {
                 throw new ParsingException("target-member.not-found", ctx);

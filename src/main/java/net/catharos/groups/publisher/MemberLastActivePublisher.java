@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 /**
  * Represents a LastActivePublisher
  */
-public interface MemberLastActivePublisher<M extends Member> {
+public interface MemberLastActivePublisher {
 
-    ListenableFuture<M> publishLastActive(M member, DateTime date);
+    ListenableFuture<Member> publishLastActive(Member member, DateTime date);
 }

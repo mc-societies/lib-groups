@@ -394,18 +394,6 @@ public class DefaultGroup extends AbstractPublishingSubject implements Group {
         return members;
     }
 
-    @Override
-    public boolean isActive() {
-        //todo return false if getLastActive is old
-        for (Member member : getMembers()) {
-            if (member.isAvailable()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public final static class Statics {
         private final SettingPublisher settingPublisher;
         private final GroupNamePublisher namePublisher;

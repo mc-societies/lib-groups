@@ -9,18 +9,18 @@ import java.util.UUID;
 /**
  * Represents a MemberCache
  */
-public interface MemberCache<M extends Member> {
+public interface MemberCache {
 
     @Nullable
-    M getMember(UUID uuid);
+    Member getMember(UUID uuid);
 
     @Nullable
-    M getMember(String name);
+    Member getMember(String name);
 
-    Set<M> getMembers();
+    Set<Member> getMembers();
 
-    boolean cache(M member);
+    boolean cache(Member member);
 
     @Nullable
-    M clear(M member);
+    Member clear(Member member);
 }

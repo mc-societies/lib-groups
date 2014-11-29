@@ -8,8 +8,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Participant extends Sender {
 
-    String getName();
-
     @Nullable
     Request getReceivedRequest();
 

@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Represents a MemberFactory
  */
-public interface MemberFactory<M extends Member> {
+public interface MemberFactory {
 
-    M create(UUID uuid);
+    Member create(UUID uuid);
 }

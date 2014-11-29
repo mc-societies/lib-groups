@@ -9,19 +9,19 @@ import java.util.UUID;
  * A {@link net.catharos.groups.MemberProvider} represents a data source for {@link net.catharos.groups.Member}s.
  * If a member does not exist in a external data source a new one will be created.
  */
-public interface MemberProvider<M extends Member> {
+public interface MemberProvider {
 
     /**
      * @param uuid The uuid to look up
      * @return A future of the member
      */
-    ListenableFuture<M> getMember(UUID uuid);
+    ListenableFuture<Member> getMember(UUID uuid);
 
     /**
      * @param name The name to look up
      * @return A future of the member
      */
-    ListenableFuture<M> getMember(String name);
+    ListenableFuture<Member> getMember(String name);
 
-    ListenableFuture<Set<M>> getMembers();
+    ListenableFuture<Set<Member>> getMembers();
 }

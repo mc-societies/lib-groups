@@ -14,11 +14,6 @@ public class SimpleParticipant extends SystemSender implements Participant {
     public SimpleParticipant() {
     }
 
-    @Override
-    public String getName() {
-        return "simple";
-    }
-
     @Nullable
     @Override
     public Request getReceivedRequest() {
@@ -49,5 +44,10 @@ public class SimpleParticipant extends SystemSender implements Participant {
     @Override
     public void clearSuppliedRequest() {
         setSuppliedRequest(null);
+    }
+
+    @Override
+    public String getName() {
+        return "simple";
     }
 }
