@@ -76,7 +76,7 @@ public class DefaultGroupHeart extends AbstractGroupHeart {
         statics.publish(new GroupTagEvent(group));
 
         if (group.isCompleted()) {
-            statics.publishTag(group, name);
+            statics.publishTag(this, name);
         }
     }
 
@@ -85,7 +85,7 @@ public class DefaultGroupHeart extends AbstractGroupHeart {
         this.name = name;
 
         if (group.isCompleted()) {
-            statics.publishName(group, name);
+            statics.publishName(this, name);
         }
     }
 
@@ -117,7 +117,7 @@ public class DefaultGroupHeart extends AbstractGroupHeart {
         this.created = created;
 
         if (group.isCompleted()) {
-            statics.publishCreated(group, created);
+            statics.publishCreated(this, created);
         }
     }
 
@@ -206,7 +206,7 @@ public class DefaultGroupHeart extends AbstractGroupHeart {
         Rank result = this.ranks.put(rank.getUUID(), rank);
 
         if (!rank.equals(result) && group.isCompleted()) {
-            statics.publishRank(group, rank);
+            statics.publishRank(this, rank);
         }
     }
 
@@ -357,19 +357,19 @@ public class DefaultGroupHeart extends AbstractGroupHeart {
             return rankDropPublisher.drop(rank);
         }
 
-        public ListenableFuture<Group> publishRank(Group group, Rank rank) {
+        public ListenableFuture<GroupHeart> publishRank(GroupHeart group, Rank rank) {
             return groupRankPublisher.publishRank(group, rank);
         }
 
-        public ListenableFuture<Group> publishName(Group group, String name) {
+        public ListenableFuture<GroupHeart> publishName(GroupHeart group, String name) {
             return namePublisher.publishName(group, name);
         }
 
-        public ListenableFuture<Group> publishTag(Group group, String tag) {
+        public ListenableFuture<GroupHeart> publishTag(GroupHeart group, String tag) {
             return namePublisher.publishTag(group, tag);
         }
 
-        public ListenableFuture<Group> publishCreated(Group group, DateTime created) {
+        public ListenableFuture<GroupHeart> publishCreated(GroupHeart group, DateTime created) {
             return createdPublisher.publishCreated(group, created);
         }
 
