@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
 import gnu.trove.set.hash.THashSet;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +38,8 @@ public class DefaultMemberHeart extends AbstractMemberHeart implements MemberHea
     private DateTime lastActive;
     private DateTime created;
 
-    public DefaultMemberHeart(Statics statics, Member member) {
+    @Inject
+    public DefaultMemberHeart(Statics statics, @Assisted Member member) {
         this.statics = statics;
         this.member = member;
         this.created = this.lastActive = DateTime.now();
