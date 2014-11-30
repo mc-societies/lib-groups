@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
 import gnu.trove.set.hash.THashSet;
@@ -149,7 +150,8 @@ public class DefaultMemberHeart extends AbstractMemberHeart implements MemberHea
         }
     }
 
-    public static final class Statics {
+    @Singleton
+    public static class Statics {
         private final MemberGroupPublisher groupPublisher;
         private final MemberRankPublisher memberRankPublisher;
         private final MemberLastActivePublisher lastActivePublisher;
