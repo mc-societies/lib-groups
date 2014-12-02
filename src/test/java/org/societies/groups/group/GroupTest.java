@@ -5,6 +5,7 @@ import net.catharos.lib.core.uuid.TimeUUIDProvider;
 import org.jukito.JukitoModule;
 import org.jukito.JukitoRunner;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.societies.groups.DefaultRelation;
@@ -14,6 +15,7 @@ import org.societies.groups.group.memory.MemoryGroupFactory;
 import java.util.UUID;
 
 @RunWith(JukitoRunner.class)
+@Ignore
 public class GroupTest {
 
 
