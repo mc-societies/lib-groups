@@ -148,7 +148,7 @@ public class MemoryMemberHeart extends AbstractMemberHeart implements MemberHear
             //fixme clear ranks in database
             this.ranks.clear();
             events
-                    .publish(new MemberLeaveEvent(member, previous == null ? null : previous.getHolder())); //fixme
+                    .publish(new MemberLeaveEvent(member, previous == null ? null : previous.getHolder()));
         } else {
             events.publish(new MemberJoinEvent(member));
         }
