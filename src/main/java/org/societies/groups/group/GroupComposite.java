@@ -8,7 +8,6 @@ import org.societies.groups.rank.Rank;
 import org.societies.groups.request.Participant;
 import org.societies.groups.setting.Setting;
 import org.societies.groups.setting.subject.Subject;
-import org.societies.groups.setting.target.SimpleTarget;
 import org.societies.groups.setting.target.Target;
 
 import java.util.Collection;
@@ -18,22 +17,40 @@ import java.util.UUID;
 /**
  * Default implementation for a Group
  */
-public class CompoundGroup implements Group {
+public class GroupComposite implements Group {
 
     private final UUID uuid;
-
-    private boolean completed = true;
 
     private Subject subject;
     private GroupHeart groupHeart;
 
-    public CompoundGroup(UUID uuid) {
+    public GroupComposite(UUID uuid) {
         this.uuid = uuid;
     }
 
     @Override
     public UUID getUUID() {
         return uuid;
+    }
+
+    @Override
+    public boolean linked() {
+        return groupHeart.linked();
+    }
+
+    @Override
+    public void unlink() {
+        groupHeart.unlink();
+    }
+
+    @Override
+    public void link() {
+        groupHeart.link();
+    }
+
+    @Override
+    public GroupHeart getHeart() {
+        return groupHeart;
     }
 
     public void setSubject(Subject subject) {
@@ -43,22 +60,6 @@ public class CompoundGroup implements Group {
     public void setGroupHeart(GroupHeart groupHeart) {
         this.groupHeart = groupHeart;
     }
-
-    @Override
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    @Override
-    public void complete(boolean value) {
-        this.completed = value;
-    }
-
-    @Override
-    public void complete() {
-        complete(true);
-    }
-
 
     @Override
     public String toString() {
@@ -73,19 +74,9 @@ public class CompoundGroup implements Group {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        // Find DefaultGroups and SimpleTargets if they are hashed in a map
-        if (o instanceof SimpleTarget) {
-            if (((SimpleTarget) o).getUUID().equals(uuid)) {
-                return true;
-            }
-        }
-
-        if (!(o instanceof CompoundGroup)) {
-            return false;
-        }
-
-        CompoundGroup that = (CompoundGroup) o;
+        GroupComposite that = (GroupComposite) o;
 
         return uuid.equals(that.uuid);
     }
@@ -113,6 +104,10 @@ public class CompoundGroup implements Group {
     @Override
     public Collection<? extends Participant> getRecipients() {
         return getMembers();
+    }
+
+    public Subject getSubject() {
+        return subject;
     }
 
     //================================================================================

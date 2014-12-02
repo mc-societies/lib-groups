@@ -2,8 +2,6 @@ package org.societies.groups.rank;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import org.jetbrains.annotations.Nullable;
-import org.societies.groups.group.Group;
 import org.societies.groups.setting.Setting;
 
 import java.util.Map;
@@ -20,29 +18,23 @@ public class StaticRank extends AbstractRank {
         super(uuid, name, priority, rules);
     }
 
-    @Nullable
-    @Override
-    public Group getGroup() {
-        return null;
-    }
-
     @Override
     public boolean isStatic() {
         return true;
     }
 
     @Override
-    public boolean isCompleted() {
-        return true;
+    public boolean linked() {
+        return false;
     }
 
     @Override
-    public void complete(boolean value) {
+    public void unlink() {
 
     }
 
     @Override
-    public void complete() {
+    public void link() {
 
     }
 }

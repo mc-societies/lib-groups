@@ -1,7 +1,6 @@
 package org.societies.groups.group;
 
 import net.catharos.lib.core.command.format.table.RowForwarder;
-import org.societies.groups.Completable;
 import org.societies.groups.request.Involved;
 import org.societies.groups.setting.subject.Subject;
 
@@ -14,18 +13,13 @@ import java.util.UUID;
  * <p/>
  * {@link org.societies.groups.Relation}s are bidirectional between groups. This means they are mirrored to each other.
  */
-public interface Group extends GroupHeart, Subject, RowForwarder, Involved, Completable {
-
-    /**
-     * The default name for new groups
-     */
-    String NEW_GROUP_NAME = "new-group";
-
-    String NEW_GROUP_TAG = "ng";
+public interface Group extends GroupHeart, Subject, RowForwarder, Involved {
 
     /**
      * @return The uuid
      */
     @Override
     UUID getUUID();
+
+    GroupHeart getHeart();
 }

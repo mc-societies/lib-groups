@@ -15,6 +15,6 @@ public class SimpleGroupProvider implements Provider<Group> {
 
     @Override
     public Group get() {
-        return groupFactory.create(Group.NEW_GROUP_NAME, Group.NEW_GROUP_TAG);
+        return groupFactory.create("name", "tag");
     }
 }

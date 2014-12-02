@@ -74,4 +74,21 @@ public abstract class AbstractSubject implements Subject {
         }
         return value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Target)) {
+            return false;
+        }
+
+        Target that = (Target) o;
+
+        return getUUID().equals(that.getUUID());
+    }
+
+    @Override
+    public int hashCode() {
+        return getUUID().hashCode();
+    }
 }

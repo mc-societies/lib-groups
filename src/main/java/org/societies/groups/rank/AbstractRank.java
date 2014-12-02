@@ -12,12 +12,13 @@ import java.util.UUID;
  * Represents a AbstractRank
  */
 public abstract class AbstractRank extends DefaultSubject implements Rank {
-    protected final UUID uuid;
-    protected final String name;
-    protected final int priority;
+    private final UUID uuid;
+    private final String name;
+    private final int priority;
     private final Map<String, Setting<Boolean>> rules;
 
     public AbstractRank(UUID uuid, String name, int priority, Map<String, Setting<Boolean>> rules) {
+        super(uuid);
         this.uuid = uuid;
         this.name = name;
         this.priority = priority;

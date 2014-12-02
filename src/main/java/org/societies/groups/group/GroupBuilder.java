@@ -70,7 +70,8 @@ public class GroupBuilder {
 
         Group group = groupFactory.create(uuid, name, tag, created);
 
-        group.complete(false);
+        //fixme
+//        group.link(false);
 
         group.setCreated(created);
 
@@ -87,7 +88,8 @@ public class GroupBuilder {
             }
         }
 
-        group.complete();
+        //fixme
+//        group.link();
         return group;
     }
 

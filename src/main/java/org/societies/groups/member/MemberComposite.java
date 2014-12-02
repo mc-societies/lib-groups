@@ -22,24 +22,19 @@ import java.util.UUID;
 /**
  * Represents a MemoryMember
  */
-public class CompoundMember implements Member, Extensible {
+public class MemberComposite implements Member, Extensible {
 
     private final UUID uuid;
 
-    private boolean completed = true;
-
     private final THashMap<Class<?>, Object> extensions = new THashMap<Class<?>, Object>();
 
-    private final Subject subject;
-    private final Participant participant;
-    private final Sender sender;
+    private Subject subject;
+    private Participant participant;
+    private Sender sender;
     private MemberHeart memberHeart;
 
-    public CompoundMember(UUID uuid, Subject subject, Participant participant, Sender sender) {
+    public MemberComposite(UUID uuid) {
         this.uuid = uuid;
-        this.subject = subject;
-        this.participant = participant;
-        this.sender = sender;
     }
 
     @Override
@@ -55,14 +50,9 @@ public class CompoundMember implements Member, Extensible {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CompoundMember that = (CompoundMember) o;
+        MemberComposite that = (MemberComposite) o;
 
         return uuid.equals(that.uuid);
-    }
-
-    @Override
-    public Member getHolder() {
-        return this;
     }
 
     @Override
@@ -72,6 +62,10 @@ public class CompoundMember implements Member, Extensible {
 
     public void setMemberHeart(MemberHeart memberHeart) {
         this.memberHeart = memberHeart;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     @Override
@@ -129,22 +123,15 @@ public class CompoundMember implements Member, Extensible {
         return 1;
     }
 
-    @Override
-    public boolean isCompleted() {
-        return completed;
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
-    @Override
-    public void complete(boolean value) {
-        this.completed = value;
+    public void setSender(Sender sender) {
+        this.sender = sender;
     }
 
-    @Override
-    public void complete() {
-        complete(true);
-    }
-
-    //================================================================================
+//================================================================================
     // Delegations
     //================================================================================
 
@@ -328,6 +315,21 @@ public class CompoundMember implements Member, Extensible {
     }
 
     @Override
+    public boolean linked() {
+        return memberHeart.linked();
+    }
+
+    @Override
+    public void unlink() {
+        memberHeart.unlink();
+    }
+
+    @Override
+    public void link() {
+        memberHeart.link();
+    }
+
+    @Override
     public boolean removeRank(Rank rank) {
         return memberHeart.removeRank(rank);
     }
@@ -371,6 +373,7 @@ public class CompoundMember implements Member, Extensible {
     public boolean getBooleanRankValue(Setting<Boolean> setting) {
         return memberHeart.getBooleanRankValue(setting);
     }
+
 
     @Override
     @Nullable

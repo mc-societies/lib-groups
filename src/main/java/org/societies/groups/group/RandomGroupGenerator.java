@@ -9,13 +9,13 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 /**
  * Represents a GroupGenerator
  */
-public class GroupGenerator {
+public class RandomGroupGenerator {
 
     private final GroupFactory groupFactory;
     private final RankFactory rankFactory;
 
     @Inject
-    public GroupGenerator(GroupFactory groupFactory, RankFactory rankFactory) {
+    public RandomGroupGenerator(GroupFactory groupFactory, RankFactory rankFactory) {
         this.groupFactory = groupFactory;
         this.rankFactory = rankFactory;
     }

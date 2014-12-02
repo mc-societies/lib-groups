@@ -1,9 +1,7 @@
 package org.societies.groups.rank;
 
 import net.catharos.lib.core.command.format.table.RowForwarder;
-import org.jetbrains.annotations.Nullable;
-import org.societies.groups.Completable;
-import org.societies.groups.group.Group;
+import org.societies.groups.Unlinkable;
 import org.societies.groups.setting.subject.Subject;
 
 import java.util.UUID;
@@ -11,7 +9,7 @@ import java.util.UUID;
 /**
  * Represents a Rank
  */
-public interface Rank extends Comparable<Rank>, Subject, RowForwarder, Completable {
+public interface Rank extends Comparable<Rank>, Subject, RowForwarder, Unlinkable {
 
     int DEFAULT_PRIORITY = 0;
 
@@ -21,12 +19,6 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder, Completab
     String getName();
 
     int getPriority();
-
-    /**
-     * @return null if this belongs to no specific group
-     */
-    @Nullable
-    Group getGroup();
 
     boolean isStatic();
 

@@ -1,7 +1,6 @@
-package org.societies.groups.publisher;
+package org.societies.groups.rank;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import org.societies.groups.rank.Rank;
 
 /**
  * Represents a RankPublisher

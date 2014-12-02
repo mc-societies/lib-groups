@@ -1,9 +1,13 @@
 package org.societies.groups;
 
+import java.util.UUID;
+
 /**
  * Represents a Extensible
  */
 public interface Extensible {
+
+    UUID getUUID();
 
     /**
      * Adds a extension to a object

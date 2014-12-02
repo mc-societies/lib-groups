@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.societies.groups.DefaultRelation;
 import org.societies.groups.Relation;
+import org.societies.groups.group.memory.MemoryGroupFactory;
 
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class GroupTest {
         @Override
         protected void configureTest() {
             bind(UUID.class).toProvider(TimeUUIDProvider.class);
-            bind(GroupFactory.class).to(DefaultGroupFactory.class);
+            bind(GroupFactory.class).to(MemoryGroupFactory.class);
             bind(Group.class).toProvider(SimpleGroupProvider.class);
         }
     }

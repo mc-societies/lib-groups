@@ -1,7 +1,6 @@
-package org.societies.groups.publisher;
+package org.societies.groups.member;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import org.societies.groups.member.Member;
 
 /**
  * Used to publish new members to a data source and drop existing ones
