@@ -2,7 +2,6 @@ package org.societies.groups.group;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import org.joda.time.DateTime;
-import org.societies.groups.group.Group;
 
 import java.util.UUID;
 

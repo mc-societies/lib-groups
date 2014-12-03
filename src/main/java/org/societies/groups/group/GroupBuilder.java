@@ -71,7 +71,7 @@ public class GroupBuilder {
         Group group = groupFactory.create(uuid, name, tag, created);
 
 
-       group.unlink();
+        group.unlink();
 
         group.setCreated(created);
 

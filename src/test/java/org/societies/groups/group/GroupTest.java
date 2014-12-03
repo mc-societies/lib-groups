@@ -15,7 +15,7 @@ import org.societies.groups.group.memory.MemoryGroupFactory;
 import java.util.UUID;
 
 @RunWith(JukitoRunner.class)
-@Ignore
+@Ignore //todo
 public class GroupTest {
 
 
