@@ -95,7 +95,6 @@ public abstract class AbstractMemberHeart implements MemberHeart {
 
     protected void publishMemberEvents(Member member, GroupHeart group, GroupHeart previous) {
         if (group == null) {
-            //fixme clear ranks in database
             events.publish(new MemberLeaveEvent(member, previous == null ? null : previous.getHolder()));
         } else {
             events.publish(new MemberJoinEvent(member));
