@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import org.jetbrains.annotations.Nullable;
-import org.societies.groups.group.Group;
 import org.societies.groups.group.GroupHeart;
 
 import java.util.UUID;
@@ -30,7 +29,7 @@ public class DefaultRelation implements Relation {
     }
 
     @AssistedInject
-    public DefaultRelation(@Assisted("source") Group source, @Assisted("target") Group target, @Assisted Type type) {
+    public DefaultRelation(@Assisted("source") GroupHeart source, @Assisted("target") GroupHeart target, @Assisted Type type) {
         this(source.getUUID(), target.getUUID(), type);
     }
 
@@ -70,7 +69,7 @@ public class DefaultRelation implements Relation {
         return new DefaultRelation(group, Type.UNKNOWN);
     }
 
-    public static DefaultRelation unknownRelation(Group group) {
+    public static DefaultRelation unknownRelation(GroupHeart group) {
         return unknownRelation(group.getUUID());
     }
 

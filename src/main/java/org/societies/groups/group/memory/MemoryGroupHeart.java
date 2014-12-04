@@ -118,6 +118,7 @@ public class MemoryGroupHeart extends AbstractGroupHeart {
 
     @Override
     public void removeRank(Rank rank) {
+        super.removeRank(rank);
         boolean result = this.ranks.remove(rank.getUUID()) != null;
 
         if (result && linked()) {

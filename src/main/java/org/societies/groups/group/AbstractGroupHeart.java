@@ -69,6 +69,13 @@ public abstract class AbstractGroupHeart implements GroupHeart {
     }
 
     @Override
+    public void removeRank(Rank rank) {
+        for (Member member : getMembers()) {
+            member.removeRank(rank);
+        }
+    }
+
+    @Override
     public Set<Member> getMembers(String rule) {
         Setting<Boolean> setting = rules.get(rule);
 
