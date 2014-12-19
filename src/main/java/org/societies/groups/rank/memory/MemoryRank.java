@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public class MemoryRank extends DefaultRank {
 
-    private final Group group;
+    private Group group;
 
     private final GroupPublisher groupPublisher;
 
@@ -39,6 +39,10 @@ public class MemoryRank extends DefaultRank {
                       Map<String, Setting<Boolean>> rules, GroupPublisher groupPublisher) {
         super(uuid, name, priority, rules);
         this.groupPublisher = groupPublisher;
+        this.group = group;
+    }
+
+    public void setGroup(Group group) {
         this.group = group;
     }
 
