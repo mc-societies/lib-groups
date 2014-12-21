@@ -13,7 +13,10 @@ public interface GroupPublisher {
     /**
      * Publishes a new group to a data source
      *
-     * @param group The group
+     * @param uuid    The uuid
+     * @param name    The name
+     * @param tag     The tag
+     * @param created The time this group has been created
      * @return A future which will fire when the group was published
      */
     ListenableFuture<Group> publish(UUID uuid, String name, String tag, DateTime created);
