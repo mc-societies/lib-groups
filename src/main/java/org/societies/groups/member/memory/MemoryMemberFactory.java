@@ -1,6 +1,7 @@
 package org.societies.groups.member.memory;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import net.catharos.lib.core.command.sender.Sender;
 import org.societies.groups.ExtensionFactory;
 import org.societies.groups.ExtensionRoller;
@@ -26,7 +27,7 @@ public class MemoryMemberFactory implements MemberFactory {
     public MemoryMemberFactory(ExtensionFactory<Sender, UUID> senderFactory,
                                MemberPublisher memberPublisher,
                                ExtensionFactory<MemoryMemberHeart, Member> heartFactory,
-                               Set<ExtensionRoller> extensions) {
+                               @Named("member") Set<ExtensionRoller> extensions) {
         this.senderFactory = senderFactory;
         this.memberPublisher = memberPublisher;
         this.heartFactory = heartFactory;
