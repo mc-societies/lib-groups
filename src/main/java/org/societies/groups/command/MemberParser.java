@@ -29,7 +29,7 @@ public class MemberParser implements ArgumentParser<Member> {
             }
 
             return member;
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             throw new ParsingException("target-member.not-found", ctx);
         } catch (ExecutionException e) {
             throw new ParsingException(e, "target-member.not-found", ctx);
