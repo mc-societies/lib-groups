@@ -1,7 +1,6 @@
 package org.societies.groups;
 
 import com.google.inject.assistedinject.Assisted;
-import org.societies.groups.group.Group;
 import org.societies.groups.group.GroupHeart;
 
 import java.util.UUID;

@@ -5,7 +5,6 @@ import com.google.inject.Provider;
 import org.joda.time.DateTime;
 import org.societies.groups.ExtensionFactory;
 import org.societies.groups.group.Group;
-import org.societies.groups.group.GroupComposite;
 import org.societies.groups.group.GroupFactory;
 import org.societies.groups.group.GroupPublisher;
 
@@ -47,7 +46,7 @@ public class MemoryGroupFactory implements GroupFactory {
 
     @Override
     public Group create(final UUID uuid, String name, String tag, DateTime created) {
-        GroupComposite group = new GroupComposite(uuid);
+        Group group = new Group(uuid);
 
         MemoryGroupHeart heart = heartFactory.create(group);
         MemoryGroupSubject subject = new MemoryGroupSubject(heart, groupPublisher);

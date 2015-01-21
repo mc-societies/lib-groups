@@ -1,7 +1,7 @@
 package org.societies.groups.rank;
 
 import net.catharos.lib.core.command.format.table.RowForwarder;
-import org.societies.groups.Unlinkable;
+import org.societies.groups.Linkable;
 import org.societies.groups.setting.subject.Subject;
 
 import java.util.UUID;
@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * Represents a Rank
  */
-public interface Rank extends Comparable<Rank>, Subject, RowForwarder, Unlinkable {
+public interface Rank extends Comparable<Rank>, Subject, RowForwarder, Linkable {
 
     int DEFAULT_PRIORITY = 0;
 

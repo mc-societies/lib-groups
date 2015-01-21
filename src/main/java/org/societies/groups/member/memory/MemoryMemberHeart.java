@@ -8,7 +8,7 @@ import com.google.inject.name.Named;
 import gnu.trove.set.hash.THashSet;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
-import org.societies.groups.Unlinkable;
+import org.societies.groups.Linkable;
 import org.societies.groups.event.EventController;
 import org.societies.groups.event.MemberJoinEvent;
 import org.societies.groups.event.MemberLeaveEvent;
@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * Default implementation for a Member
  */
-public class MemoryMemberHeart extends AbstractMemberHeart implements MemberHeart, Unlinkable {
+public class MemoryMemberHeart extends AbstractMemberHeart implements MemberHeart, Linkable {
 
     private boolean completed = true;
 
@@ -166,6 +166,7 @@ public class MemoryMemberHeart extends AbstractMemberHeart implements MemberHear
         return completed;
     }
 
+    @Override
     public void unlink(boolean value) {
         this.completed = value;
     }

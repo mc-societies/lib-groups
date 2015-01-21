@@ -5,7 +5,6 @@ import net.catharos.lib.core.command.sender.Sender;
 import org.societies.groups.ExtensionFactory;
 import org.societies.groups.ExtensionRoller;
 import org.societies.groups.member.Member;
-import org.societies.groups.member.MemberComposite;
 import org.societies.groups.member.MemberFactory;
 import org.societies.groups.member.MemberPublisher;
 import org.societies.groups.request.DefaultParticipant;
@@ -36,7 +35,7 @@ public class MemoryMemberFactory implements MemberFactory {
 
     @Override
     public Member create(UUID uuid) {
-        MemberComposite member = new MemberComposite(uuid);
+        Member member = new Member(uuid);
 
         Sender sender = senderFactory.create(uuid);
         DefaultParticipant participant = new DefaultParticipant(sender);

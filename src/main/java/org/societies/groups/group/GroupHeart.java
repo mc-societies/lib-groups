@@ -1,8 +1,8 @@
 package org.societies.groups.group;
 
 import org.joda.time.DateTime;
+import org.societies.groups.Linkable;
 import org.societies.groups.Relation;
-import org.societies.groups.Unlinkable;
 import org.societies.groups.member.Member;
 import org.societies.groups.rank.Rank;
 import org.societies.groups.setting.Setting;
@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * Represents a GroupHearth
  */
-public interface GroupHeart extends Target, Unlinkable {
+public interface GroupHeart extends Target, Linkable {
 
     Group getHolder();
 

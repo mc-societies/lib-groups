@@ -1,6 +1,6 @@
 package org.societies.groups.rank;
 
-import org.societies.groups.Unlinkable;
+import org.societies.groups.Linkable;
 import org.societies.groups.setting.Setting;
 
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * Represents a DefaultRank
  */
-public class DefaultRank extends AbstractRank implements Unlinkable {
+public class DefaultRank extends AbstractRank implements Linkable {
 
     private boolean completed = true;
 

@@ -3,7 +3,7 @@ package org.societies.groups;
 /**
  * Represents a Completable
  */
-public interface Unlinkable {
+public interface Linkable {
 
     boolean linked();
 

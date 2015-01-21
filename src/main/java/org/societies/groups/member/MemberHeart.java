@@ -2,7 +2,7 @@ package org.societies.groups.member;
 
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
-import org.societies.groups.Unlinkable;
+import org.societies.groups.Linkable;
 import org.societies.groups.group.GroupHeart;
 import org.societies.groups.rank.Rank;
 import org.societies.groups.setting.Setting;
@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * Represents a GroupMember
  */
-public interface MemberHeart extends Unlinkable {
+public interface MemberHeart extends Linkable {
 
     Set<Rank> getRanks();
 
