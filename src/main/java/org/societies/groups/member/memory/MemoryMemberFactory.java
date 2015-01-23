@@ -1,7 +1,6 @@
 package org.societies.groups.member.memory;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import net.catharos.lib.core.command.sender.Sender;
 import org.societies.groups.ExtensionFactory;
 import org.societies.groups.ExtensionRoller;
@@ -21,13 +20,13 @@ public class MemoryMemberFactory implements MemberFactory {
     private final ExtensionFactory<? extends Sender, UUID> senderFactory;
     private final MemberPublisher memberPublisher;
     private final ExtensionFactory<MemoryMemberHeart, Member> heartFactory;
-    private final Set<ExtensionRoller> extensions;
+    private final Set<ExtensionRoller<Member>> extensions;
 
     @Inject
     public MemoryMemberFactory(ExtensionFactory<Sender, UUID> senderFactory,
                                MemberPublisher memberPublisher,
                                ExtensionFactory<MemoryMemberHeart, Member> heartFactory,
-                               @Named("member") Set<ExtensionRoller> extensions) {
+                               Set<ExtensionRoller<Member>> extensions) {
         this.senderFactory = senderFactory;
         this.memberPublisher = memberPublisher;
         this.heartFactory = heartFactory;
@@ -48,7 +47,7 @@ public class MemoryMemberFactory implements MemberFactory {
         member.setParticipant(participant);
         member.setSender(sender);
 
-        for (ExtensionRoller extension : extensions) {
+        for (ExtensionRoller<Member> extension : extensions) {
             extension.roll(member);
         }
 

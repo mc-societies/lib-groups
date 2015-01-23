@@ -17,7 +17,8 @@ public abstract class AbstractExtensible implements Extensible {
 
     @Override
     public <E> E add(Class<? extends E> clazz, E extension) {
-        return CastSafe.toGeneric(extensions.put(clazz, extension));
+        extensions.put(clazz, extension);
+        return CastSafe.toGeneric(extension);
     }
 
     @Override

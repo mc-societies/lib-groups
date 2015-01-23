@@ -2,7 +2,6 @@ package org.societies.groups.group.memory;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.name.Named;
 import org.joda.time.DateTime;
 import org.societies.groups.ExtensionFactory;
 import org.societies.groups.ExtensionRoller;
@@ -21,14 +20,14 @@ public class MemoryGroupFactory implements GroupFactory {
     private final Provider<UUID> uuidProvider;
     private final GroupPublisher groupPublisher;
     private final ExtensionFactory<MemoryGroupHeart, Group> heartFactory;
-    private final Set<ExtensionRoller> extensions;
+    private final Set<ExtensionRoller<Group>> extensions;
 
     @Inject
     public MemoryGroupFactory(
             Provider<UUID> uuidProvider,
             GroupPublisher groupPublisher,
             ExtensionFactory<MemoryGroupHeart, Group> heartFactory,
-            @Named("group") Set<ExtensionRoller> extensions) {
+            Set<ExtensionRoller<Group>> extensions) {
         this.uuidProvider = uuidProvider;
         this.groupPublisher = groupPublisher;
         this.heartFactory = heartFactory;
@@ -65,7 +64,7 @@ public class MemoryGroupFactory implements GroupFactory {
         heart.setTag(tag);
         heart.setCreated(created);
 
-        for (ExtensionRoller extension : extensions) {
+        for (ExtensionRoller<Group> extension : extensions) {
             extension.roll(group);
         }
 
