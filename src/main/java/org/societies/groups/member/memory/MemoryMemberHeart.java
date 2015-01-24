@@ -31,7 +31,7 @@ public class MemoryMemberHeart extends AbstractMemberHeart implements MemberHear
 
     @Nullable
     private GroupHeart group;
-    private THashSet<Rank> ranks = new THashSet<Rank>();
+    private Set<Rank> ranks = Collections.synchronizedSet(new THashSet<Rank>());
     private DateTime lastActive;
     private DateTime created;
 

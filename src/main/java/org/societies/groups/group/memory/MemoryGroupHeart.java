@@ -17,10 +17,7 @@ import org.societies.groups.member.Member;
 import org.societies.groups.rank.Rank;
 import org.societies.groups.setting.Setting;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Collections.unmodifiableSet;
 
@@ -31,8 +28,8 @@ public class MemoryGroupHeart extends AbstractGroupHeart {
 
     private String name, tag;
     private DateTime created;
-    private final THashMap<UUID, Rank> ranks = new THashMap<UUID, Rank>();
-    private final THashSet<Member> members = new THashSet<Member>();
+    private final Map<UUID, Rank> ranks = Collections.synchronizedMap(new THashMap<UUID, Rank>());
+    private final Set<Member> members = Collections.synchronizedSet(new THashSet<Member>());
 
 
     private final Group group;
