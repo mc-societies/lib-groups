@@ -38,4 +38,10 @@ public class NaughtyMemberCache implements MemberCache {
     public Member clear(Member member) {
         return null;
     }
+
+    @Nullable
+    @Override
+    public Member clear(UUID uuid) {
+        return null;
+    }
 }

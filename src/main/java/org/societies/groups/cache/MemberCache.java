@@ -23,4 +23,7 @@ public interface MemberCache {
 
     @Nullable
     Member clear(Member member);
+
+    @Nullable
+    Member clear(UUID uuid);
 }

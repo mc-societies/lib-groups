@@ -2,6 +2,7 @@ package org.societies.groups.cache;
 
 import org.jetbrains.annotations.Nullable;
 import org.societies.groups.group.Group;
+import org.societies.groups.member.Member;
 
 import java.util.Set;
 import java.util.UUID;
@@ -26,4 +27,7 @@ public interface GroupCache {
 
     @Nullable
     Group clear(Group group);
+
+    @Nullable
+    Group clear(Member leaving, Group group);
 }

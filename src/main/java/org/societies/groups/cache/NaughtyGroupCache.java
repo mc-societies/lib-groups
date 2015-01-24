@@ -2,6 +2,7 @@ package org.societies.groups.cache;
 
 import org.jetbrains.annotations.Nullable;
 import org.societies.groups.group.Group;
+import org.societies.groups.member.Member;
 
 import java.util.Set;
 import java.util.UUID;
@@ -42,6 +43,12 @@ public class NaughtyGroupCache implements GroupCache {
     @Nullable
     @Override
     public Group clear(Group group) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Group clear(Member leaving, Group group) {
         return null;
     }
 }
