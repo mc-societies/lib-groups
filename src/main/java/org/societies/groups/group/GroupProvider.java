@@ -1,7 +1,5 @@
 package org.societies.groups.group;
 
-import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,18 +13,18 @@ public interface GroupProvider {
      * @param uuid The uuid to look up
      * @return A future of the group
      */
-    ListenableFuture<Group> getGroup(UUID uuid);
+    Group getGroup(UUID uuid);
 
     /**
      * @param tag The tag to look up
      * @return A future of the group
      */
-    ListenableFuture<Set<Group>> getGroup(String tag);
+    Set<Group> getGroup(String tag);
 
     /**
      * @return All existing groups
      */
-    ListenableFuture<Set<Group>> getGroups();
+    Set<Group> getGroups();
 
-    ListenableFuture<Integer> size();
+    Integer size();
 }

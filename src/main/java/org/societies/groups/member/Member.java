@@ -39,9 +39,10 @@ public class Member extends AbstractExtensible implements MemberHeart, Subject, 
 
     @Override
     public String toString() {
+        Group group = getGroup();
         return "DefaultMember{" +
                 "uuid=" + uuid +
-                ", group=" + (getGroup() != null ? getGroup().getName() : null) +
+                ", group=" + (group != null ? group.getName() : null) +
                 '}';
     }
 

@@ -1,6 +1,5 @@
 package org.societies.groups.group;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
@@ -19,9 +18,11 @@ public interface GroupPublisher {
      * @param created The time this group has been created
      * @return A future which will fire when the group was published
      */
-    ListenableFuture<Group> publish(UUID uuid, String name, String tag, DateTime created);
+    Group publish(UUID uuid, String name, String tag, DateTime created);
 
-    ListenableFuture<Group> publish(String name, String tag);
+    Group publish(String name, String tag);
 
-    ListenableFuture<Group> publish(Group group);
+    Group publish(Group group);
+
+    Group destruct(Group group);
 }

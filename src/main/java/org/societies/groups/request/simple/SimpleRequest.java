@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.societies.groups.request.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -215,7 +216,7 @@ public class SimpleRequest implements Request<Choices> {
         return future;
     }
 
-    private static class EntryValueComparator<K, V extends Comparable<V>> implements Comparator<Map.Entry<K, V>> {
+    private static class EntryValueComparator<K, V extends Comparable<V>> implements Comparator<Map.Entry<K, V>>, Serializable {
         @Override
         public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
             return o1.getValue().compareTo(o2.getValue());

@@ -1,7 +1,5 @@
 package org.societies.groups.member;
 
-import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,13 +13,13 @@ public interface MemberProvider {
      * @param uuid The uuid to look up
      * @return A future of the member
      */
-    ListenableFuture<Member> getMember(UUID uuid);
+    Member getMember(UUID uuid);
 
     /**
      * @param name The name to look up
      * @return A future of the member
      */
-    ListenableFuture<Member> getMember(String name);
+    Member getMember(String name);
 
-    ListenableFuture<Set<Member>> getMembers();
+    Set<Member> getMembers();
 }

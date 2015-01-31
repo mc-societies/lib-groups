@@ -10,7 +10,6 @@ import org.societies.groups.group.Group;
 import org.societies.groups.group.GroupProvider;
 
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Represents a GroupParser
@@ -28,18 +27,12 @@ public class GroupParser implements ArgumentParser<Group> {
 
     @Override
     public Group parse(String input, CommandContext<?> ctx) throws ParsingException {
-        try {
-            Set<Group> groups = provider.getGroup(input).get();
+        Set<Group> groups = provider.getGroup(input);
 
-            if (groups.isEmpty()) {
-                throw new ParsingException(dictionary.getTranslation("target-society.not-found", (Object) input), ctx);
-            }
-
-            return Iterables.getFirst(groups, null);
-        } catch (InterruptedException e) {
-            throw new ParsingException(e, dictionary.getTranslation("target-society.not-found", (Object) input), ctx);
-        } catch (ExecutionException e) {
-            throw new ParsingException(e, dictionary.getTranslation("target-society.not-found", (Object) input), ctx);
+        if (groups.isEmpty()) {
+            throw new ParsingException(dictionary.getTranslation("target-society.not-found", (Object) input), ctx);
         }
+
+        return Iterables.getFirst(groups, null);
     }
 }
