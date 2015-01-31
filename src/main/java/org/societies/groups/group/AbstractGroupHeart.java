@@ -1,6 +1,7 @@
 package org.societies.groups.group;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 import gnu.trove.set.hash.THashSet;
 import net.catharos.lib.core.util.CastSafe;
 import org.joda.time.DateTime;
@@ -60,7 +61,7 @@ public abstract class AbstractGroupHeart implements GroupHeart {
         THashSet<Rank> ranks = new THashSet<Rank>();
 
         for (Rank rank : getRanks()) {
-            if (rank.hasRule(rule)) {
+            if (rank.hasRule(rule) || rank.hasRule("*")) {   //beautify
                 ranks.add(rank);
             }
         }
@@ -83,7 +84,9 @@ public abstract class AbstractGroupHeart implements GroupHeart {
             return Collections.emptySet();
         }
 
-        return getMembers(setting);
+        Setting<Boolean> wildcard = rules.get("*");  //beautify
+
+        return Sets.union(getMembers(setting), getMembers(wildcard));
     }
 
     @Override
@@ -216,7 +219,6 @@ public abstract class AbstractGroupHeart implements GroupHeart {
     public void verify(boolean newState) {
         subject.set(verifySetting, newState);
     }
-
 
     @Override
     public UUID getUUID() {

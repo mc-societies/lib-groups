@@ -58,7 +58,7 @@ public abstract class AbstractMemberHeart implements MemberHeart {
     @Override
     public boolean hasRule(String rule) {
         for (Rank rank : getRanks()) {
-            if (rank.hasRule(rule)) {
+            if (rank.hasRule(rule) || rank.hasRule("*")) { //beautify
                 return true;
             }
         }
