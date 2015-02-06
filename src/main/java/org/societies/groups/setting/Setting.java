@@ -1,6 +1,8 @@
 package org.societies.groups.setting;
 
+import com.google.common.collect.Table;
 import com.migcomponents.migbase64.Base64;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.societies.groups.setting.subject.Subject;
 import org.societies.groups.setting.target.Target;
@@ -48,6 +50,22 @@ public abstract class Setting<V> {
     @Override
     public int hashCode() {
         return getID();
+    }
+
+
+    public static void set(Table<Setting, Target, String> settings, Subject subject, Logger logger) {
+        //beautify
+        for (Table.Cell<Setting, Target, String> cell : settings.cellSet()) {
+            Setting setting = cell.getRowKey();
+            Target target = cell.getColumnKey();
+            String value = cell.getValue();
+
+            try {
+                subject.set(setting, target, setting.convertFromString(subject, target, value));
+            } catch (SettingException ignored) {
+                logger.warn("Failed to convert setting %s! Subject: %s Target: %s Value: %s", setting, subject, target, value);
+            }
+        }
     }
 
 //    public static class Boolean extends Setting<DefaultSettingValue> {

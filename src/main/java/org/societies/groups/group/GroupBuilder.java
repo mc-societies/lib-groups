@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.shank.logging.InjectLogger;
 import org.societies.groups.setting.Setting;
-import org.societies.groups.setting.SettingException;
 import org.societies.groups.setting.target.Target;
 
 import java.util.UUID;
@@ -75,18 +74,7 @@ public class GroupBuilder {
 
         group.setCreated(created);
 
-        //beautify
-        for (Table.Cell<Setting, Target, String> cell : settings.cellSet()) {
-            Setting setting = cell.getRowKey();
-            Target target = cell.getColumnKey();
-            String value = cell.getValue();
-
-            try {
-                group.set(setting, target, setting.convertFromString(group, target, value));
-            } catch (SettingException ignored) {
-                logger.warn("Failed to convert setting %s! Subject: %s Target: %s Value: %s", setting, group, target, value);
-            }
-        }
+        Setting.set(settings, group, logger);
 
         group.link();
         return group;
