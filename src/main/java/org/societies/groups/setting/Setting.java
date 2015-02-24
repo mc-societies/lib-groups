@@ -12,13 +12,13 @@ import org.societies.groups.setting.target.Target;
  */
 public abstract class Setting<V> {
 
-    private final int id;
+    private final String id;
 
-    public Setting(int id) {
+    public Setting(String id) {
         this.id = id;
     }
 
-    public int getID() {
+    public String getID() {
         return id;
     }
 
@@ -44,12 +44,12 @@ public abstract class Setting<V> {
 
         Setting that = (Setting) o;
 
-        return getID() == that.getID();
+        return getID().equals(that.getID());
     }
 
     @Override
     public int hashCode() {
-        return getID();
+        return getID().hashCode();
     }
 
 
@@ -67,16 +67,4 @@ public abstract class Setting<V> {
             }
         }
     }
-
-//    public static class Boolean extends Setting<DefaultSettingValue> {
-//
-//        public Boolean(int id) {
-//            super(id);
-//        }
-//
-//        @Override
-//        public DefaultSettingValue convert(byte[] value) {
-//            return new DefaultSettingValue(value);
-//        }
-//    }
 }

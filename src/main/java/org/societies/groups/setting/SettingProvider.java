@@ -8,5 +8,5 @@ import org.jetbrains.annotations.Nullable;
 public interface SettingProvider {
 
     @Nullable
-    Setting getSetting(int id);
+    Setting getSetting(String id);
 }

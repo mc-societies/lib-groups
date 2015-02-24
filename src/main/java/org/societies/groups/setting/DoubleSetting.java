@@ -10,7 +10,7 @@ import org.societies.groups.setting.target.Target;
  */
 public class DoubleSetting extends Setting<Double> {
 
-    public DoubleSetting(int id) {
+    public DoubleSetting(String id) {
         super(id);
     }
 

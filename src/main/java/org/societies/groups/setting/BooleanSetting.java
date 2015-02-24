@@ -9,7 +9,7 @@ import org.societies.groups.setting.target.Target;
  */
 public class BooleanSetting extends Setting<Boolean> {
 
-    public BooleanSetting(int id) {
+    public BooleanSetting(String id) {
         super(id);
     }
 
