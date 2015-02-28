@@ -1,5 +1,7 @@
 package org.societies.groups.member;
 
+import com.google.common.base.Optional;
+
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,7 +21,7 @@ public interface MemberProvider {
      * @param name The name to look up
      * @return A future of the member
      */
-    Member getMember(String name);
+    Optional<Member> getMember(String name);
 
     Set<Member> getMembers();
 }
