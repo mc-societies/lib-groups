@@ -140,4 +140,8 @@ public interface GroupHeart extends Target, Linkable {
     boolean isVerified();
 
     void verify(boolean newState);
+
+    void send(String message);
+
+    void send(String message, Object... obj);
 }

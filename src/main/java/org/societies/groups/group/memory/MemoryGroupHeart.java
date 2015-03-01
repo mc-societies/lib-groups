@@ -159,4 +159,18 @@ public class MemoryGroupHeart extends AbstractGroupHeart {
             member.setGroup(null);
         }
     }
+
+    @Override
+    public void send(String message) {
+        for (Member member : members) {
+            member.send(message);
+        }
+    }
+
+    @Override
+    public void send(String message, Object... obj) {
+        for (Member member : members) {
+            member.send(message, obj);
+        }
+    }
 }

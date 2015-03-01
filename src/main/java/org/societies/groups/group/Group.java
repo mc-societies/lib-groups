@@ -333,6 +333,16 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
     }
 
     @Override
+    public void send(String message) {
+        groupHeart.send(message);
+    }
+
+    @Override
+    public void send(String message, Object... obj) {
+        groupHeart.send(message, obj);
+    }
+
+    @Override
     public Group getHolder() {
         return groupHeart.getHolder();
     }
