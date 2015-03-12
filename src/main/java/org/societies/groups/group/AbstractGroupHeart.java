@@ -11,6 +11,7 @@ import org.societies.groups.member.Member;
 import org.societies.groups.rank.Rank;
 import org.societies.groups.setting.Setting;
 import org.societies.groups.setting.subject.Subject;
+import org.societies.groups.setting.target.SimpleTarget;
 
 import java.util.*;
 
@@ -114,7 +115,7 @@ public abstract class AbstractGroupHeart implements GroupHeart {
 
     @Override
     public Relation getRelation(GroupHeart anotherGroup) {
-        Relation relation = subject.get(relationSetting, anotherGroup);
+        Relation relation = subject.get(relationSetting, new SimpleTarget(anotherGroup.getUUID()));
         return relation == null ? DefaultRelation.unknownRelation(subject.getUUID()) : relation;
     }
 
@@ -129,6 +130,9 @@ public abstract class AbstractGroupHeart implements GroupHeart {
         THashSet<Relation> relations = new THashSet<Relation>();
         for (Object obj : subject.getSettings().row(relationSetting).values()) {
             Relation relation = (Relation) obj;
+            if (relation.getType() != type) {
+                continue;
+            }
             relations.add(relation);
 
         }
@@ -159,7 +163,7 @@ public abstract class AbstractGroupHeart implements GroupHeart {
         }
 
 
-        subject.set(relationSetting, target, relation);
+        subject.set(relationSetting, new SimpleTarget(target.getUUID()), relation);
 
 
         if (!target.hasRelation(this)) {
@@ -170,7 +174,7 @@ public abstract class AbstractGroupHeart implements GroupHeart {
     @Override
     public void removeRelation(GroupHeart anotherGroup) {
         if (hasRelation(anotherGroup)) {
-            subject.remove(relationSetting, anotherGroup);
+            subject.remove(relationSetting, new SimpleTarget(anotherGroup.getUUID()));
         }
 
         if (anotherGroup.hasRelation(this)) {
@@ -180,7 +184,7 @@ public abstract class AbstractGroupHeart implements GroupHeart {
 
     @Override
     public boolean hasRelation(GroupHeart anotherGroup) {
-        Relation value = subject.get(relationSetting, anotherGroup);
+        Relation value = subject.get(relationSetting, new SimpleTarget(anotherGroup.getUUID()));
 
         if (value == null) {
             return false;
@@ -242,5 +246,30 @@ public abstract class AbstractGroupHeart implements GroupHeart {
     @Override
     public void link() {
         unlink(true);
+    }
+
+    @Override
+    public String toString() {
+        return "DefaultGroup{" +
+                "uuid=" + getUUID() +
+                ", relations=" + getRelations() +
+                ", ranks=" + getRanks() +
+                ", members=" + getMembers() +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GroupHeart that = (GroupHeart) o;
+
+        return getUUID().equals(that.getUUID());
+    }
+
+    @Override
+    public int hashCode() {
+        return getUUID().hashCode();
     }
 }

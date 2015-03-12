@@ -9,9 +9,8 @@ import java.util.UUID;
 /**
  *
  */
-public interface Subject extends Target {
+public interface Subject {
 
-    @Override
     UUID getUUID();
 
     <V> void set(Setting<V> setting, Target target, V value);

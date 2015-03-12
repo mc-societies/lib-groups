@@ -6,7 +6,6 @@ import org.societies.groups.Relation;
 import org.societies.groups.member.Member;
 import org.societies.groups.rank.Rank;
 import org.societies.groups.setting.Setting;
-import org.societies.groups.setting.target.Target;
 
 import java.util.Collection;
 import java.util.Set;
@@ -15,7 +14,9 @@ import java.util.UUID;
 /**
  * Represents a GroupHearth
  */
-public interface GroupHeart extends Target, Linkable {
+public interface GroupHeart extends Linkable {
+
+    UUID getUUID();
 
     Group getHolder();
 

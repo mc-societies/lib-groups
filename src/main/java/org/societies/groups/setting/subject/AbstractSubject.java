@@ -1,6 +1,7 @@
 package org.societies.groups.setting.subject;
 
 import org.societies.groups.setting.Setting;
+import org.societies.groups.setting.target.SimpleTarget;
 import org.societies.groups.setting.target.Target;
 
 /**
@@ -10,17 +11,17 @@ public abstract class AbstractSubject implements Subject {
 
     @Override
     public <V> void remove(Setting<V> setting) {
-        remove(setting, this);
+        remove(setting, new SimpleTarget(getUUID()));
     }
 
     @Override
     public <V> void set(Setting<V> setting, V value) {
-        set(setting, this, value);
+        set(setting, new SimpleTarget(getUUID()), value);
     }
 
     @Override
     public <V> V get(Setting<V> setting) {
-        return get(setting, this);
+        return get(setting, new SimpleTarget(getUUID()));
     }
 
     @Override

@@ -81,6 +81,7 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
 
         Group that = (Group) o;
