@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
-import org.shank.logging.InjectLogger;
 import org.societies.groups.setting.Setting;
 import org.societies.groups.setting.target.Target;
 
@@ -26,13 +25,13 @@ public class GroupBuilder {
     private DateTime created;
     private final Table<Setting, Target, String> settings = HashBasedTable.create();
 
-    @InjectLogger
     private Logger logger;
 
     @Inject
-    public GroupBuilder(GroupFactory groupFactory, Provider<UUID> uuidProvider) {
+    public GroupBuilder(GroupFactory groupFactory, Provider<UUID> uuidProvider, Logger logger) {
         this.groupFactory = groupFactory;
         this.uuidProvider = uuidProvider;
+        this.logger = logger;
     }
 
     public GroupBuilder setUUID(UUID uuid) {
