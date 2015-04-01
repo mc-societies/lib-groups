@@ -9,7 +9,9 @@ public class SimpleTarget implements Target {
 
     private final UUID uuid;
 
-    public SimpleTarget(UUID uuid) {this.uuid = uuid;}
+    public SimpleTarget(UUID uuid) {
+        this.uuid = uuid;
+    }
 
     @Override
     public UUID getUUID() {

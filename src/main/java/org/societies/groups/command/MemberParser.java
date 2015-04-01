@@ -16,7 +16,9 @@ public class MemberParser implements ArgumentParser<Member> {
     private final MemberProvider provider;
 
     @Inject
-    public MemberParser(MemberProvider provider) {this.provider = provider;}
+    public MemberParser(MemberProvider provider) {
+        this.provider = provider;
+    }
 
     @Override
     public Member parse(String input, CommandContext<?> ctx) throws ParsingException {

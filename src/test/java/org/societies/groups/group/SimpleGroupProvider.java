@@ -11,7 +11,9 @@ public class SimpleGroupProvider implements Provider<Group> {
     private final GroupFactory groupFactory;
 
     @Inject
-    public SimpleGroupProvider(GroupFactory groupFactory) {this.groupFactory = groupFactory;}
+    public SimpleGroupProvider(GroupFactory groupFactory) {
+        this.groupFactory = groupFactory;
+    }
 
     @Override
     public Group get() {

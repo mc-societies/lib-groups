@@ -16,7 +16,9 @@ public class DefaultParticipant implements Participant {
 
     private final Sender sender;
 
-    public DefaultParticipant(Sender sender) {this.sender = sender;}
+    public DefaultParticipant(Sender sender) {
+        this.sender = sender;
+    }
 
     @Nullable
     @Override

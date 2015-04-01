@@ -17,7 +17,9 @@ public abstract class AbstractMemberHeart implements MemberHeart {
 
     private final EventController events;
 
-    protected AbstractMemberHeart(EventController events) {this.events = events;}
+    protected AbstractMemberHeart(EventController events) {
+        this.events = events;
+    }
 
     @Override
     public boolean hasRank(Rank rank) {

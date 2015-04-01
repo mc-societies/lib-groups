@@ -12,7 +12,9 @@ public class SetInvolved implements Involved {
 
     private final Set<? extends Participant> participants;
 
-    public SetInvolved(Set<? extends Participant> participants) {this.participants = new THashSet<Participant>(participants);}
+    public SetInvolved(Set<? extends Participant> participants) {
+        this.participants = new THashSet<Participant>(participants);
+    }
 
     @Override
     public boolean isInvolved(Participant participant) {

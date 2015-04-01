@@ -9,7 +9,9 @@ import java.util.Collections;
 public class SingleInvolved implements Involved {
     private final Participant participant;
 
-    public SingleInvolved(Participant participant) {this.participant = participant;}
+    public SingleInvolved(Participant participant) {
+        this.participant = participant;
+    }
 
     @Override
     public boolean isInvolved(Participant participant) {
