@@ -1,6 +1,5 @@
 package org.societies.groups.setting;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.Nullable;
 import org.societies.groups.setting.subject.Subject;
 import org.societies.groups.setting.target.Target;
@@ -37,7 +36,7 @@ public class DoubleSetting extends Setting<Double> {
     @Override
     public String convertToString(Subject subject, Target target, @Nullable Double value) throws SettingException {
         if (value == null) {
-            return Strings.EMPTY;
+            return "";
         }
 
         return value.toString();
