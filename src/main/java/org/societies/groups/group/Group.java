@@ -1,6 +1,5 @@
 package org.societies.groups.group;
 
-import com.google.common.collect.Table;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import org.joda.time.DateTime;
 import org.societies.groups.AbstractExtensible;
@@ -10,9 +9,6 @@ import org.societies.groups.member.Member;
 import org.societies.groups.rank.Rank;
 import org.societies.groups.request.Involved;
 import org.societies.groups.request.Participant;
-import org.societies.groups.setting.Setting;
-import org.societies.groups.setting.subject.Subject;
-import org.societies.groups.setting.target.Target;
 
 import java.util.Collection;
 import java.util.Set;
@@ -25,11 +21,10 @@ import java.util.UUID;
  * <p/>
  * {@link org.societies.groups.Relation}s are bidirectional between groups. This means they are mirrored to each other.
  */
-public class Group extends AbstractExtensible implements Extensible, GroupHeart, Subject, RowForwarder, Involved {
+public class Group extends AbstractExtensible implements Extensible, GroupHeart, RowForwarder, Involved {
 
     private final UUID uuid;
 
-    private Subject subject;
     private GroupHeart groupHeart;
 
     public Group(UUID uuid) {
@@ -58,10 +53,6 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
 
     public GroupHeart getHeart() {
         return groupHeart;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
     }
 
     public void setGroupHeart(GroupHeart groupHeart) {
@@ -115,79 +106,6 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
         return getMembers();
     }
 
-    public Subject getSubject() {
-        return subject;
-    }
-
-    //================================================================================
-    // Delegates
-    //================================================================================
-
-    @Override
-    public <V> void set(Setting<V> setting, Target target, V value) {
-        subject.set(setting, target, value);
-    }
-
-    @Override
-    public <V> void set(Setting<V> setting, V value) {
-        subject.set(setting, value);
-    }
-
-    @Override
-    public <V> void remove(Setting<V> setting, Target target) {
-        subject.remove(setting, target);
-    }
-
-    @Override
-    public <V> void remove(Setting<V> setting) {
-        subject.remove(setting);
-    }
-
-    @Override
-    public <V> V get(Setting<V> setting, Target target) {
-        return subject.get(setting, target);
-    }
-
-    @Override
-    public boolean getBoolean(Setting<Boolean> setting, Target target) {
-        return subject.getBoolean(setting, target);
-    }
-
-    @Override
-    public int getInteger(Setting<Integer> setting, Target target) {
-        return subject.getInteger(setting, target);
-    }
-
-    @Override
-    public double getDouble(Setting<Double> setting, Target target) {
-        return subject.getDouble(setting, target);
-    }
-
-    @Override
-    public <V> V get(Setting<V> setting) {
-        return subject.get(setting);
-    }
-
-    @Override
-    public double getDouble(Setting<Double> setting) {
-        return subject.getDouble(setting);
-    }
-
-    @Override
-    public boolean getBoolean(Setting<Boolean> setting) {
-        return subject.getBoolean(setting);
-    }
-
-    @Override
-    public int getInteger(Setting<Integer> setting) {
-        return subject.getInteger(setting);
-    }
-
-    @Override
-    public Table<Setting, Target, Object> getSettings() {
-        return subject.getSettings();
-    }
-
     @Override
     public String getName() {
         return groupHeart.getName();
@@ -236,6 +154,11 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
     @Override
     public Collection<Relation> getRelations(Relation.Type type) {
         return groupHeart.getRelations(type);
+    }
+
+    @Override
+    public void setRawRelation(UUID anotherGroup, Relation relation) {
+        groupHeart.setRawRelation(anotherGroup, relation);
     }
 
     @Override
@@ -299,11 +222,6 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
     }
 
     @Override
-    public Set<Member> getMembers(Setting<Boolean> setting) {
-        return groupHeart.getMembers(setting);
-    }
-
-    @Override
     public Set<Member> getMembers(String rule) {
         return groupHeart.getMembers(rule);
     }
@@ -321,16 +239,6 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
     @Override
     public void removeMember(Member member) {
         groupHeart.removeMember(member);
-    }
-
-    @Override
-    public boolean isVerified() {
-        return groupHeart.isVerified();
-    }
-
-    @Override
-    public void verify(boolean newState) {
-        groupHeart.verify(newState);
     }
 
     @Override

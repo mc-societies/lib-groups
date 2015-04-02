@@ -54,10 +54,8 @@ public class MemoryGroupFactory implements GroupFactory {
         Group group = new Group(uuid);
 
         MemoryGroupHeart heart = heartFactory.create(group);
-        MemoryGroupSubject subject = new MemoryGroupSubject(heart, groupPublisher);
 
         group.setGroupHeart(heart);
-        group.setSubject(subject);
 
         group.unlink();
         heart.setName(name);

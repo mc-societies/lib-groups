@@ -1,13 +1,8 @@
 package org.societies.groups.group;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
-import org.societies.groups.setting.Setting;
-import org.societies.groups.setting.target.Target;
 
 import java.util.UUID;
 
@@ -23,15 +18,26 @@ public class GroupBuilder {
     private String name, tag;
 
     private DateTime created;
-    private final Table<Setting, Target, String> settings = HashBasedTable.create();
-
-    private Logger logger;
 
     @Inject
-    public GroupBuilder(GroupFactory groupFactory, Provider<UUID> uuidProvider, Logger logger) {
+    public GroupBuilder(GroupFactory groupFactory, Provider<UUID> uuidProvider) {
         this.groupFactory = groupFactory;
         this.uuidProvider = uuidProvider;
-        this.logger = logger;
+    }
+
+    public Group build() {
+        if (uuid == null) {
+            uuid = uuidProvider.get();
+        }
+
+        Group group = groupFactory.create(uuid, name, tag, created);
+
+        group.unlink();
+
+        group.setCreated(created);
+
+        group.link();
+        return group;
     }
 
     public GroupBuilder setUUID(UUID uuid) {
@@ -49,49 +55,11 @@ public class GroupBuilder {
         return this;
     }
 
-    public UUID getUUID() {
-        return uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public Group build() {
-        if (uuid == null) {
-            uuid = uuidProvider.get();
-        }
-
-        Group group = groupFactory.create(uuid, name, tag, created);
-
-
-        group.unlink();
-
-        group.setCreated(created);
-
-        Setting.set(settings, group, logger);
-
-        group.link();
-        return group;
-    }
-
-    public void put(Setting rowKey, Target columnKey, String value) {
-        settings.put(rowKey, columnKey, value);
-    }
-
-    public DateTime getCreated() {
-        return created;
-    }
-
     public void setCreated(DateTime created) {
         this.created = created;
     }
 
-    public Table<Setting, Target, String> getSettings() {
-        return settings;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 }

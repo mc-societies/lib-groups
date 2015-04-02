@@ -5,7 +5,6 @@ import org.joda.time.DateTime;
 import org.societies.groups.Linkable;
 import org.societies.groups.group.GroupHeart;
 import org.societies.groups.rank.Rank;
-import org.societies.groups.setting.Setting;
 
 import java.util.Set;
 
@@ -33,10 +32,6 @@ public interface MemberHeart extends Linkable {
     DateTime getCreated();
 
     void setCreated(DateTime created);
-
-    <V> V getRankValue(Setting<V> setting);
-
-    boolean getBooleanRankValue(Setting<Boolean> setting);
 
     @Nullable
     GroupHeart getGroup();

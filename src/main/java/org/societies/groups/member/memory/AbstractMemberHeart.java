@@ -1,12 +1,13 @@
-package org.societies.groups.member;
+package org.societies.groups.member.memory;
 
 import org.joda.time.DateTime;
 import org.societies.groups.event.EventController;
 import org.societies.groups.event.MemberJoinEvent;
 import org.societies.groups.event.MemberLeaveEvent;
 import org.societies.groups.group.GroupHeart;
+import org.societies.groups.member.Member;
+import org.societies.groups.member.MemberHeart;
 import org.societies.groups.rank.Rank;
-import org.societies.groups.setting.Setting;
 
 /**
  * Represents a AbstractMemberHeart
@@ -43,20 +44,6 @@ public abstract class AbstractMemberHeart implements MemberHeart {
         return highest;
     }
 
-
-    @Override
-    public <V> V getRankValue(Setting<V> setting) {
-        for (Rank rank : getRanks()) {
-            V value = rank.get(setting);
-
-            if (value != null) {
-                return value;
-            }
-        }
-
-        return null;
-    }
-
     @Override
     public boolean hasRule(String rule) {
         for (Rank rank : getRanks()) {
@@ -66,17 +53,6 @@ public abstract class AbstractMemberHeart implements MemberHeart {
         }
 
         return false;
-    }
-
-    @Override
-    public boolean getBooleanRankValue(Setting<Boolean> setting) {
-        Boolean value = getRankValue(setting);
-
-        if (value == null) {
-            return false;
-        }
-
-        return value;
     }
 
     @Override

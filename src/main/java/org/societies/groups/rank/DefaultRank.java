@@ -1,23 +1,42 @@
 package org.societies.groups.rank;
 
+import com.google.common.primitives.Ints;
+import gnu.trove.set.hash.THashSet;
+import org.jetbrains.annotations.NotNull;
 import org.societies.groups.Linkable;
-import org.societies.groups.setting.Setting;
+import org.societies.groups.group.Group;
+import org.societies.groups.group.GroupPublisher;
 
-import java.util.Map;
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * Represents a DefaultRank
  */
-public class DefaultRank extends AbstractRank implements Linkable {
+public class DefaultRank implements Linkable, Rank {
+
+    private final UUID uuid;
+    private final String name;
+    private final int priority;
+    private final Set<String> rules = new THashSet<String>();
+    private final Group owner;
 
     private boolean completed = true;
+
+    private final Set<String> availableRules;
+    private GroupPublisher groupPublisher;
 
     public DefaultRank(UUID uuid,
                        String name,
                        int priority,
-                       Map<String, Setting<Boolean>> rules) {
-        super(uuid, name, priority, rules);
+                       Group owner, Set<String> availableRules, GroupPublisher groupPublisher) {
+        this.uuid = uuid;
+        this.name = name;
+        this.priority = priority;
+        this.owner = owner;
+        this.availableRules = availableRules;
+        this.groupPublisher = groupPublisher;
     }
 
     @Override
@@ -42,5 +61,73 @@ public class DefaultRank extends AbstractRank implements Linkable {
     @Override
     public boolean isStatic() {
         return false;
+    }
+
+    @Override
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public int getPriority() {
+        return priority;
+    }
+
+    @Override
+    public boolean isSlave(Rank rank) {
+        return getPriority() < rank.getPriority();
+    }
+
+    @Override
+    public int compareTo(@NotNull Rank anotherRank) {
+        return Ints.compare(getPriority(), anotherRank.getPriority());
+    }
+
+    @Override
+    public int getColumns() {
+        return 1;
+    }
+
+    @Override
+    public void addRule(String rule) {
+
+        if (!availableRules.contains(rule)) {
+            return;
+        }
+
+        rules.add(rule);
+
+        if (linked()) {
+            groupPublisher.publish(owner);
+        }
+    }
+
+    @Override
+    public boolean hasRule(String rule) {
+        return rules.contains(rule);
+    }
+
+    @Override
+    public String getColumn(int column) {
+        return name;
+    }
+
+    @Override
+    public Set<String> getAvailableRules() {
+        return Collections.unmodifiableSet(rules);
+    }
+
+    @Override
+    public void removeRule(String rule) {
+        rules.remove(rule);
+
+        if (linked()) {
+            groupPublisher.publish(owner);
+        }
     }
 }

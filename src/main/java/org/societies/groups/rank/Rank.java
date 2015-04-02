@@ -2,18 +2,17 @@ package org.societies.groups.rank;
 
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import org.societies.groups.Linkable;
-import org.societies.groups.setting.subject.Subject;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * Represents a Rank
  */
-public interface Rank extends Comparable<Rank>, Subject, RowForwarder, Linkable {
+public interface Rank extends Comparable<Rank>, RowForwarder, Linkable {
 
     int DEFAULT_PRIORITY = 0;
 
-    @Override
     UUID getUUID();
 
     String getName();
@@ -24,7 +23,11 @@ public interface Rank extends Comparable<Rank>, Subject, RowForwarder, Linkable 
 
     void addRule(String rule);
 
+    void removeRule(String rule);
+
     boolean hasRule(String rule);
+
+    Set<String> getAvailableRules();
 
     boolean isSlave(Rank rank);
 

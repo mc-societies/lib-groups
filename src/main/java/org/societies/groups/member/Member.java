@@ -1,6 +1,5 @@
 package org.societies.groups.member;
 
-import com.google.common.collect.Table;
 import net.catharos.lib.core.command.Command;
 import net.catharos.lib.core.command.format.table.RowForwarder;
 import net.catharos.lib.core.command.sender.Sender;
@@ -13,9 +12,6 @@ import org.societies.groups.group.GroupHeart;
 import org.societies.groups.rank.Rank;
 import org.societies.groups.request.Participant;
 import org.societies.groups.request.Request;
-import org.societies.groups.setting.Setting;
-import org.societies.groups.setting.subject.Subject;
-import org.societies.groups.setting.target.Target;
 
 import java.util.Set;
 import java.util.UUID;
@@ -23,12 +19,11 @@ import java.util.UUID;
 /**
  *
  */
-public class Member extends AbstractExtensible implements MemberHeart, Subject, Participant, Sender, Extensible, RowForwarder {
+public class Member extends AbstractExtensible implements MemberHeart, Participant, Sender, Extensible, RowForwarder {
 
     private final UUID uuid;
 
 
-    private Subject subject;
     private Participant participant;
     private Sender sender;
     private MemberHeart memberHeart;
@@ -65,9 +60,6 @@ public class Member extends AbstractExtensible implements MemberHeart, Subject, 
         this.memberHeart = memberHeart;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
 
     @Override
     public UUID getUUID() {
@@ -134,74 +126,6 @@ public class Member extends AbstractExtensible implements MemberHeart, Subject, 
         return sender.getName();
     }
 
-    //================================================================================
-    // Subject
-    //================================================================================
-
-    @Override
-    public <V> void set(Setting<V> setting, Target target, V value) {
-        subject.set(setting, target, value);
-    }
-
-    @Override
-    public <V> void set(Setting<V> setting, V value) {
-        subject.set(setting, value);
-    }
-
-    @Override
-    public <V> void remove(Setting<V> setting, Target target) {
-        subject.remove(setting, target);
-    }
-
-    @Override
-    public <V> void remove(Setting<V> setting) {
-        subject.remove(setting);
-    }
-
-    @Override
-    public <V> V get(Setting<V> setting, Target target) {
-        return subject.get(setting, target);
-    }
-
-    @Override
-    public boolean getBoolean(Setting<Boolean> setting, Target target) {
-        return subject.getBoolean(setting, target);
-    }
-
-    @Override
-    public int getInteger(Setting<Integer> setting, Target target) {
-        return subject.getInteger(setting, target);
-    }
-
-    @Override
-    public double getDouble(Setting<Double> setting, Target target) {
-        return subject.getDouble(setting, target);
-    }
-
-    @Override
-    public <V> V get(Setting<V> setting) {
-        return subject.get(setting);
-    }
-
-    @Override
-    public double getDouble(Setting<Double> setting) {
-        return subject.getDouble(setting);
-    }
-
-    @Override
-    public boolean getBoolean(Setting<Boolean> setting) {
-        return subject.getBoolean(setting);
-    }
-
-    @Override
-    public int getInteger(Setting<Integer> setting) {
-        return subject.getInteger(setting);
-    }
-
-    @Override
-    public Table<Setting, Target, Object> getSettings() {
-        return subject.getSettings();
-    }
 
     //================================================================================
     //  Participant
@@ -327,16 +251,6 @@ public class Member extends AbstractExtensible implements MemberHeart, Subject, 
     @Override
     public void setCreated(DateTime created) {
         memberHeart.setCreated(created);
-    }
-
-    @Override
-    public <V> V getRankValue(Setting<V> setting) {
-        return memberHeart.getRankValue(setting);
-    }
-
-    @Override
-    public boolean getBooleanRankValue(Setting<Boolean> setting) {
-        return memberHeart.getBooleanRankValue(setting);
     }
 
 

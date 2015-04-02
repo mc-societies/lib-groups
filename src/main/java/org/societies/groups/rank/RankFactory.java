@@ -10,10 +10,10 @@ import java.util.UUID;
  */
 public interface RankFactory {
 
-    Rank create(UUID uuid, String name, int priority, Group group);
+    Rank create(UUID uuid, String name, int priority, Group owner);
 
-    Rank create(String name, int priority, Group group);
+    Rank create(String name, int priority, Group owner);
 
     @Named("static")
-    Rank createStatic(UUID uuid, String name, int priority);
+    Rank createStatic(UUID uuid, String name, int priority, Iterable<String> rules);
 }

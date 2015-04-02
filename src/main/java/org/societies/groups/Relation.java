@@ -40,7 +40,7 @@ public interface Relation extends RowForwarder {
 
     boolean contains(GroupHeart group);
 
-    public static enum Type {
+    enum Type {
         ALLIED(1, "allies"),
         RIVALED(2, "rivals"),
         UNKNOWN(0, "unkown");

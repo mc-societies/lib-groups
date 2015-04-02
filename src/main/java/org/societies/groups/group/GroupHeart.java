@@ -5,7 +5,6 @@ import org.societies.groups.Linkable;
 import org.societies.groups.Relation;
 import org.societies.groups.member.Member;
 import org.societies.groups.rank.Rank;
-import org.societies.groups.setting.Setting;
 
 import java.util.Collection;
 import java.util.Set;
@@ -54,6 +53,8 @@ public interface GroupHeart extends Linkable {
     Collection<Relation> getRelations();
 
     Collection<Relation> getRelations(Relation.Type type);
+
+    void setRawRelation(UUID anotherGroup, Relation relation);
 
     /**
      * Sets the relation to an other group
@@ -110,12 +111,6 @@ public interface GroupHeart extends Linkable {
 
     int size();
 
-    /**
-     * @param setting The setting to look by
-     * @return The members which have this setting
-     */
-    Set<Member> getMembers(Setting<Boolean> setting);
-
     Set<Member> getMembers(String rule);
 
     /**
@@ -137,10 +132,6 @@ public interface GroupHeart extends Linkable {
      * @param member The member
      */
     void removeMember(Member member);
-
-    boolean isVerified();
-
-    void verify(boolean newState);
 
     void send(String message);
 

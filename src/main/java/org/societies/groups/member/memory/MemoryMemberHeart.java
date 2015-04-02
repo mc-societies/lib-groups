@@ -13,7 +13,6 @@ import org.societies.groups.event.EventController;
 import org.societies.groups.event.MemberJoinEvent;
 import org.societies.groups.event.MemberLeaveEvent;
 import org.societies.groups.group.GroupHeart;
-import org.societies.groups.member.AbstractMemberHeart;
 import org.societies.groups.member.Member;
 import org.societies.groups.member.MemberHeart;
 import org.societies.groups.member.MemberPublisher;
