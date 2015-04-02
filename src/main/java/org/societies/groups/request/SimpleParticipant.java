@@ -1,6 +1,6 @@
 package org.societies.groups.request;
 
-import net.catharos.lib.core.command.SystemSender;
+import order.SystemSender;
 import org.jetbrains.annotations.Nullable;
 
 /**

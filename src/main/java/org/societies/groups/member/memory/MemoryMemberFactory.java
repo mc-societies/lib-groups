@@ -1,7 +1,7 @@
 package org.societies.groups.member.memory;
 
 import com.google.inject.Inject;
-import net.catharos.lib.core.command.sender.Sender;
+import order.sender.Sender;
 import org.societies.groups.ExtensionFactory;
 import org.societies.groups.ExtensionRoller;
 import org.societies.groups.member.Member;

@@ -2,10 +2,10 @@ package org.societies.groups.command;
 
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
-import net.catharos.lib.core.command.CommandContext;
-import net.catharos.lib.core.command.ParsingException;
-import net.catharos.lib.core.command.parser.ArgumentParser;
-import net.catharos.lib.core.i18n.Dictionary;
+import order.CommandContext;
+import order.ParsingException;
+import order.parser.ArgumentParser;
+import org.societies.groups.dictionary.Dictionary;
 import org.societies.groups.group.Group;
 import org.societies.groups.group.GroupProvider;
 

@@ -1,8 +1,8 @@
 package org.societies.groups.member;
 
-import net.catharos.lib.core.command.Command;
-import net.catharos.lib.core.command.format.table.RowForwarder;
-import net.catharos.lib.core.command.sender.Sender;
+import order.Command;
+import order.format.table.RowForwarder;
+import order.sender.Sender;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.societies.groups.AbstractExtensible;

@@ -1,7 +1,7 @@
 package org.societies.groups;
 
 import gnu.trove.map.hash.TByteObjectHashMap;
-import net.catharos.lib.core.command.format.table.RowForwarder;
+import order.format.table.RowForwarder;
 import org.jetbrains.annotations.Nullable;
 import org.societies.groups.group.GroupHeart;
 

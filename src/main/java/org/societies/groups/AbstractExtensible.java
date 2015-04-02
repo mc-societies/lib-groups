@@ -1,7 +1,6 @@
 package org.societies.groups;
 
 import gnu.trove.map.hash.THashMap;
-import net.catharos.lib.core.util.CastSafe;
 
 /**
  * Represents a AbstractExtensible

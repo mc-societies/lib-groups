@@ -1,6 +1,6 @@
 package org.societies.groups.rank;
 
-import net.catharos.lib.core.command.format.table.RowForwarder;
+import order.format.table.RowForwarder;
 import org.societies.groups.Linkable;
 
 import java.util.Set;

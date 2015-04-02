@@ -1,7 +1,7 @@
 package org.societies.groups.request;
 
-import net.catharos.lib.core.command.Command;
-import net.catharos.lib.core.command.sender.Sender;
+import order.Command;
+import order.sender.Sender;
 import org.jetbrains.annotations.Nullable;
 
 /**

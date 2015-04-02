@@ -1,24 +1,26 @@
 package org.societies.groups.request;
 
-import net.catharos.lib.core.lang.ArgumentException;
-
 /**
  * Represents a RequestFailedException
  */
-public class RequestFailedException extends ArgumentException {
+public class RequestFailedException extends Exception {
 
     public RequestFailedException() {
     }
 
-    public RequestFailedException(String message, Object... args) {
-        super(message, args);
+    public RequestFailedException(String message) {
+        super(message);
     }
 
-    public RequestFailedException(Throwable cause, String message, Object... args) {
-        super(cause, message, args);
+    public RequestFailedException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     public RequestFailedException(Throwable cause) {
         super(cause);
+    }
+
+    public RequestFailedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

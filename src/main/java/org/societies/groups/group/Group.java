@@ -1,6 +1,6 @@
 package org.societies.groups.group;
 
-import net.catharos.lib.core.command.format.table.RowForwarder;
+import order.format.table.RowForwarder;
 import org.joda.time.DateTime;
 import org.societies.groups.AbstractExtensible;
 import org.societies.groups.Extensible;

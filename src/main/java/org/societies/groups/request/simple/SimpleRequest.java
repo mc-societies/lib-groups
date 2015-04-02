@@ -6,10 +6,10 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.procedure.TObjectProcedure;
-import net.catharos.lib.core.util.CastSafe;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
+import org.societies.groups.CastSafe;
 import org.societies.groups.request.*;
 
 import java.io.Serializable;

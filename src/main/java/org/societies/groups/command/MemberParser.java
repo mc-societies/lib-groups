@@ -2,9 +2,9 @@ package org.societies.groups.command;
 
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
-import net.catharos.lib.core.command.CommandContext;
-import net.catharos.lib.core.command.ParsingException;
-import net.catharos.lib.core.command.parser.ArgumentParser;
+import order.CommandContext;
+import order.ParsingException;
+import order.parser.ArgumentParser;
 import org.societies.groups.member.Member;
 import org.societies.groups.member.MemberProvider;
 
