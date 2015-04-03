@@ -31,7 +31,7 @@ public class MemoryGroupHeart implements GroupHeart {
     private final Set<String> rules;
     private String name, tag;
     private DateTime created;
-    private final Map<UUID, Rank> ranks = Collections.synchronizedMap(new THashMap<UUID, Rank>());
+    private final Map<String, Rank> ranks = Collections.synchronizedMap(new THashMap<String, Rank>());
     private final Set<Member> members = Collections.synchronizedSet(new THashSet<Member>());
     private final THashMap<UUID, Relation> relations = new THashMap<UUID, Relation>();
 
@@ -110,7 +110,7 @@ public class MemoryGroupHeart implements GroupHeart {
 
     @Override
     public void addRank(Rank rank) {
-        Rank result = this.ranks.put(rank.getUUID(), rank);
+        Rank result = this.ranks.put(rank.getName(), rank);
 
         if (!rank.equals(result) && linked()) {
             groupPublisher.publish(group);
@@ -119,7 +119,7 @@ public class MemoryGroupHeart implements GroupHeart {
 
     @Override
     public void removeRank(Rank rank) {
-        boolean result = this.ranks.remove(rank.getUUID()) != null;
+        boolean result = this.ranks.remove(rank.getName()) != null;
 
         if (result && linked()) {
             groupPublisher.publish(group);
@@ -127,14 +127,15 @@ public class MemoryGroupHeart implements GroupHeart {
     }
 
     @Override
-    public Rank getRank(UUID uuid) {
+    public Rank getRank(String name) {
         //beautify
         for (Rank defaultRank : defaultRanks) {
-            if (defaultRank.getUUID().equals(uuid)) {
+            if (defaultRank.getName().equals(name)) {
                 return defaultRank;
             }
         }
-        return this.ranks.get(uuid);
+
+        return this.ranks.get(name);
     }
 
     @Override
@@ -175,16 +176,6 @@ public class MemoryGroupHeart implements GroupHeart {
         for (Member member : members) {
             member.send(message, obj);
         }
-    }
-
-    @Override
-    public Rank getRank(String name) {
-        for (Rank rank : getRanks()) {
-            if (rank.getName().equals(name)) {
-                return rank;
-            }
-        }
-        return null;
     }
 
     @Override

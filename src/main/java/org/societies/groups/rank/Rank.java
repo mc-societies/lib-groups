@@ -4,7 +4,6 @@ import order.format.table.RowForwarder;
 import org.societies.groups.Linkable;
 
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Represents a Rank
@@ -12,8 +11,6 @@ import java.util.UUID;
 public interface Rank extends Comparable<Rank>, RowForwarder, Linkable {
 
     int DEFAULT_PRIORITY = 0;
-
-    UUID getUUID();
 
     String getName();
 

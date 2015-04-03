@@ -91,8 +91,6 @@ public interface GroupHeart extends Linkable {
 
     Rank getRank(String name);
 
-    Rank getRank(UUID uuid);
-
     /**
      * @return The ranks of this group
      */

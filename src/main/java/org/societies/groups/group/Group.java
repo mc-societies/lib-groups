@@ -197,11 +197,6 @@ public class Group extends AbstractExtensible implements Extensible, GroupHeart,
     }
 
     @Override
-    public Rank getRank(UUID uuid) {
-        return groupHeart.getRank(uuid);
-    }
-
-    @Override
     public Collection<Rank> getRanks() {
         return groupHeart.getRanks();
     }

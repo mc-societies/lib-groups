@@ -9,28 +9,20 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Represents a StaticAbstractRank
  */
 public class StaticRank implements Rank {
-    private final UUID uuid;
     private final String name;
     private final int priority;
     private final Iterable<String> rules;
 
     @Inject
-    public StaticRank(@Assisted UUID uuid, @Assisted String name, @Assisted int priority, @Assisted Iterable<String> rules) {
-        this.uuid = uuid;
+    public StaticRank(@Assisted String name, @Assisted int priority, @Assisted Iterable<String> rules) {
         this.name = name;
         this.priority = priority;
         this.rules = rules;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return uuid;
     }
 
     @Override

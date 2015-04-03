@@ -9,14 +9,12 @@ import org.societies.groups.group.GroupPublisher;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Represents a DefaultRank
  */
 public class DefaultRank implements Linkable, Rank {
 
-    private final UUID uuid;
     private final String name;
     private final int priority;
     private final Set<String> rules = new THashSet<String>();
@@ -27,11 +25,9 @@ public class DefaultRank implements Linkable, Rank {
     private final Set<String> availableRules;
     private GroupPublisher groupPublisher;
 
-    public DefaultRank(UUID uuid,
-                       String name,
+    public DefaultRank(String name,
                        int priority,
                        Group owner, Set<String> availableRules, GroupPublisher groupPublisher) {
-        this.uuid = uuid;
         this.name = name;
         this.priority = priority;
         this.owner = owner;
@@ -61,11 +57,6 @@ public class DefaultRank implements Linkable, Rank {
     @Override
     public boolean isStatic() {
         return false;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return uuid;
     }
 
     @Override
