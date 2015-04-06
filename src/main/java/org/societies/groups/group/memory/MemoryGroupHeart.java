@@ -231,21 +231,21 @@ public class MemoryGroupHeart implements GroupHeart {
 
     @Override
     public Collection<Relation> getRelations(final Relation.Type type) {
-        final THashSet<Relation> relations = new THashSet<Relation>();
+        final THashSet<Relation> foundRelations = new THashSet<Relation>();
 
-        relations.forEach(new TObjectProcedure<Relation>() {
+        relations.forEachValue(new TObjectProcedure<Relation>() {
             @Override
             public boolean execute(Relation relation) {
 
                 if (relation.getType() != type) {
                     return true;
                 }
-                relations.add(relation);
+                foundRelations.add(relation);
                 return true;
             }
         });
 
-        return relations;
+        return foundRelations;
     }
 
     @Override

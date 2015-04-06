@@ -189,6 +189,8 @@ public class SimpleRequest implements Request<Choices> {
         Choices choice = getLast(sorted).getKey();
         future.set(new DefaultRequestResult<Choices>(choice, this));
         messenger.end(this, choice);
+
+        done();
     }
 
     @Override

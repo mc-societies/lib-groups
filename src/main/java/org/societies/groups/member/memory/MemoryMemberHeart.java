@@ -45,7 +45,6 @@ public class MemoryMemberHeart extends AbstractMemberHeart implements MemberHear
                              EventController events,
                              @Named("default-rank") Rank defaultRank,
                              MemberPublisher memberPublisher) {
-        super(events);
         this.events = events;
         this.defaultRank = defaultRank;
         this.memberPublisher = memberPublisher;

@@ -1,11 +1,7 @@
 package org.societies.groups.member.memory;
 
 import org.joda.time.DateTime;
-import org.societies.groups.event.EventController;
-import org.societies.groups.event.MemberJoinEvent;
-import org.societies.groups.event.MemberLeaveEvent;
 import org.societies.groups.group.GroupHeart;
-import org.societies.groups.member.Member;
 import org.societies.groups.member.MemberHeart;
 import org.societies.groups.rank.Rank;
 
@@ -15,12 +11,6 @@ import org.societies.groups.rank.Rank;
 public abstract class AbstractMemberHeart implements MemberHeart {
 
     private boolean completed = true;
-
-    private final EventController events;
-
-    protected AbstractMemberHeart(EventController events) {
-        this.events = events;
-    }
 
     @Override
     public boolean hasRank(Rank rank) {
@@ -69,14 +59,6 @@ public abstract class AbstractMemberHeart implements MemberHeart {
     public boolean isGroup(GroupHeart group) {
         GroupHeart current = getGroup();
         return current != null && current.equals(group);
-    }
-
-    protected void publishMemberEvents(Member member, GroupHeart group, GroupHeart previous) {
-        if (group == null) {
-            events.publish(new MemberLeaveEvent(member, previous == null ? null : previous.getHolder()));
-        } else {
-            events.publish(new MemberJoinEvent(member));
-        }
     }
 
     @Override
