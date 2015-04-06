@@ -7,7 +7,6 @@ import org.societies.groups.ExtensionFactory;
 import org.societies.groups.ExtensionRoller;
 import org.societies.groups.group.Group;
 import org.societies.groups.group.GroupFactory;
-import org.societies.groups.group.GroupPublisher;
 
 import java.util.Set;
 import java.util.UUID;
@@ -18,18 +17,15 @@ import java.util.UUID;
 public class MemoryGroupFactory implements GroupFactory {
 
     private final Provider<UUID> uuidProvider;
-    private final GroupPublisher groupPublisher;
     private final ExtensionFactory<MemoryGroupHeart, Group> heartFactory;
     private final Set<ExtensionRoller<Group>> extensions;
 
     @Inject
     public MemoryGroupFactory(
             Provider<UUID> uuidProvider,
-            GroupPublisher groupPublisher,
             ExtensionFactory<MemoryGroupHeart, Group> heartFactory,
             Set<ExtensionRoller<Group>> extensions) {
         this.uuidProvider = uuidProvider;
-        this.groupPublisher = groupPublisher;
         this.heartFactory = heartFactory;
         this.extensions = extensions;
     }
