@@ -24,7 +24,7 @@ public interface Rank extends Comparable<Rank>, RowForwarder, Linkable {
 
     boolean hasRule(String rule);
 
-    Set<String> getAvailableRules();
+    Set<String> getRules();
 
     boolean isSlave(Rank rank);
 

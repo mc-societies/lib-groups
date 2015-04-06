@@ -109,7 +109,7 @@ public class DefaultRank implements Linkable, Rank {
     }
 
     @Override
-    public Set<String> getAvailableRules() {
+    public Set<String> getRules() {
         return Collections.unmodifiableSet(rules);
     }
 

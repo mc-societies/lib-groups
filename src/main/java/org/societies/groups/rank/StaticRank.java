@@ -71,7 +71,7 @@ public class StaticRank implements Rank {
     }
 
     @Override
-    public Set<String> getAvailableRules() {
+    public Set<String> getRules() {
         return ImmutableSet.copyOf(rules);
     }
 
